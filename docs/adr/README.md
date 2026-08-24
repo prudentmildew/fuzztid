@@ -15,3 +15,4 @@ or leaves standing.
 | ADR | Decision |
 |---|---|
 | [0023](./0023-broadcast-feed-as-programme-source.md) | Broadcast festival feed as the programme source: build-time snapshot, hourly October cron, `objectId` identity, published predicate, no-overlap invariant |
+| [0024](./0024-programme-as-the-pipeline-seam.md) | The pipeline's two seams: `data/schedule.json` is the only thing crossing `scripts/` → `src/`; inside, a Broadcast adapter emits the Programme (Oslo-local, `null` before the Reveal) and a source-agnostic assembler holds the canonical invariants |

@@ -7,7 +7,13 @@ across the rooms of Kulturkirken Jakob, Oslo, over two days in October.
 
 **Programme**:
 The festival's schedule of acts with times and Stages, as published for one edition.
+Before the Reveal there is no Programme — only a lineup.
 _Avoid_: lineup (the acts without times), schedule (the on-disk artifact)
+
+**Edition config**:
+The facts that change between editions and nothing else: which edition, its dates, and
+its Stages in display order.
+_Avoid_: festival config, settings
 
 **Reveal**:
 The moment the festival publishes the Programme's times and Stages — historically about
