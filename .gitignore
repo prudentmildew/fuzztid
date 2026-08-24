@@ -4,3 +4,4 @@ dist/
 .scratch/
 *.local
 .idea/
+.claude/worktrees/
