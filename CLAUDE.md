@@ -16,11 +16,37 @@ Høstsabbat is a different festival with a different programme structure.
 
 ## Toolchain
 
-Not chosen yet. Øyablikk's stack is the starting proposal: pnpm, Node ≥ 24,
-vanilla TypeScript + Vite with no UI framework, Vitest + happy-dom for tests,
-Biome for lint and format, GitHub Pages for deploys. Confirm or replace it in
-the Wayfinder session before writing code, then rewrite this section with what
-was actually chosen.
+Inherited from Øyablikk wholesale — pnpm, Node ≥ 24, vanilla TypeScript + Vite with
+no UI framework, Vitest + happy-dom for tests, Biome for lint and format, GitHub
+Pages for deploys. Settled in [#2](https://github.com/prudentmildew/fuzztid/issues/2);
+the stack was already the minimal one, so there was nothing to remove without adding
+work. The *simplify* brief on the map is about module seams and line count, not build
+tools.
+
+**Versions float within major.** Dependencies carry carets and resolve fresh — do not
+copy Øyablikk's `pnpm-lock.yaml`, and do not carry its `minimumReleaseAgeExclude`
+escape hatch. A new repo has no reproducibility debt to protect. The two exact pins:
+`packageManager` is `pnpm@11.23.0`, and `engines.node` is `>= 24` with CI on 24 —
+Node 24 is LTS, and nothing here wants Node 26.
+
+**`tsconfig.json` and `biome.json` copy verbatim**, which makes two of their flags
+project rules rather than inherited style: `erasableSyntaxOnly` bans enums,
+namespaces and parameter properties, and `allowImportingTsExtensions` means import
+specifiers carry the `.ts` extension. `noUncheckedIndexedAccess` and
+`verbatimModuleSyntax` are on.
+
+**Two pieces are conditional on the service worker**, decided in
+[#3](https://github.com/prudentmildew/fuzztid/issues/3), not here. If a service
+worker survives the port, keep Øyablikk's two-config typecheck split
+(`tsconfig.worker.json` typechecks `src/sw.ts` against the WebWorker lib) and its
+five PWA dependencies — `vite-plugin-pwa` plus four `workbox-*`. If it does not,
+both disappear: a single `tsconfig.json`, one `typecheck` script, six devDependencies
+instead of eleven. Do not merge the two configs into one with
+`lib: ["DOM", "WebWorker"]` — the globals conflict and the errors are silent.
+
+The pre-commit hook stays opt-in per clone (`git config core.hooksPath .githooks`):
+lint-fix and re-stage, then typecheck, then the suite. `deploy.yml` is the real gate
+on `main`.
 
 ## Agent skills
 
