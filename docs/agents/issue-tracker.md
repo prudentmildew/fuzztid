@@ -44,13 +44,3 @@ Used by `/wayfinder`. The **map** is a single issue with **child** issues as tic
 - **Claim**: `gh issue edit <n> --add-assignee @me` — the session's first write.
 - **Resolve**: `gh issue comment <n> --body "<answer>"`, then `gh issue close <n>`, then append a context pointer (gist + link) to the map's Decisions-so-far.
 
-## Setup status
-
-⚠️ This directory is **not yet a git repo** and has **no GitHub remote**, so none of the `gh` commands above will work yet. Before the issue-tracker-backed skills (`/to-tickets`, `/triage`, `/to-spec`, `/wayfinder`) can run:
-
-1. `git init` and make an initial commit.
-2. Create the GitHub repo and add the remote — `gh repo create` or `git remote add origin git@github.com:<owner>/<repo>.git`.
-3. Create the five triage labels: `gh label create needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`.
-4. Create the Wayfinder labels: `gh label create wayfinder:map`, plus `wayfinder:research`, `wayfinder:prototype`, `wayfinder:grilling`, `wayfinder:task`.
-
-Delete this section once all four are done.
