@@ -1,0 +1,1397 @@
+[
+  {
+    "objectId": "AuYNElzODS",
+    "tags": [
+      "Sludge",
+      "Post-Metal",
+      "Doom"
+    ],
+    "socialLinks": [
+      {
+        "type": "spotify",
+        "url": "https://open.spotify.com/artist/3c0euuPkwljoPa188SKyBf?si=Rf0F-d98QxGBOlWZQPKVsQ"
+      },
+      {
+        "type": "tidal",
+        "url": "https://tidal.com/browse/artist/6122572/u"
+      },
+      {
+        "type": "instagram",
+        "url": "https://www.instagram.com/crouch_official/"
+      },
+      {
+        "type": "facebook",
+        "url": "https://www.facebook.com/ThebandCrouch/"
+      }
+    ],
+    "name": "Crouch",
+    "start_time": 1761314400,
+    "end_time": 1761318000,
+    "start_time_iso": "2025-10-24T14:00:00.000Z",
+    "end_time_iso": "2025-10-24T15:00:00.000Z",
+    "description": "ℭ𝔯𝔬𝔲𝔠𝔥 brings Belgian sludge, slow, heavy and groovy.",
+    "externalVenueName": "The Crypt",
+    "youTube": "Ny1sZ6nrM2I",
+    "isMainSchedule": true,
+    "relatedEvent": {
+      "objectId": "t8wUoQScas",
+      "name": "Høstsabbat",
+      "venue": {
+        "objectId": "PbVOcqLkry",
+        "name": "Kulturkirken Jakob",
+        "createdAt": "2022-02-28T18:40:54.952Z",
+        "updatedAt": "2026-02-14T10:09:30.577Z",
+        "__type": "Object",
+        "className": "venues"
+      },
+      "createdAt": "2025-06-18T07:08:14.828Z",
+      "updatedAt": "2025-10-13T13:27:27.785Z",
+      "__type": "Object",
+      "className": "events",
+      "custom_fields": {
+        "ticketUrl": "https://www.ticketmaster.no/artist/hstsabbat-billetter/1101633"
+      }
+    },
+    "createdAt": "2025-08-23T16:52:43.575Z",
+    "updatedAt": "2025-10-21T09:11:03.725Z",
+    "imageUrl": "https://ik.imagekit.io/mfgbmrqfuvo/schedule-images/schedule_image_o_dYs4TG1"
+  },
+  {
+    "objectId": "8CrNFUvoOL",
+    "tags": [
+      "BlackMetal",
+      "Noise",
+      "ExtremeMetal"
+    ],
+    "socialLinks": [
+      {
+        "type": "instagram",
+        "url": "https://www.instagram.com/blodkvalt/"
+      },
+      {
+        "type": "bandcamp",
+        "url": "https://blodkvalt.bandcamp.com"
+      },
+      {
+        "type": "tidal",
+        "url": "https://tidal.com/artist/28295530/u"
+      },
+      {
+        "type": "spotify",
+        "url": "https://open.spotify.com/artist/2LOxskxwQvBYaDrLEmgBxn"
+      }
+    ],
+    "name": "Blodkvalt",
+    "start_time": 1761316200,
+    "end_time": 1761319800,
+    "start_time_iso": "2025-10-24T14:30:00.000Z",
+    "end_time_iso": "2025-10-24T15:30:00.000Z",
+    "description": "Raw, primal and loud. Blodkvalt mixes all things extreme, from the shrill piercing vocals, to the tenacious and intense wall of musical prowess.",
+    "externalVenueName": "Verkstedet",
+    "youTube": "RG171Yd1JTs",
+    "isMainSchedule": true,
+    "relatedEvent": {
+      "objectId": "t8wUoQScas",
+      "name": "Høstsabbat",
+      "venue": {
+        "objectId": "PbVOcqLkry",
+        "name": "Kulturkirken Jakob",
+        "createdAt": "2022-02-28T18:40:54.952Z",
+        "updatedAt": "2026-02-14T10:09:30.577Z",
+        "__type": "Object",
+        "className": "venues"
+      },
+      "createdAt": "2025-06-18T07:08:14.828Z",
+      "updatedAt": "2025-10-13T13:27:27.785Z",
+      "__type": "Object",
+      "className": "events",
+      "custom_fields": {
+        "ticketUrl": "https://www.ticketmaster.no/artist/hstsabbat-billetter/1101633"
+      }
+    },
+    "createdAt": "2025-10-19T08:21:47.207Z",
+    "updatedAt": "2025-10-21T09:11:14.875Z",
+    "imageUrl": "https://ik.imagekit.io/mfgbmrqfuvo/schedule-images/schedule_image_VfGy_d1GA"
+  },
+  {
+    "objectId": "LrTZ68txPT",
+    "tags": [
+      "Folkrock",
+      "Psych",
+      "Folktronica"
+    ],
+    "socialLinks": [
+      {
+        "type": "tidal",
+        "url": "https://tidal.com/browse/album/360381306/u"
+      },
+      {
+        "type": "spotify",
+        "url": "https://open.spotify.com/album/0xnQ7EDx3ztvthoJF64XDa?si=mTHkoQP_TpeVQXaOMPMpQQ"
+      },
+      {
+        "type": "facebook",
+        "url": "https://www.facebook.com/kanaanband/"
+      },
+      {
+        "type": "instagram",
+        "url": "https://www.instagram.com/kanaanband"
+      },
+      {
+        "type": "facebook",
+        "url": "https://www.facebook.com/aevestaden/"
+      },
+      {
+        "type": "instagram",
+        "url": "https://www.instagram.com/aevestaden/"
+      }
+    ],
+    "name": "Kanaan & Ævestaden",
+    "start_time": 1761318000,
+    "end_time": 1761321600,
+    "start_time_iso": "2025-10-24T15:00:00.000Z",
+    "end_time_iso": "2025-10-24T16:00:00.000Z",
+    "description": "When psych-rock and jazz collides with wooly sweaters, fiddles and Norwegian cultural historic aesthetics, you get something like this. A cozy, soulful, one-of-a-kind musical phenomenon.",
+    "externalVenueName": "The Chapel",
+    "youTube": "UVXaEK3rfyk",
+    "isMainSchedule": true,
+    "relatedEvent": {
+      "objectId": "t8wUoQScas",
+      "name": "Høstsabbat",
+      "venue": {
+        "objectId": "PbVOcqLkry",
+        "name": "Kulturkirken Jakob",
+        "createdAt": "2022-02-28T18:40:54.952Z",
+        "updatedAt": "2026-02-14T10:09:30.577Z",
+        "__type": "Object",
+        "className": "venues"
+      },
+      "createdAt": "2025-06-18T07:08:14.828Z",
+      "updatedAt": "2025-10-13T13:27:27.785Z",
+      "__type": "Object",
+      "className": "events",
+      "custom_fields": {
+        "ticketUrl": "https://www.ticketmaster.no/artist/hstsabbat-billetter/1101633"
+      }
+    },
+    "createdAt": "2025-09-06T08:58:38.823Z",
+    "updatedAt": "2025-10-21T09:11:24.188Z",
+    "imageUrl": "https://ik.imagekit.io/mfgbmrqfuvo/schedule-images/schedule_image_XLomlu1JM"
+  },
+  {
+    "objectId": "ojvUMviLSM",
+    "tags": [
+      "Doom",
+      "Joik",
+      "Hardcore"
+    ],
+    "socialLinks": [
+      {
+        "type": "spotify",
+        "url": "https://open.spotify.com/artist/0005FKkd2owK8ersgDh5D1?si=7D4icJxbRF6qxjJRgEnXeA"
+      },
+      {
+        "type": "tidal",
+        "url": "https://tidal.com/browse/artist/22383443/u"
+      },
+      {
+        "type": "facebook",
+        "url": "https://www.facebook.com/Nagircalmmiid/?locale=nb_NO"
+      },
+      {
+        "type": "instagram",
+        "url": "https://www.instagram.com/nagircalmmiid/"
+      }
+    ],
+    "name": "Nagircalmmiid",
+    "start_time": 1761321600,
+    "end_time": 1761325200,
+    "start_time_iso": "2025-10-24T16:00:00.000Z",
+    "end_time_iso": "2025-10-24T17:00:00.000Z",
+    "description": "An exceptionally hard duo, delving into the Sámi religious and shamanistic themes, dragging us down to the abyss that is Rohttuáibmu, Rohttu’s kingdom of death and sickness.",
+    "externalVenueName": "The Crypt",
+    "youTube": "pfm93DpAhmE",
+    "isMainSchedule": true,
+    "relatedEvent": {
+      "objectId": "t8wUoQScas",
+      "name": "Høstsabbat",
+      "venue": {
+        "objectId": "PbVOcqLkry",
+        "name": "Kulturkirken Jakob",
+        "createdAt": "2022-02-28T18:40:54.952Z",
+        "updatedAt": "2026-02-14T10:09:30.577Z",
+        "__type": "Object",
+        "className": "venues"
+      },
+      "createdAt": "2025-06-18T07:08:14.828Z",
+      "updatedAt": "2025-10-13T13:27:27.785Z",
+      "__type": "Object",
+      "className": "events",
+      "custom_fields": {
+        "ticketUrl": "https://www.ticketmaster.no/artist/hstsabbat-billetter/1101633"
+      }
+    },
+    "createdAt": "2025-09-06T09:01:19.402Z",
+    "updatedAt": "2025-10-24T08:53:06.963Z",
+    "imageUrl": "https://ik.imagekit.io/mfgbmrqfuvo/schedule-images/schedule_image_WSzvw62J1"
+  },
+  {
+    "objectId": "6k96jm5oGq",
+    "tags": [
+      "Psych",
+      "Doom",
+      "Atmospheric"
+    ],
+    "socialLinks": [
+      {
+        "type": "spotify",
+        "url": "https://open.spotify.com/artist/1GBRlUgyWCCARlThcz3xhT?si=miZUDiElQnOgZmukO-lpsA"
+      },
+      {
+        "type": "tidal",
+        "url": "https://tidal.com/browse/artist/10046952/u"
+      },
+      {
+        "type": "facebook",
+        "url": "https://www.facebook.com/Klosterbandnorway/"
+      },
+      {
+        "type": "instagram",
+        "url": "https://www.instagram.com/kloster.band/"
+      }
+    ],
+    "name": "Kløster",
+    "start_time": 1761323400,
+    "end_time": 1761327000,
+    "start_time_iso": "2025-10-24T16:30:00.000Z",
+    "end_time_iso": "2025-10-24T17:30:00.000Z",
+    "description": "The psychedelic doom outfit that paints the most haunting, shrill, and esoteric soundscape.",
+    "externalVenueName": "Verkstedet",
+    "youTube": "PP7Xc0Y6y1o",
+    "isMainSchedule": true,
+    "relatedEvent": {
+      "objectId": "t8wUoQScas",
+      "name": "Høstsabbat",
+      "venue": {
+        "objectId": "PbVOcqLkry",
+        "name": "Kulturkirken Jakob",
+        "createdAt": "2022-02-28T18:40:54.952Z",
+        "updatedAt": "2026-02-14T10:09:30.577Z",
+        "__type": "Object",
+        "className": "venues"
+      },
+      "createdAt": "2025-06-18T07:08:14.828Z",
+      "updatedAt": "2025-10-13T13:27:27.785Z",
+      "__type": "Object",
+      "className": "events",
+      "custom_fields": {
+        "ticketUrl": "https://www.ticketmaster.no/artist/hstsabbat-billetter/1101633"
+      }
+    },
+    "createdAt": "2025-09-06T09:01:37.208Z",
+    "updatedAt": "2025-10-21T09:11:59.155Z",
+    "imageUrl": "https://ik.imagekit.io/mfgbmrqfuvo/schedule-images/schedule_image_UAdNRBiAu"
+  },
+  {
+    "objectId": "kBaXl0Aaav",
+    "tags": [
+      "Deathmetal",
+      "Brutal",
+      "Extreme"
+    ],
+    "socialLinks": [
+      {
+        "type": "instagram",
+        "url": "https://www.instagram.com/living_gate/"
+      },
+      {
+        "type": "facebook",
+        "url": "https://www.facebook.com/LivingGate666/"
+      },
+      {
+        "type": "spotify",
+        "url": "https://open.spotify.com/artist/6uiTa3MLovwAdLBbDCveLa?si=Ww0l68yNS_CwlH3IYBtfwg"
+      },
+      {
+        "type": "tidal",
+        "url": "https://tidal.com/browse/artist/18688288/u"
+      }
+    ],
+    "name": "Living Gate",
+    "start_time": 1761325200,
+    "end_time": 1761328800,
+    "start_time_iso": "2025-10-24T17:00:00.000Z",
+    "end_time_iso": "2025-10-24T18:00:00.000Z",
+    "description": "𝔏𝔦𝔳𝔦𝔫𝔤 𝔊𝔞𝔱𝔢 brings their unrelenting death metal, and will have us Suffer as One.",
+    "externalVenueName": "The Chapel",
+    "youTube": "q0JuI6t63TQ",
+    "isMainSchedule": true,
+    "relatedEvent": {
+      "objectId": "t8wUoQScas",
+      "name": "Høstsabbat",
+      "venue": {
+        "objectId": "PbVOcqLkry",
+        "name": "Kulturkirken Jakob",
+        "createdAt": "2022-02-28T18:40:54.952Z",
+        "updatedAt": "2026-02-14T10:09:30.577Z",
+        "__type": "Object",
+        "className": "venues"
+      },
+      "createdAt": "2025-06-18T07:08:14.828Z",
+      "updatedAt": "2025-10-13T13:27:27.785Z",
+      "__type": "Object",
+      "className": "events",
+      "custom_fields": {
+        "ticketUrl": "https://www.ticketmaster.no/artist/hstsabbat-billetter/1101633"
+      }
+    },
+    "createdAt": "2025-08-23T17:04:53.259Z",
+    "updatedAt": "2025-10-24T08:52:39.030Z",
+    "imageUrl": "https://ik.imagekit.io/mfgbmrqfuvo/schedule-images/schedule_image_7AJc4C7F0v"
+  },
+  {
+    "objectId": "46hQR2uEYg",
+    "tags": [
+      "Noise",
+      "Punk",
+      "Hardcore"
+    ],
+    "socialLinks": [
+      {
+        "type": "facebook",
+        "url": "https://www.facebook.com/daufodt/"
+      },
+      {
+        "type": "instagram",
+        "url": "https://www.instagram.com/daufodt/"
+      },
+      {
+        "type": "spotify",
+        "url": "https://open.spotify.com/artist/0lYwNo6c3pXmv6ZQDkuEMt?si=vwhWShAcR1uVhie5IS3JhQ"
+      },
+      {
+        "type": "tidal",
+        "url": "https://tidal.com/browse/artist/9205323/u"
+      }
+    ],
+    "name": "Daufødt",
+    "start_time": 1761328800,
+    "end_time": 1761332400,
+    "start_time_iso": "2025-10-24T18:00:00.000Z",
+    "end_time_iso": "2025-10-24T19:00:00.000Z",
+    "description": "Experimental noise and punk outfit, with extra weight on mental. Daufødt always delivers extraordinary live shows, with frontwoman Annika never holding back.",
+    "externalVenueName": "The Crypt",
+    "youTube": "tgICK0UUDy8",
+    "isMainSchedule": true,
+    "relatedEvent": {
+      "objectId": "t8wUoQScas",
+      "name": "Høstsabbat",
+      "venue": {
+        "objectId": "PbVOcqLkry",
+        "name": "Kulturkirken Jakob",
+        "createdAt": "2022-02-28T18:40:54.952Z",
+        "updatedAt": "2026-02-14T10:09:30.577Z",
+        "__type": "Object",
+        "className": "venues"
+      },
+      "createdAt": "2025-06-18T07:08:14.828Z",
+      "updatedAt": "2025-10-13T13:27:27.785Z",
+      "__type": "Object",
+      "className": "events",
+      "custom_fields": {
+        "ticketUrl": "https://www.ticketmaster.no/artist/hstsabbat-billetter/1101633"
+      }
+    },
+    "createdAt": "2025-09-06T09:00:51.810Z",
+    "updatedAt": "2025-10-21T09:12:15.996Z",
+    "imageUrl": "https://ik.imagekit.io/mfgbmrqfuvo/schedule-images/schedule_image_FOOUCoN3n"
+  },
+  {
+    "objectId": "cLerN2EOAJ",
+    "tags": [
+      "Trash",
+      "Extreme",
+      "HeavyMetal"
+    ],
+    "socialLinks": [
+      {
+        "type": "facebook",
+        "url": "https://www.facebook.com/p/Arachno-100092623839430/"
+      },
+      {
+        "type": "instagram",
+        "url": "https://www.instagram.com/arachno_band?"
+      }
+    ],
+    "name": "Arachno",
+    "start_time": 1761330600,
+    "end_time": 1761334200,
+    "start_time_iso": "2025-10-24T18:30:00.000Z",
+    "end_time_iso": "2025-10-24T19:30:00.000Z",
+    "description": "Who’s Arachno? Only the coolest f*king dudes in town!\nAspiring, young, full-of-energy brutalists! Hailing from Oslo and Kongsberg, they bring the Power Trip, Pantera and Demolition Hammer storm of groovy trash metal!",
+    "externalVenueName": "Verkstedet",
+    "youTube": "0M6teBk0p9M",
+    "isMainSchedule": true,
+    "relatedEvent": {
+      "objectId": "t8wUoQScas",
+      "name": "Høstsabbat",
+      "venue": {
+        "objectId": "PbVOcqLkry",
+        "name": "Kulturkirken Jakob",
+        "createdAt": "2022-02-28T18:40:54.952Z",
+        "updatedAt": "2026-02-14T10:09:30.577Z",
+        "__type": "Object",
+        "className": "venues"
+      },
+      "createdAt": "2025-06-18T07:08:14.828Z",
+      "updatedAt": "2025-10-13T13:27:27.785Z",
+      "__type": "Object",
+      "className": "events",
+      "custom_fields": {
+        "ticketUrl": "https://www.ticketmaster.no/artist/hstsabbat-billetter/1101633"
+      }
+    },
+    "createdAt": "2025-08-23T17:02:03.211Z",
+    "updatedAt": "2025-10-24T10:25:00.859Z",
+    "imageUrl": "https://ik.imagekit.io/mfgbmrqfuvo/schedule-images/schedule_image_Tc2v9ml0D"
+  },
+  {
+    "objectId": "2dZuiQUFjD",
+    "tags": [
+      "Stonerrock",
+      "Riff-o-mania",
+      "Gnomerock"
+    ],
+    "socialLinks": [
+      {
+        "type": "spotify",
+        "url": "https://open.spotify.com/artist/6CLbqb5cObaXRBi4qvcKmO?si=Sbheo509QFOr2ASnNfOsSA"
+      },
+      {
+        "type": "tidal",
+        "url": "https://tidal.com/browse/artist/36215424/u"
+      },
+      {
+        "type": "facebook",
+        "url": "https://www.facebook.com/officialgnomeband/"
+      },
+      {
+        "type": "instagram",
+        "url": "https://www.instagram.com/gnomeverse/"
+      }
+    ],
+    "name": "Gnome",
+    "start_time": 1761332400,
+    "end_time": 1761336000,
+    "start_time_iso": "2025-10-24T19:00:00.000Z",
+    "end_time_iso": "2025-10-24T20:00:00.000Z",
+    "description": "Three Belgian stoned gnomes with pointy hats and armed to the teeth with killer riffs and coordinated dances. What's not to love?",
+    "externalVenueName": "The Chapel",
+    "youTube": "xmqPS53J34g",
+    "isMainSchedule": true,
+    "relatedEvent": {
+      "objectId": "t8wUoQScas",
+      "name": "Høstsabbat",
+      "venue": {
+        "objectId": "PbVOcqLkry",
+        "name": "Kulturkirken Jakob",
+        "createdAt": "2022-02-28T18:40:54.952Z",
+        "updatedAt": "2026-02-14T10:09:30.577Z",
+        "__type": "Object",
+        "className": "venues"
+      },
+      "createdAt": "2025-06-18T07:08:14.828Z",
+      "updatedAt": "2025-10-13T13:27:27.785Z",
+      "__type": "Object",
+      "className": "events",
+      "custom_fields": {
+        "ticketUrl": "https://www.ticketmaster.no/artist/hstsabbat-billetter/1101633"
+      }
+    },
+    "createdAt": "2025-08-23T17:01:20.428Z",
+    "updatedAt": "2025-10-21T09:12:33.732Z",
+    "imageUrl": "https://ik.imagekit.io/mfgbmrqfuvo/schedule-images/schedule_image_I2l7pJqyP"
+  },
+  {
+    "objectId": "6RETtIKIpK",
+    "tags": [
+      "HeavyDoom",
+      "Deathmetal",
+      "Danish"
+    ],
+    "socialLinks": [
+      {
+        "type": "facebook",
+        "url": "https://www.facebook.com/KATLADK/"
+      },
+      {
+        "type": "instagram",
+        "url": "https://www.instagram.com/katlaofficial/"
+      },
+      {
+        "type": "spotify",
+        "url": "https://open.spotify.com/artist/6FFTQRf8CS9YJf9T8dcAnG?si=MYr5I-aZTdWp3Q_TwsXVzw"
+      },
+      {
+        "type": "tidal",
+        "url": "https://tidal.com/browse/artist/6529635/u"
+      }
+    ],
+    "name": "Katla",
+    "start_time": 1761336000,
+    "end_time": 1761339600,
+    "start_time_iso": "2025-10-24T20:00:00.000Z",
+    "end_time_iso": "2025-10-24T21:00:00.000Z",
+    "description": "Gut punching heavy doom from Copenhagen! The danish dynamite trio steps in to fill Domkraft's spot, who unfortunately have to cancel due to unforseen issues.\nKatla, hot of their debut albumrelease in March (Scandinavian Pain), \nhave laid waste to Scandinavia and Germany on tour.\nNow, they bring their energetic stage presence to Høstsabbat and few bands have fit the bill of playing in the Church of Riffs better than these guys!\nExpect grinding doom with black- and deathmetal influences.\nIf there's any religious entities left in the church, they're gonna be rattled and shaken out for good after this!",
+    "externalVenueName": "The Crypt",
+    "youTube": "L7ccHpO6Wek",
+    "isMainSchedule": true,
+    "relatedEvent": {
+      "objectId": "t8wUoQScas",
+      "name": "Høstsabbat",
+      "venue": {
+        "objectId": "PbVOcqLkry",
+        "name": "Kulturkirken Jakob",
+        "createdAt": "2022-02-28T18:40:54.952Z",
+        "updatedAt": "2026-02-14T10:09:30.577Z",
+        "__type": "Object",
+        "className": "venues"
+      },
+      "createdAt": "2025-06-18T07:08:14.828Z",
+      "updatedAt": "2025-10-13T13:27:27.785Z",
+      "__type": "Object",
+      "className": "events",
+      "custom_fields": {
+        "ticketUrl": "https://www.ticketmaster.no/artist/hstsabbat-billetter/1101633"
+      }
+    },
+    "createdAt": "2025-09-16T09:11:53.211Z",
+    "updatedAt": "2025-10-21T09:12:47.728Z",
+    "imageUrl": "https://ik.imagekit.io/mfgbmrqfuvo/schedule-images/schedule_image_LBiBVf9Vx"
+  },
+  {
+    "objectId": "PKAIDp5ke9",
+    "tags": [
+      "Punk",
+      "Prog-metal",
+      "Aggressive"
+    ],
+    "socialLinks": [
+      {
+        "type": "spotify",
+        "url": "https://open.spotify.com/artist/1Vm8N0eT01j12THcY5tf8E?si=FXN-cUFvQbS1xuUX_d_hJw"
+      },
+      {
+        "type": "tidal",
+        "url": "https://tidal.com/browse/artist/4558285/u"
+      },
+      {
+        "type": "facebook",
+        "url": "https://www.facebook.com/kambodsja/"
+      },
+      {
+        "type": "instagram",
+        "url": "https://www.instagram.com/kambodsja/"
+      }
+    ],
+    "name": "Kambodsja",
+    "start_time": 1761337800,
+    "end_time": 1761341400,
+    "start_time_iso": "2025-10-24T20:30:00.000Z",
+    "end_time_iso": "2025-10-24T21:30:00.000Z",
+    "description": "Progressive indie punk rock, spiced with enough attitude and spunk to rip your face off.",
+    "externalVenueName": "Verkstedet",
+    "youTube": "m4kf3FE0Cno",
+    "isMainSchedule": true,
+    "relatedEvent": {
+      "objectId": "t8wUoQScas",
+      "name": "Høstsabbat",
+      "venue": {
+        "objectId": "PbVOcqLkry",
+        "name": "Kulturkirken Jakob",
+        "createdAt": "2022-02-28T18:40:54.952Z",
+        "updatedAt": "2026-02-14T10:09:30.577Z",
+        "__type": "Object",
+        "className": "venues"
+      },
+      "createdAt": "2025-06-18T07:08:14.828Z",
+      "updatedAt": "2025-10-13T13:27:27.785Z",
+      "__type": "Object",
+      "className": "events",
+      "custom_fields": {
+        "ticketUrl": "https://www.ticketmaster.no/artist/hstsabbat-billetter/1101633"
+      }
+    },
+    "createdAt": "2025-08-23T17:04:05.732Z",
+    "updatedAt": "2025-10-21T09:12:53.680Z",
+    "imageUrl": "https://ik.imagekit.io/mfgbmrqfuvo/schedule-images/schedule_image_lqbb7Lb4v"
+  },
+  {
+    "objectId": "XqFQge5LZR",
+    "tags": [
+      "Doom",
+      "Post-metal",
+      "Stonermetal"
+    ],
+    "socialLinks": [
+      {
+        "type": "facebook",
+        "url": "https://www.facebook.com/quantumyob/"
+      },
+      {
+        "type": "instagram",
+        "url": "https://www.instagram.com/quantumyob/"
+      },
+      {
+        "type": "spotify",
+        "url": "https://open.spotify.com/artist/1hiIe6hmDchjc246cpoAOM?si=MwXA_BNfThOUCXoUvAxQ-g"
+      },
+      {
+        "type": "tidal",
+        "url": "https://tidal.com/browse/artist/4277426/u"
+      }
+    ],
+    "name": "YOB",
+    "start_time": 1761339600,
+    "end_time": 1761343140,
+    "start_time_iso": "2025-10-24T21:00:00.000Z",
+    "end_time_iso": "2025-10-24T21:59:00.000Z",
+    "description": "Please welcome the doom-legends from Eugene, Oregon, the magic powertrio that is Yob!\nThey will play one set of ATMA one day, and a mixed set the other day.\n\nBring your thickets ear-muffs, the church will crumble.",
+    "externalVenueName": "The Chapel",
+    "youTube": "Uif5XmYF7_k",
+    "isMainSchedule": true,
+    "relatedEvent": {
+      "objectId": "t8wUoQScas",
+      "name": "Høstsabbat",
+      "venue": {
+        "objectId": "PbVOcqLkry",
+        "name": "Kulturkirken Jakob",
+        "createdAt": "2022-02-28T18:40:54.952Z",
+        "updatedAt": "2026-02-14T10:09:30.577Z",
+        "__type": "Object",
+        "className": "venues"
+      },
+      "createdAt": "2025-06-18T07:08:14.828Z",
+      "updatedAt": "2025-10-13T13:27:27.785Z",
+      "__type": "Object",
+      "className": "events",
+      "custom_fields": {
+        "ticketUrl": "https://www.ticketmaster.no/artist/hstsabbat-billetter/1101633"
+      }
+    },
+    "createdAt": "2025-08-21T11:47:10.509Z",
+    "updatedAt": "2025-10-21T09:13:01.350Z",
+    "imageUrl": "https://ik.imagekit.io/mfgbmrqfuvo/schedule-images/schedule_image_kcafpCKR6"
+  },
+  {
+    "objectId": "GJFMPzUcIm",
+    "tags": [],
+    "socialLinks": [],
+    "name": "Hestedirektoratets Rockequiz",
+    "start_time": 1761397200,
+    "end_time": 1761400800,
+    "start_time_iso": "2025-10-25T13:00:00.000Z",
+    "end_time_iso": "2025-10-25T14:00:00.000Z",
+    "description": "Rock and metal quiz in the beer-tent!\nThere will be prizes, beer and music!",
+    "externalVenueName": "The Chapel",
+    "youTube": "",
+    "isMainSchedule": true,
+    "relatedEvent": {
+      "objectId": "kaEoejBd4D",
+      "venue": {
+        "objectId": "PbVOcqLkry",
+        "name": "Kulturkirken Jakob",
+        "createdAt": "2022-02-28T18:40:54.952Z",
+        "updatedAt": "2026-02-14T10:09:30.577Z",
+        "__type": "Object",
+        "className": "venues"
+      },
+      "name": "Høstsabbat",
+      "createdAt": "2025-10-09T05:43:11.913Z",
+      "updatedAt": "2025-10-13T13:27:41.337Z",
+      "__type": "Object",
+      "className": "events",
+      "custom_fields": {
+        "ticketUrl": "https://www.ticketmaster.no/event/hstsabbat-saturday-billetter/226302472"
+      }
+    },
+    "createdAt": "2025-10-21T09:15:28.878Z",
+    "updatedAt": "2025-10-21T09:19:54.903Z",
+    "imageUrl": "https://ik.imagekit.io/mfgbmrqfuvo/schedule-images/schedule_image_iJea94zOP"
+  },
+  {
+    "objectId": "9XiECFFaYr",
+    "tags": [
+      "Brutal",
+      "Deathmetal",
+      "Blackened"
+    ],
+    "socialLinks": [
+      {
+        "type": "spotify",
+        "url": "https://open.spotify.com/artist/3SJevRyiO3kSul0ceR7TxS?si=5-McjLQOTXSMj88RuU3MOA"
+      },
+      {
+        "type": "tidal",
+        "url": "https://tidal.com/browse/artist/9587489/u"
+      },
+      {
+        "type": "facebook",
+        "url": "https://www.facebook.com/ruunband/?locale=nb_NO"
+      },
+      {
+        "type": "instagram",
+        "url": "https://www.instagram.com/ruunband/"
+      }
+    ],
+    "name": "RUUN",
+    "start_time": 1761400800,
+    "end_time": 1761404400,
+    "start_time_iso": "2025-10-25T14:00:00.000Z",
+    "end_time_iso": "2025-10-25T15:00:00.000Z",
+    "description": "Promising brutality and slaughter, their corrosive death metal perfectly accompanies the dystopian human existence.",
+    "externalVenueName": "The Crypt",
+    "youTube": "7LFh5hu06zs",
+    "isMainSchedule": true,
+    "relatedEvent": {
+      "objectId": "kaEoejBd4D",
+      "venue": {
+        "objectId": "PbVOcqLkry",
+        "name": "Kulturkirken Jakob",
+        "createdAt": "2022-02-28T18:40:54.952Z",
+        "updatedAt": "2026-02-14T10:09:30.577Z",
+        "__type": "Object",
+        "className": "venues"
+      },
+      "name": "Høstsabbat",
+      "createdAt": "2025-10-09T05:43:11.913Z",
+      "updatedAt": "2025-10-13T13:27:41.337Z",
+      "__type": "Object",
+      "className": "events",
+      "custom_fields": {
+        "ticketUrl": "https://www.ticketmaster.no/event/hstsabbat-saturday-billetter/226302472"
+      }
+    },
+    "createdAt": "2025-08-23T17:07:43.969Z",
+    "updatedAt": "2025-10-21T09:13:59.488Z",
+    "imageUrl": "https://ik.imagekit.io/mfgbmrqfuvo/schedule-images/schedule_image_BDDVdfdQ-"
+  },
+  {
+    "objectId": "z3VY3ee2wR",
+    "tags": [
+      "HeavyRock",
+      "Sludge",
+      "Stoner"
+    ],
+    "socialLinks": [
+      {
+        "type": "facebook",
+        "url": "https://www.facebook.com/redwoodtempleband"
+      },
+      {
+        "type": "instagram",
+        "url": "https://www.instagram.com/redwoodtemple/"
+      },
+      {
+        "type": "tidal",
+        "url": "https://tidal.com/artist/9161211/u"
+      },
+      {
+        "type": "spotify",
+        "url": "https://open.spotify.com/artist/3QY08mMjq8cyqGDvQOGDSq"
+      }
+    ],
+    "name": "Redwood Temple",
+    "start_time": 1761402600,
+    "end_time": 1761406200,
+    "start_time_iso": "2025-10-25T14:30:00.000Z",
+    "end_time_iso": "2025-10-25T15:30:00.000Z",
+    "description": "Dynamic, raw, and sludgy. Having re-invented their sound, and come out harder, faster and punchier, the Temple is now filled with relentless, in-your-face metal!",
+    "externalVenueName": "Verkstedet",
+    "youTube": "CJmccWftSHU",
+    "isMainSchedule": true,
+    "relatedEvent": {
+      "objectId": "kaEoejBd4D",
+      "venue": {
+        "objectId": "PbVOcqLkry",
+        "name": "Kulturkirken Jakob",
+        "createdAt": "2022-02-28T18:40:54.952Z",
+        "updatedAt": "2026-02-14T10:09:30.577Z",
+        "__type": "Object",
+        "className": "venues"
+      },
+      "name": "Høstsabbat",
+      "createdAt": "2025-10-09T05:43:11.913Z",
+      "updatedAt": "2025-10-13T13:27:41.337Z",
+      "__type": "Object",
+      "className": "events",
+      "custom_fields": {
+        "ticketUrl": "https://www.ticketmaster.no/event/hstsabbat-saturday-billetter/226302472"
+      }
+    },
+    "createdAt": "2025-10-19T08:21:55.246Z",
+    "updatedAt": "2025-10-21T09:13:21.171Z",
+    "imageUrl": "https://ik.imagekit.io/mfgbmrqfuvo/schedule-images/schedule_image_e9i4j0tdf"
+  },
+  {
+    "objectId": "1uvLSjkKKo",
+    "tags": [
+      "AtmosphericSludge",
+      "ExtremeMetal",
+      "DroptuneChugCore"
+    ],
+    "socialLinks": [
+      {
+        "type": "facebook",
+        "url": "https://www.facebook.com/llnnband"
+      },
+      {
+        "type": "instagram",
+        "url": "https://www.instagram.com/llnn.band/"
+      },
+      {
+        "type": "tidal",
+        "url": "https://tidal.com/artist/7425791/u"
+      },
+      {
+        "type": "spotify",
+        "url": "https://open.spotify.com/artist/2uyWd9ObO64Qngrfj61YNy"
+      }
+    ],
+    "name": "LLNN",
+    "start_time": 1761404400,
+    "end_time": 1761408000,
+    "start_time_iso": "2025-10-25T15:00:00.000Z",
+    "end_time_iso": "2025-10-25T16:00:00.000Z",
+    "description": "If you mix an 80s space-horror movie soundtrack, with crushing hardcore vocals, and a thundering omnipresent bass, rumbling through your very human core, you get something close to LLNN. Your spine and knees will have trouble standing upright through this set.",
+    "externalVenueName": "The Chapel",
+    "youTube": "tj2Ft3a0xyo",
+    "isMainSchedule": true,
+    "relatedEvent": {
+      "objectId": "kaEoejBd4D",
+      "venue": {
+        "objectId": "PbVOcqLkry",
+        "name": "Kulturkirken Jakob",
+        "createdAt": "2022-02-28T18:40:54.952Z",
+        "updatedAt": "2026-02-14T10:09:30.577Z",
+        "__type": "Object",
+        "className": "venues"
+      },
+      "name": "Høstsabbat",
+      "createdAt": "2025-10-09T05:43:11.913Z",
+      "updatedAt": "2025-10-13T13:27:41.337Z",
+      "__type": "Object",
+      "className": "events",
+      "custom_fields": {
+        "ticketUrl": "https://www.ticketmaster.no/event/hstsabbat-saturday-billetter/226302472"
+      }
+    },
+    "createdAt": "2025-10-19T08:21:18.663Z",
+    "updatedAt": "2025-10-21T09:13:36.450Z",
+    "imageUrl": "https://ik.imagekit.io/mfgbmrqfuvo/schedule-images/schedule_image_zecTJollbW"
+  },
+  {
+    "objectId": "k2L3O4qqOc",
+    "tags": [
+      "Hardcore",
+      "Post-metal",
+      "Crossover"
+    ],
+    "socialLinks": [
+      {
+        "type": "spotify",
+        "url": "https://open.spotify.com/artist/6WoSPIYYLCZic079pGjIh5?si=1F55B5GSTuy-zuh-AE9jHw"
+      },
+      {
+        "type": "tidal",
+        "url": "https://tidal.com/browse/artist/36936651/u"
+      },
+      {
+        "type": "facebook",
+        "url": "https://www.facebook.com/arvband/?locale=nb_NO"
+      },
+      {
+        "type": "instagram",
+        "url": "https://www.instagram.com/arv_band/"
+      }
+    ],
+    "name": "ARV",
+    "start_time": 1761408000,
+    "end_time": 1761411600,
+    "start_time_iso": "2025-10-25T16:00:00.000Z",
+    "end_time_iso": "2025-10-25T17:00:00.000Z",
+    "description": "𝔄𝔯𝔳 with their new album serves the biggest gut punch of the festival, mixing hardcore and post-metal.",
+    "externalVenueName": "The Crypt",
+    "youTube": "ST9RCOuz9dY",
+    "isMainSchedule": true,
+    "relatedEvent": {
+      "objectId": "kaEoejBd4D",
+      "venue": {
+        "objectId": "PbVOcqLkry",
+        "name": "Kulturkirken Jakob",
+        "createdAt": "2022-02-28T18:40:54.952Z",
+        "updatedAt": "2026-02-14T10:09:30.577Z",
+        "__type": "Object",
+        "className": "venues"
+      },
+      "name": "Høstsabbat",
+      "createdAt": "2025-10-09T05:43:11.913Z",
+      "updatedAt": "2025-10-13T13:27:41.337Z",
+      "__type": "Object",
+      "className": "events",
+      "custom_fields": {
+        "ticketUrl": "https://www.ticketmaster.no/event/hstsabbat-saturday-billetter/226302472"
+      }
+    },
+    "createdAt": "2025-08-23T16:51:50.163Z",
+    "updatedAt": "2025-10-21T09:14:14.715Z",
+    "imageUrl": "https://ik.imagekit.io/mfgbmrqfuvo/schedule-images/schedule_image_u7jDnk7Uy"
+  },
+  {
+    "objectId": "k80YQtLN4G",
+    "tags": [
+      "Doom",
+      "Sludge",
+      "Blackmetal"
+    ],
+    "socialLinks": [
+      {
+        "type": "instagram",
+        "url": "https://www.instagram.com/yvris.band/"
+      },
+      {
+        "type": "facebook",
+        "url": "https://www.facebook.com/people/YVRIS/61559894008404/"
+      }
+    ],
+    "name": "Yvris",
+    "start_time": 1761409800,
+    "end_time": 1761413400,
+    "start_time_iso": "2025-10-25T16:30:00.000Z",
+    "end_time_iso": "2025-10-25T17:30:00.000Z",
+    "description": "New outfit Yvris, brings their chugging, dark and melancholic take on humanity's decay. Expect harsh vocals tied together by a gnarly band with sludge flair.",
+    "externalVenueName": "Verkstedet",
+    "youTube": "",
+    "isMainSchedule": true,
+    "relatedEvent": {
+      "objectId": "kaEoejBd4D",
+      "venue": {
+        "objectId": "PbVOcqLkry",
+        "name": "Kulturkirken Jakob",
+        "createdAt": "2022-02-28T18:40:54.952Z",
+        "updatedAt": "2026-02-14T10:09:30.577Z",
+        "__type": "Object",
+        "className": "venues"
+      },
+      "name": "Høstsabbat",
+      "createdAt": "2025-10-09T05:43:11.913Z",
+      "updatedAt": "2025-10-13T13:27:41.337Z",
+      "__type": "Object",
+      "className": "events",
+      "custom_fields": {
+        "ticketUrl": "https://www.ticketmaster.no/event/hstsabbat-saturday-billetter/226302472"
+      }
+    },
+    "createdAt": "2025-09-06T09:01:05.872Z",
+    "updatedAt": "2025-10-21T09:14:24.514Z",
+    "imageUrl": "https://ik.imagekit.io/mfgbmrqfuvo/schedule-images/schedule_image_zHYZB_kbht"
+  },
+  {
+    "objectId": "NXdXYZEC7i",
+    "tags": [
+      "Doom",
+      "FuneralDoom",
+      "NauticalMetal"
+    ],
+    "socialLinks": [
+      {
+        "type": "spotify",
+        "url": "https://open.spotify.com/artist/2N8XkSGgBeH1VrFHxbarbz?si=H6CAyw-aSuOsVC4PBqQmhQ"
+      },
+      {
+        "type": "tidal",
+        "url": "https://tidal.com/browse/artist/3604692/u"
+      },
+      {
+        "type": "facebook",
+        "url": "https://www.facebook.com/AhabDoom/"
+      },
+      {
+        "type": "instagram",
+        "url": "https://www.instagram.com/ahabdoom/"
+      }
+    ],
+    "name": "Ahab",
+    "start_time": 1761411600,
+    "end_time": 1761415200,
+    "start_time_iso": "2025-10-25T17:00:00.000Z",
+    "end_time_iso": "2025-10-25T18:00:00.000Z",
+    "description": "The hard hitting, whale-hunting trailblazers from the coral tombs, AHAB comes to rattle the Church!",
+    "externalVenueName": "The Chapel",
+    "youTube": "_y16EPGFK2E",
+    "isMainSchedule": true,
+    "relatedEvent": {
+      "objectId": "kaEoejBd4D",
+      "venue": {
+        "objectId": "PbVOcqLkry",
+        "name": "Kulturkirken Jakob",
+        "createdAt": "2022-02-28T18:40:54.952Z",
+        "updatedAt": "2026-02-14T10:09:30.577Z",
+        "__type": "Object",
+        "className": "venues"
+      },
+      "name": "Høstsabbat",
+      "createdAt": "2025-10-09T05:43:11.913Z",
+      "updatedAt": "2025-10-13T13:27:41.337Z",
+      "__type": "Object",
+      "className": "events",
+      "custom_fields": {
+        "ticketUrl": "https://www.ticketmaster.no/event/hstsabbat-saturday-billetter/226302472"
+      }
+    },
+    "createdAt": "2025-08-23T16:48:15.451Z",
+    "updatedAt": "2025-10-21T09:14:33.035Z",
+    "imageUrl": "https://ik.imagekit.io/mfgbmrqfuvo/schedule-images/schedule_image_p2M9rx9QJ"
+  },
+  {
+    "objectId": "fcmGYoFew5",
+    "tags": [
+      "PsychRock",
+      "Doom",
+      "Stoner"
+    ],
+    "socialLinks": [
+      {
+        "type": "facebook",
+        "url": "https://www.facebook.com/sterikdoom"
+      },
+      {
+        "type": "instagram",
+        "url": "https://www.instagram.com/sterikdoom/"
+      },
+      {
+        "type": "tidal",
+        "url": "https://tidal.com/artist/4813979/u"
+      },
+      {
+        "type": "spotify",
+        "url": "https://open.spotify.com/artist/4Ev1yPp7CizkvRWji3qK7x"
+      }
+    ],
+    "name": "S:T Erik",
+    "start_time": 1761415200,
+    "end_time": 1761418800,
+    "start_time_iso": "2025-10-25T18:00:00.000Z",
+    "end_time_iso": "2025-10-25T19:00:00.000Z",
+    "description": "The angst driven psychedelic doom outfit from Uppsala has risen from the permafrost to perform their swan songs echoing from the brink of outer space!",
+    "externalVenueName": "The Crypt",
+    "youTube": "h-sbwhn1VXg",
+    "isMainSchedule": true,
+    "relatedEvent": {
+      "objectId": "kaEoejBd4D",
+      "venue": {
+        "objectId": "PbVOcqLkry",
+        "name": "Kulturkirken Jakob",
+        "createdAt": "2022-02-28T18:40:54.952Z",
+        "updatedAt": "2026-02-14T10:09:30.577Z",
+        "__type": "Object",
+        "className": "venues"
+      },
+      "name": "Høstsabbat",
+      "createdAt": "2025-10-09T05:43:11.913Z",
+      "updatedAt": "2025-10-13T13:27:41.337Z",
+      "__type": "Object",
+      "className": "events",
+      "custom_fields": {
+        "ticketUrl": "https://www.ticketmaster.no/event/hstsabbat-saturday-billetter/226302472"
+      }
+    },
+    "createdAt": "2025-10-19T08:21:02.669Z",
+    "updatedAt": "2025-10-21T09:13:50.173Z",
+    "imageUrl": "https://ik.imagekit.io/mfgbmrqfuvo/schedule-images/schedule_image_N2EtW2ATs"
+  },
+  {
+    "objectId": "fdZM0vKxHH",
+    "tags": [
+      "Blackmetal",
+      "Aggressive",
+      "Extreme"
+    ],
+    "socialLinks": [
+      {
+        "type": "spotify",
+        "url": "https://open.spotify.com/artist/2RUA2i47wfyPxlKXFX41rN?si=FOmMX3L8QnqcTwd1I8AOfg"
+      },
+      {
+        "type": "tidal",
+        "url": "https://tidal.com/browse/artist/42900536/u"
+      },
+      {
+        "type": "facebook",
+        "url": "https://www.facebook.com/NadirCult/?locale=nb_NO"
+      },
+      {
+        "type": "instagram",
+        "url": "https://www.instagram.com/nadircult/"
+      }
+    ],
+    "name": "Nadir",
+    "start_time": 1761417000,
+    "end_time": 1761420600,
+    "start_time_iso": "2025-10-25T18:30:00.000Z",
+    "end_time_iso": "2025-10-25T19:30:00.000Z",
+    "description": "Rooted in Black Metal, Nadir delivers charred, fast-paced, aggressive and relentless walls of existential dread.",
+    "externalVenueName": "Verkstedet",
+    "youTube": "4W42lA0FzNk",
+    "isMainSchedule": true,
+    "relatedEvent": {
+      "objectId": "kaEoejBd4D",
+      "venue": {
+        "objectId": "PbVOcqLkry",
+        "name": "Kulturkirken Jakob",
+        "createdAt": "2022-02-28T18:40:54.952Z",
+        "updatedAt": "2026-02-14T10:09:30.577Z",
+        "__type": "Object",
+        "className": "venues"
+      },
+      "name": "Høstsabbat",
+      "createdAt": "2025-10-09T05:43:11.913Z",
+      "updatedAt": "2025-10-13T13:27:41.337Z",
+      "__type": "Object",
+      "className": "events",
+      "custom_fields": {
+        "ticketUrl": "https://www.ticketmaster.no/event/hstsabbat-saturday-billetter/226302472"
+      }
+    },
+    "createdAt": "2025-08-23T17:05:50.135Z",
+    "updatedAt": "2025-10-21T09:14:41.169Z",
+    "imageUrl": "https://ik.imagekit.io/mfgbmrqfuvo/schedule-images/schedule_image_iTTSq6bbZ"
+  },
+  {
+    "objectId": "lp34IjUMeI",
+    "tags": [
+      "Electrocore",
+      "Crossover"
+    ],
+    "socialLinks": [
+      {
+        "type": "facebook",
+        "url": "https://www.facebook.com/johncxnnor/"
+      },
+      {
+        "type": "instagram",
+        "url": "https://www.instagram.com/johncxnnor"
+      },
+      {
+        "type": "tidal",
+        "url": "https://tidal.com/browse/artist/27931334/u"
+      },
+      {
+        "type": "spotify",
+        "url": "https://open.spotify.com/artist/2NKQiE93SxoavsQfWoReyN?si=Hzoi60McQnCyTsh7feTT-g"
+      }
+    ],
+    "name": "John Cxnnor",
+    "start_time": 1761418800,
+    "end_time": 1761422400,
+    "start_time_iso": "2025-10-25T19:00:00.000Z",
+    "end_time_iso": "2025-10-25T20:00:00.000Z",
+    "description": "John Cxnnor will absolutely decimate the church with their one-of-a-kind electrocore. Industrial noise, dark beats and secret guests! Sonically and visually unique!",
+    "externalVenueName": "The Chapel",
+    "youTube": "kEFoqm16QlU",
+    "isMainSchedule": true,
+    "relatedEvent": {
+      "objectId": "kaEoejBd4D",
+      "venue": {
+        "objectId": "PbVOcqLkry",
+        "name": "Kulturkirken Jakob",
+        "createdAt": "2022-02-28T18:40:54.952Z",
+        "updatedAt": "2026-02-14T10:09:30.577Z",
+        "__type": "Object",
+        "className": "venues"
+      },
+      "name": "Høstsabbat",
+      "createdAt": "2025-10-09T05:43:11.913Z",
+      "updatedAt": "2025-10-13T13:27:41.337Z",
+      "__type": "Object",
+      "className": "events",
+      "custom_fields": {
+        "ticketUrl": "https://www.ticketmaster.no/event/hstsabbat-saturday-billetter/226302472"
+      }
+    },
+    "createdAt": "2025-08-23T17:03:19.728Z",
+    "updatedAt": "2025-10-21T09:14:49.689Z",
+    "imageUrl": "https://ik.imagekit.io/mfgbmrqfuvo/schedule-images/schedule_image_CVqfJkIS2f"
+  },
+  {
+    "objectId": "Q3khcPBBQS",
+    "tags": [
+      "Noise",
+      "Hardcore",
+      "Chaotic"
+    ],
+    "socialLinks": [
+      {
+        "type": "spotify",
+        "url": "https://open.spotify.com/artist/44vH2rZm45LuZZCh35jVfC?si=WqmXF9xVS3W8VIdzUO1fjQ"
+      },
+      {
+        "type": "instagram",
+        "url": "https://www.instagram.com/newmoney_band/"
+      },
+      {
+        "type": "facebook",
+        "url": "https://www.facebook.com/dineronuevo666/"
+      },
+      {
+        "type": "tidal",
+        "url": "https://tidal.com/browse/artist/5459086/u"
+      }
+    ],
+    "name": "New Money",
+    "start_time": 1761422400,
+    "end_time": 1761426000,
+    "start_time_iso": "2025-10-25T20:00:00.000Z",
+    "end_time_iso": "2025-10-25T21:00:00.000Z",
+    "description": "Danish dynamite from the underground Copenhagen scene, mixing Hardcore and Noise Rock",
+    "externalVenueName": "The Crypt",
+    "youTube": "",
+    "isMainSchedule": true,
+    "relatedEvent": {
+      "objectId": "kaEoejBd4D",
+      "venue": {
+        "objectId": "PbVOcqLkry",
+        "name": "Kulturkirken Jakob",
+        "createdAt": "2022-02-28T18:40:54.952Z",
+        "updatedAt": "2026-02-14T10:09:30.577Z",
+        "__type": "Object",
+        "className": "venues"
+      },
+      "name": "Høstsabbat",
+      "createdAt": "2025-10-09T05:43:11.913Z",
+      "updatedAt": "2025-10-13T13:27:41.337Z",
+      "__type": "Object",
+      "className": "events",
+      "custom_fields": {
+        "ticketUrl": "https://www.ticketmaster.no/event/hstsabbat-saturday-billetter/226302472"
+      }
+    },
+    "createdAt": "2025-08-23T17:06:59.666Z",
+    "updatedAt": "2025-10-21T09:14:56.826Z",
+    "imageUrl": "https://ik.imagekit.io/mfgbmrqfuvo/schedule-images/schedule_image_NsSfRprk4"
+  },
+  {
+    "objectId": "tQPpHpc0BB",
+    "tags": [
+      "Punk",
+      "Hardcore",
+      "Scandirock"
+    ],
+    "socialLinks": [
+      {
+        "type": "facebook",
+        "url": "https://www.facebook.com/fightsoslo/"
+      },
+      {
+        "type": "instagram",
+        "url": "https://www.instagram.com/fightsoslo/?hl=nb"
+      },
+      {
+        "type": "spotify",
+        "url": "https://open.spotify.com/artist/5go1nvPuLCt4vDLZXYkzE7?si=LbnaUjl1SGG2mUhAgJ9WEg"
+      },
+      {
+        "type": "tidal",
+        "url": "https://tidal.com/browse/artist/3582391/u"
+      }
+    ],
+    "name": "Fights",
+    "start_time": 1761424200,
+    "end_time": 1761427800,
+    "start_time_iso": "2025-10-25T20:30:00.000Z",
+    "end_time_iso": "2025-10-25T21:30:00.000Z",
+    "description": "𝔉𝔦𝔤𝔥𝔱𝔰 hold their own with their scampirock sound, relentless punk mayhem.",
+    "externalVenueName": "Verkstedet",
+    "youTube": "ATXd-YRV5Hs",
+    "isMainSchedule": true,
+    "relatedEvent": {
+      "objectId": "kaEoejBd4D",
+      "venue": {
+        "objectId": "PbVOcqLkry",
+        "name": "Kulturkirken Jakob",
+        "createdAt": "2022-02-28T18:40:54.952Z",
+        "updatedAt": "2026-02-14T10:09:30.577Z",
+        "__type": "Object",
+        "className": "venues"
+      },
+      "name": "Høstsabbat",
+      "createdAt": "2025-10-09T05:43:11.913Z",
+      "updatedAt": "2025-10-13T13:27:41.337Z",
+      "__type": "Object",
+      "className": "events",
+      "custom_fields": {
+        "ticketUrl": "https://www.ticketmaster.no/event/hstsabbat-saturday-billetter/226302472"
+      }
+    },
+    "createdAt": "2025-08-23T16:55:03.254Z",
+    "updatedAt": "2025-10-21T09:15:04.675Z",
+    "imageUrl": "https://ik.imagekit.io/mfgbmrqfuvo/schedule-images/schedule_image_v2RPAfQlr"
+  },
+  {
+    "objectId": "7pHVfbOV2y",
+    "tags": [
+      "Doom",
+      "Post-Metal",
+      "StonerMetal"
+    ],
+    "socialLinks": [
+      {
+        "type": "spotify",
+        "url": "https://open.spotify.com/artist/1hiIe6hmDchjc246cpoAOM?si=MwXA_BNfThOUCXoUvAxQ-g"
+      },
+      {
+        "type": "tidal",
+        "url": "https://tidal.com/browse/artist/4277426/u"
+      },
+      {
+        "type": "facebook",
+        "url": "https://www.facebook.com/quantumyob/"
+      },
+      {
+        "type": "instagram",
+        "url": "https://www.instagram.com/quantumyob/"
+      }
+    ],
+    "name": "YOB",
+    "start_time": 1761426000,
+    "end_time": 1761429540,
+    "start_time_iso": "2025-10-25T21:00:00.000Z",
+    "end_time_iso": "2025-10-25T21:59:00.000Z",
+    "description": "Please welcome the doom-legends from Eugene, Oregon, the magic powertrio that is Yob!\nThey will play one set of ATMA one day, and a mixed set the other day.\n\nBring your thickets ear-muffs, the church will crumble.",
+    "externalVenueName": "The Chapel",
+    "youTube": "Uif5XmYF7_k",
+    "isMainSchedule": true,
+    "relatedEvent": {
+      "objectId": "kaEoejBd4D",
+      "venue": {
+        "objectId": "PbVOcqLkry",
+        "name": "Kulturkirken Jakob",
+        "createdAt": "2022-02-28T18:40:54.952Z",
+        "updatedAt": "2026-02-14T10:09:30.577Z",
+        "__type": "Object",
+        "className": "venues"
+      },
+      "name": "Høstsabbat",
+      "createdAt": "2025-10-09T05:43:11.913Z",
+      "updatedAt": "2025-10-13T13:27:41.337Z",
+      "__type": "Object",
+      "className": "events",
+      "custom_fields": {
+        "ticketUrl": "https://www.ticketmaster.no/event/hstsabbat-saturday-billetter/226302472"
+      }
+    },
+    "createdAt": "2025-08-21T11:47:07.197Z",
+    "updatedAt": "2025-10-21T09:15:10.797Z",
+    "imageUrl": "https://ik.imagekit.io/mfgbmrqfuvo/schedule-images/schedule_image_qlgg1ul6D"
+  }
+]

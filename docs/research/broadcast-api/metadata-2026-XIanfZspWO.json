@@ -1,0 +1,106 @@
+{
+  "objectId": "XIanfZspWO",
+  "imagekitRef": {
+    "fileId": "6a744ac15c7cd75eb8132ff4",
+    "name": "festival_image__jYEzd7kI",
+    "size": 159966,
+    "versionInfo": {
+      "id": "6a744ac15c7cd75eb8132ff4",
+      "name": "Version 1"
+    },
+    "filePath": "/festivals/festival_image__jYEzd7kI",
+    "url": "https://ik.imagekit.io/mfgbmrqfuvo/festivals/festival_image__jYEzd7kI",
+    "fileType": "image",
+    "height": 608,
+    "width": 1080,
+    "thumbnailUrl": "https://ik.imagekit.io/mfgbmrqfuvo/tr:n-ik_ml_thumbnail/festivals/festival_image__jYEzd7kI",
+    "AITags": null
+  },
+  "profileImg": {
+    "fileId": "6a744ab45c7cd75eb812281a",
+    "name": "festival_profile_I8zwl2i3-",
+    "size": 162296,
+    "versionInfo": {
+      "id": "6a744ab45c7cd75eb812281a",
+      "name": "Version 1"
+    },
+    "filePath": "/festivals/festival_profile_I8zwl2i3-",
+    "url": "https://ik.imagekit.io/mfgbmrqfuvo/festivals/festival_profile_I8zwl2i3-",
+    "fileType": "image",
+    "height": 1080,
+    "width": 1080,
+    "thumbnailUrl": "https://ik.imagekit.io/mfgbmrqfuvo/tr:n-ik_ml_thumbnail/festivals/festival_profile_I8zwl2i3-",
+    "AITags": null
+  },
+  "appConfig": {
+    "showLocationsFilter": false,
+    "showHeaderOnHome": true,
+    "showMap": false,
+    "mapUrl": "",
+    "enableNotifications": true,
+    "subscriptionText": "",
+    "showUpdates": true,
+    "showTitlesOnArtistsPage": true,
+    "enableSharing": true
+  },
+  "name": "Høstsabbat",
+  "published": true,
+  "description": "",
+  "start_time": 1792742400,
+  "end_time": 1792879140,
+  "start_time_iso": "2026-10-23T08:00:00.000Z",
+  "end_time_iso": "2026-10-24T21:59:00.000Z",
+  "brandColor": "#000000",
+  "useStages": false,
+  "ticketLink": "https://www.ticketmaster.no/event/hstsabbat-2026-billetter/1443649456",
+  "showTicketLink": true,
+  "isTicketMasterAffiliate": false,
+  "homescreenMessage": "",
+  "showHomescreenMessage": false,
+  "website": "https://www.hostsabbat.no/",
+  "imageUrl": "https://ik.imagekit.io/mfgbmrqfuvo/festivals/festival_image__jYEzd7kI",
+  "profileImgUrl": "https://ik.imagekit.io/mfgbmrqfuvo/festivals/festival_profile_I8zwl2i3-",
+  "dateDisplayType": 2,
+  "useScheduleFilter": false,
+  "region": "Oslo",
+  "country": "Norway",
+  "createdAt": "2026-08-06T08:47:12.187Z",
+  "updatedAt": "2026-08-06T09:04:08.009Z",
+  "entity": {
+    "__type": "Pointer",
+    "className": "Entity",
+    "objectId": "QWB8lNKhva"
+  },
+  "workspace": {
+    "__type": "Pointer",
+    "className": "Workspace",
+    "objectId": "hsuzUyUC1i"
+  },
+  "shortLink": {
+    "__type": "Pointer",
+    "className": "ShortLinks",
+    "objectId": "NiuI5qDiOe"
+  },
+  "websiteMessage": "Høstsabbat will showcase the best of the current underground scene of heavy music.",
+  "appScreenshot": {
+    "fileId": "6a744e075c7cd75eb845e2de",
+    "name": "festival_app_screenshot_ww7kagkoq",
+    "size": 1117613,
+    "versionInfo": {
+      "id": "6a744e075c7cd75eb845e2de",
+      "name": "Version 1"
+    },
+    "filePath": "/festivals/festival_app_screenshot_ww7kagkoq",
+    "url": "https://ik.imagekit.io/mfgbmrqfuvo/festivals/festival_app_screenshot_ww7kagkoq",
+    "fileType": "image",
+    "height": 2096,
+    "width": 1179,
+    "thumbnailUrl": "https://ik.imagekit.io/mfgbmrqfuvo/tr:n-ik_ml_thumbnail/festivals/festival_app_screenshot_ww7kagkoq",
+    "AITags": null
+  },
+  "appScreenshotUrl": "https://ik.imagekit.io/mfgbmrqfuvo/festivals/festival_app_screenshot_ww7kagkoq",
+  "id": "XIanfZspWO",
+  "profile": {
+    "entityId": "QWB8lNKhva"
+  }
+}

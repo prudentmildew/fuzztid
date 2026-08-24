@@ -1,0 +1,147 @@
+{
+  "objectId": "dEoMHOghYt",
+  "imagekitRef": {
+    "fileId": "68a47ef85c7cd75eb89b6580",
+    "name": "abcdefg_LFPmaT8E7",
+    "size": 961526,
+    "versionInfo": {
+      "id": "68a47ef85c7cd75eb89b6580",
+      "name": "Version 1"
+    },
+    "filePath": "/PromoEvent/abcdefg_LFPmaT8E7",
+    "url": "https://ik.imagekit.io/mfgbmrqfuvo/PromoEvent/abcdefg_LFPmaT8E7",
+    "fileType": "image",
+    "height": 633,
+    "width": 1125,
+    "thumbnailUrl": "https://ik.imagekit.io/mfgbmrqfuvo/tr:n-ik_ml_thumbnail/PromoEvent/abcdefg_LFPmaT8E7",
+    "AITags": null,
+    "description": null
+  },
+  "profileImg": {
+    "fileId": "68a47f175c7cd75eb89c2297",
+    "name": "abcdefg_ckgjqOO5-",
+    "size": 322177,
+    "versionInfo": {
+      "id": "68a47f175c7cd75eb89c2297",
+      "name": "Version 1"
+    },
+    "filePath": "/PromoEvent/abcdefg_ckgjqOO5-",
+    "url": "https://ik.imagekit.io/mfgbmrqfuvo/PromoEvent/abcdefg_ckgjqOO5-",
+    "fileType": "image",
+    "height": 1080,
+    "width": 1080,
+    "thumbnailUrl": "https://ik.imagekit.io/mfgbmrqfuvo/tr:n-ik_ml_thumbnail/PromoEvent/abcdefg_ckgjqOO5-",
+    "AITags": null,
+    "description": null
+  },
+  "appConfig": {
+    "showLocationsFilter": false,
+    "showHeaderOnHome": true,
+    "showMap": false,
+    "mapUrl": "",
+    "enableNotifications": true,
+    "subscriptionText": "",
+    "hideArtistsPage": false,
+    "enableSharing": true,
+    "themeConfig": {
+      "background": "#393837",
+      "foreground": "#b8aead",
+      "primary": "#b85050",
+      "primaryForeground": "#23273A",
+      "secondary": "#E3D3C0",
+      "secondaryForeground": "#4B3B5A",
+      "muted": "#F5F5F5",
+      "mutedForeground": "#f5f5f5",
+      "border": "#eeeef0",
+      "borderRadius": 8,
+      "accent": "#b85050",
+      "accentForeground": "#23273A",
+      "cardBackground": "",
+      "cardForeground": "#ffffff",
+      "cardTitle": "#ffffff",
+      "cardBorder": "",
+      "cardPadding": false,
+      "headerBackground": "#393837",
+      "headerForeground": "#b8aead",
+      "tabBarBackground": "#393837",
+      "tabBarForeground": "#b8aead",
+      "tabBarActiveTintColor": "#b85050",
+      "star": "#b85050",
+      "squareCorners": false,
+      "cardSquareCorners": false
+    },
+    "enableCustomTheme": true,
+    "statusBarDark": false,
+    "isLineupPublished": true
+  },
+  "name": "Høstsabbat 2025",
+  "published": true,
+  "description": "",
+  "start_time": 1761307200,
+  "end_time": 1761429540,
+  "start_time_iso": "2025-10-24T12:00:00.000Z",
+  "end_time_iso": "2025-10-25T21:59:00.000Z",
+  "brandColor": "#000000",
+  "useStages": true,
+  "ticketLink": "https://www.ticketmaster.no/artist/hstsabbat-billetter/1101633?language=en-us",
+  "showTicketLink": true,
+  "isTicketMasterAffiliate": true,
+  "homescreenMessage": "",
+  "showHomescreenMessage": false,
+  "website": "https://www.hostsabbat.no/",
+  "imageUrl": "https://ik.imagekit.io/mfgbmrqfuvo/PromoEvent/abcdefg_LFPmaT8E7",
+  "profileImgUrl": "https://ik.imagekit.io/mfgbmrqfuvo/PromoEvent/abcdefg_ckgjqOO5-",
+  "dateDisplayType": 0,
+  "useScheduleFilter": false,
+  "region": "Oslo",
+  "createdAt": "2025-08-19T13:40:17.833Z",
+  "updatedAt": "2026-01-17T14:15:01.539Z",
+  "stages": [
+    {
+      "value": "The Chapel",
+      "name": "The Chapel"
+    },
+    {
+      "value": "The Crypt",
+      "name": "The Crypt"
+    },
+    {
+      "value": "Verkstedet",
+      "name": "Verkstedet"
+    }
+  ],
+  "websiteMessage": "Høstsabbat is brought to life by people involved in the underground music scene in Oslo, Norway. Since the start in 2013 it has slowly developed to be an important festival for this scene.\n\nNext Høstsabbat will take place at Kulturkirken Jakob the October 27-28, 2023. Over two days on four stages you will experience slow and crushing doom, heavy bluesrock, stoner, proto-heavy metal, psychedelic spacerock, prog+++.\n\nHøstsabbat will showcase the best of the current underground scene of heavy music, bringing new talent as well as established names.\n\nSummon the spirits, gather the souls…",
+  "workspace": {
+    "__type": "Pointer",
+    "className": "Workspace",
+    "objectId": "hsuzUyUC1i"
+  },
+  "appScreenshot": {
+    "fileId": "68f0d8b05c7cd75eb8b64663",
+    "name": "abcdefg_hB8Pi_Bjg",
+    "size": 282750,
+    "versionInfo": {
+      "id": "68f0d8b05c7cd75eb8b64663",
+      "name": "Version 1"
+    },
+    "filePath": "/PromoEvent/abcdefg_hB8Pi_Bjg",
+    "url": "https://ik.imagekit.io/mfgbmrqfuvo/PromoEvent/abcdefg_hB8Pi_Bjg",
+    "fileType": "image",
+    "height": 2000,
+    "width": 1125,
+    "orientation": 1,
+    "thumbnailUrl": "https://ik.imagekit.io/mfgbmrqfuvo/tr:n-ik_ml_thumbnail/PromoEvent/abcdefg_hB8Pi_Bjg",
+    "AITags": null,
+    "description": null
+  },
+  "appScreenshotUrl": "https://ik.imagekit.io/mfgbmrqfuvo/PromoEvent/abcdefg_hB8Pi_Bjg",
+  "entity": {
+    "__type": "Pointer",
+    "className": "Entity",
+    "objectId": "usXsCoqFhW"
+  },
+  "id": "dEoMHOghYt",
+  "profile": {
+    "entityId": "usXsCoqFhW"
+  }
+}
