@@ -1,0 +1,669 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>PROTOTYPE — fuzztid two-Day switcher (#12)</title>
+<!--
+  THROWAWAY PROTOTYPE — issue #12, "Shape the two-Day switcher".
+  Three structurally different switchers on one 360 px screen, switchable via
+  ?variant=. Two extra axes the ticket asks about get their own controls:
+  ?labels= (tab wording) and ?marker= (the today marker). ?clock= moves the
+  simulated Oslo "now" so the marker can be judged under today / past-future /
+  none. Not production code: no tests, no error handling, no abstractions.
+  Data: the real 2025 Broadcast payload, remapped onto the 2026 dates.
+-->
+<style>
+@font-face {
+  font-family: "Oswald";
+  font-style: normal;
+  font-weight: 200 700;
+  font-display: block;
+  src: url("./oswald-latin-var.woff2") format("woff2");
+}
+
+/* ---- #11 palette (ADR-0025) ---- */
+:root {
+  --bg: #0b0a0c;
+  --surface: #2a2326;
+  --border: #4a3d40;
+  --fg: #d9d2c7;
+  --muted: #948b83;
+  --accent: #d9452f;
+
+  --header-height: 56px;
+  --strip-height: 38px;
+  --rail-width: 44px;
+  --column-header-height: 30px;
+  --column-gap: 4px;
+  --gutter: 6px;
+  --act-radius: 6px;
+  --gridline: rgba(217, 210, 199, 0.08);
+  --display-font: "Oswald", -apple-system, BlinkMacSystemFont, sans-serif;
+  --body-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui, sans-serif;
+}
+* { box-sizing: border-box; }
+
+/* ---- prototype chrome (NOT the design) ---- */
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #17151a;
+  color: #c9c4bd;
+  font-family: var(--body-font);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0 92px;
+}
+.proto-note {
+  font-size: 12px;
+  color: #8d8780;
+  max-width: 760px;
+  text-align: center;
+  line-height: 1.5;
+}
+.proto-note b { color: #c9c4bd; }
+.phone {
+  width: 360px;
+  height: min(700px, calc(100vh - 190px));
+  flex: 0 0 auto;
+  border: 1px solid #322d34;
+  border-radius: 22px;
+  overflow: hidden;
+  background: var(--bg);
+  box-shadow: 0 18px 50px rgba(0,0,0,0.6);
+}
+.bar {
+  position: fixed;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  background: #f2efe9;
+  color: #17151a;
+  border-radius: 10px;
+  padding: 6px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.55);
+  font-size: 12px;
+}
+.bar .grp { display: flex; align-items: center; gap: 4px; padding: 0 6px; border-right: 1px solid #d5d0c8; }
+.bar .grp:last-child { border-right: 0; }
+.bar .lbl { color: #6a655e; text-transform: uppercase; letter-spacing: 0.08em; font-size: 10px; }
+.bar button {
+  font: inherit;
+  border: 1px solid transparent;
+  background: #e2ded6;
+  color: #17151a;
+  border-radius: 6px;
+  padding: 5px 8px;
+  cursor: pointer;
+}
+.bar button[aria-pressed="true"] { background: #17151a; color: #f2efe9; }
+.bar .name { min-width: 190px; text-align: center; font-weight: 600; }
+
+/* ---- the app ---- */
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 16px;
+  height: var(--header-height);
+  flex-shrink: 0;
+  background: var(--bg);
+  border-bottom: 1px solid var(--gridline);
+}
+.app-brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.app-logo-text {
+  font-family: var(--display-font);
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--fg);
+  flex-shrink: 0;
+}
+.app-actions { display: flex; align-items: center; flex-shrink: 0; }
+.app-actions button {
+  background: none; border: 0; padding: 8px; margin: 0;
+  color: var(--fg); cursor: pointer; display: flex; align-items: center;
+}
+.app-actions svg { width: 24px; height: 24px; pointer-events: none; }
+.app-focus-button[aria-pressed="true"] { color: var(--accent); }
+
+/* ---- switcher: shared bits ---- */
+.tab {
+  font-family: var(--display-font);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: none;
+  border: 0;
+  color: var(--muted);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  white-space: nowrap;
+  padding: 0;
+}
+.tab[aria-selected="true"] { color: var(--fg); }
+.dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent); flex: 0 0 auto;
+}
+.tab .dot { display: none; }
+[data-marker="dot"] .tab[data-today="true"] .dot { display: block; }
+
+/* chip marker: the ADR-0022 inheritance — black-on-accent */
+[data-marker="chip"] .tab[data-today="true"] {
+  background: var(--accent);
+  color: #0b0a0c;
+  border-radius: 3px;
+  padding: 2px 7px;
+}
+/* underline marker */
+[data-marker="underline"] .tab[data-today="true"] {
+  box-shadow: inset 0 -2px 0 0 var(--accent);
+}
+
+/* ---- variant A: tabs in the header row ---- */
+.sw-a { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.sw-a .tab {
+  font-size: 1.05rem;
+  font-weight: 400;
+  padding: 6px 5px;
+}
+.sw-a .tab[aria-selected="true"] { font-weight: 600; }
+[data-marker="chip"] .sw-a .tab[data-today="true"] { padding: 4px 7px; }
+
+/* ---- variant B: its own strip ---- */
+.sw-b {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: var(--strip-height);
+  flex-shrink: 0;
+  background: var(--bg);
+  border-bottom: 1px solid var(--gridline);
+}
+.sw-b .tab {
+  font-size: 1rem;
+  font-weight: 400;
+  height: 100%;
+  border-radius: 0;
+}
+.sw-b .tab[aria-selected="true"] {
+  font-weight: 600;
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+[data-marker="chip"] .sw-b .tab[data-today="true"] { border-radius: 0; padding: 0; }
+[data-marker="chip"] .sw-b .tab[data-today="true"] span.txt {
+  background: var(--accent); color: #0b0a0c; border-radius: 3px; padding: 2px 7px;
+}
+[data-marker="underline"] .sw-b .tab[data-today="true"] { box-shadow: inset 0 -2px 0 0 var(--accent); }
+[data-marker="underline"] .sw-b .tab[aria-selected="true"][data-today="true"] {
+  box-shadow: inset 0 0 0 1px var(--border), inset 0 -2px 0 0 var(--accent);
+}
+
+/* ---- variant C: dominant day + subordinate toggle ---- */
+.sw-c { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
+.sw-c .tab { padding: 6px 2px; }
+.sw-c .tab[aria-selected="true"] { font-size: 1.4rem; font-weight: 400; }
+.sw-c .tab[aria-selected="false"] { font-size: 0.8rem; font-weight: 500; }
+.sw-c .sep { color: var(--border); font-family: var(--display-font); font-size: 0.9rem; }
+
+/* ---- schedule ---- */
+.schedule {
+  position: relative;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0 var(--gutter) 24px;
+  scrollbar-width: none;
+}
+.schedule::-webkit-scrollbar { display: none; }
+
+.stage-row {
+  position: sticky; top: 0; z-index: 3;
+  margin-left: var(--rail-width);
+  height: var(--column-header-height);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--column-gap);
+  background: var(--bg);
+}
+.stage-label {
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--fg); font-weight: 800;
+}
+.rail { position: absolute; top: var(--column-header-height); left: var(--gutter); width: var(--rail-width); pointer-events: none; z-index: 1; }
+.tick {
+  position: absolute; left: 0; width: var(--rail-width);
+  font-size: 0.7rem; font-weight: 600; color: var(--muted);
+  font-variant-numeric: tabular-nums; transform: translateY(-50%);
+  text-align: right; padding-right: 8px;
+}
+.tick::after {
+  content: ""; position: absolute; left: var(--rail-width); top: 50%;
+  right: -8px; height: 0; border-top: 1px solid var(--gridline); width: 100vw;
+}
+.days {
+  position: relative; display: flex; margin-left: var(--rail-width);
+  overflow-x: auto; overflow-y: hidden;
+  scroll-snap-type: x mandatory; scrollbar-width: none; touch-action: manipulation;
+}
+.days::-webkit-scrollbar { display: none; }
+.day { flex: 0 0 100%; width: 100%; scroll-snap-align: start; scroll-snap-stop: always; }
+.columns { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--column-gap); }
+.column { position: relative; }
+
+.act {
+  position: absolute; left: 0; right: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--act-radius);
+  padding: 3px 5px;
+  display: flex; flex-direction: column; overflow: hidden;
+  color: var(--fg); cursor: pointer;
+  transition: background 140ms ease, border-color 140ms ease, opacity 140ms ease;
+}
+.act-start, .act-end {
+  font-size: 0.65rem; font-weight: 700; color: var(--muted);
+  font-variant-numeric: tabular-nums; line-height: 1;
+}
+.act-end { align-self: flex-end; margin-top: auto; }
+.act-name {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  text-align: center; font-family: var(--display-font);
+  font-size: 1.05rem; font-weight: 400; letter-spacing: 0.02em; line-height: 1;
+  overflow-wrap: break-word; hyphens: auto; padding: 2px 0;
+}
+.act.starred { border-color: var(--accent); }
+.act.starred .act-name { color: var(--accent); }
+/* Focus (0021 as re-mechanised by 0025 §6): dim toward --bg, not by opacity */
+#app[data-focus="true"] .act:not(.starred) { background: #131013; border-color: #241f22; color: var(--muted); }
+#app[data-focus="true"] .act:not(.starred) .act-name { color: var(--muted); }
+
+.now-line {
+  position: absolute; left: var(--gutter); right: var(--gutter); height: 2px;
+  background-color: var(--accent); pointer-events: none; z-index: 5;
+  transition: background-color 180ms ease, height 180ms ease;
+}
+.schedule[data-now-standing="past"] .now-line,
+.schedule[data-now-standing="future"] .now-line { height: 1px; background-color: var(--muted); }
+.now-pill {
+  position: absolute; left: var(--gutter);
+  display: flex; align-items: center; justify-content: center;
+  height: 18px; padding: 0 8px;
+  background: var(--accent); color: #0b0a0c;
+  font-family: var(--display-font); font-size: 0.75rem; letter-spacing: 0.08em;
+  border-radius: 3px; pointer-events: none; z-index: 6;
+}
+.schedule[data-now-standing="past"] .now-pill,
+.schedule[data-now-standing="future"] .now-pill { display: none; }
+.now-line[hidden], .now-pill[hidden] { display: none; }
+</style>
+</head>
+<body>
+<div class="proto-note">
+  <b>PROTOTYPE — issue #12.</b> 360&nbsp;px, real Oswald, the #11 palette, the real
+  2025 programme on the 2026 dates. Swipe/drag the panes, tap a tab, tap an act to star it,
+  tap the heart for Focus. Bar below: variant, tab labels, today marker, simulated clock.
+  <b>←</b>/<b>→</b> cycle variants.
+</div>
+<div class="phone"><div id="app"></div></div>
+<div class="bar" id="bar"></div>
+
+<script type="module">
+history.scrollRestoration = "manual";
+const ACTS = [{"id":"AuYNElzODS","name":"Crouch","stage":"crypt","date":"2026-10-23","start":"16:00","end":"17:00","start_min":960,"end_min":1020},{"id":"8CrNFUvoOL","name":"Blodkvalt","stage":"verkstedet","date":"2026-10-23","start":"16:30","end":"17:30","start_min":990,"end_min":1050},{"id":"LrTZ68txPT","name":"Kanaan & Ævestaden","stage":"chapel","date":"2026-10-23","start":"17:00","end":"18:00","start_min":1020,"end_min":1080},{"id":"ojvUMviLSM","name":"Nagircalmmiid","stage":"crypt","date":"2026-10-23","start":"18:00","end":"19:00","start_min":1080,"end_min":1140},{"id":"6k96jm5oGq","name":"Kløster","stage":"verkstedet","date":"2026-10-23","start":"18:30","end":"19:30","start_min":1110,"end_min":1170},{"id":"kBaXl0Aaav","name":"Living Gate","stage":"chapel","date":"2026-10-23","start":"19:00","end":"20:00","start_min":1140,"end_min":1200},{"id":"46hQR2uEYg","name":"Daufødt","stage":"crypt","date":"2026-10-23","start":"20:00","end":"21:00","start_min":1200,"end_min":1260},{"id":"cLerN2EOAJ","name":"Arachno","stage":"verkstedet","date":"2026-10-23","start":"20:30","end":"21:30","start_min":1230,"end_min":1290},{"id":"2dZuiQUFjD","name":"Gnome","stage":"chapel","date":"2026-10-23","start":"21:00","end":"22:00","start_min":1260,"end_min":1320},{"id":"6RETtIKIpK","name":"Katla","stage":"crypt","date":"2026-10-23","start":"22:00","end":"23:00","start_min":1320,"end_min":1380},{"id":"PKAIDp5ke9","name":"Kambodsja","stage":"verkstedet","date":"2026-10-23","start":"22:30","end":"23:30","start_min":1350,"end_min":1410},{"id":"XqFQge5LZR","name":"YOB","stage":"chapel","date":"2026-10-23","start":"23:00","end":"23:59","start_min":1380,"end_min":1439},{"id":"GJFMPzUcIm","name":"Hestedirektoratets Rockequiz","stage":"chapel","date":"2026-10-24","start":"15:00","end":"16:00","start_min":900,"end_min":960},{"id":"9XiECFFaYr","name":"RUUN","stage":"crypt","date":"2026-10-24","start":"16:00","end":"17:00","start_min":960,"end_min":1020},{"id":"z3VY3ee2wR","name":"Redwood Temple","stage":"verkstedet","date":"2026-10-24","start":"16:30","end":"17:30","start_min":990,"end_min":1050},{"id":"1uvLSjkKKo","name":"LLNN","stage":"chapel","date":"2026-10-24","start":"17:00","end":"18:00","start_min":1020,"end_min":1080},{"id":"k2L3O4qqOc","name":"ARV","stage":"crypt","date":"2026-10-24","start":"18:00","end":"19:00","start_min":1080,"end_min":1140},{"id":"k80YQtLN4G","name":"Yvris","stage":"verkstedet","date":"2026-10-24","start":"18:30","end":"19:30","start_min":1110,"end_min":1170},{"id":"NXdXYZEC7i","name":"Ahab","stage":"chapel","date":"2026-10-24","start":"19:00","end":"20:00","start_min":1140,"end_min":1200},{"id":"fcmGYoFew5","name":"S:T Erik","stage":"crypt","date":"2026-10-24","start":"20:00","end":"21:00","start_min":1200,"end_min":1260},{"id":"fdZM0vKxHH","name":"Nadir","stage":"verkstedet","date":"2026-10-24","start":"20:30","end":"21:30","start_min":1230,"end_min":1290},{"id":"lp34IjUMeI","name":"John Cxnnor","stage":"chapel","date":"2026-10-24","start":"21:00","end":"22:00","start_min":1260,"end_min":1320},{"id":"Q3khcPBBQS","name":"New Money","stage":"crypt","date":"2026-10-24","start":"22:00","end":"23:00","start_min":1320,"end_min":1380},{"id":"tQPpHpc0BB","name":"Fights","stage":"verkstedet","date":"2026-10-24","start":"22:30","end":"23:30","start_min":1350,"end_min":1410},{"id":"7pHVfbOV2y","name":"YOB","stage":"chapel","date":"2026-10-24","start":"23:00","end":"23:59","start_min":1380,"end_min":1439}];
+
+const STAGES = [
+  { id: "chapel", name: "The Chapel" },
+  { id: "crypt", name: "The Crypt" },
+  { id: "verkstedet", name: "Verkstedet" },
+];
+const DAYS = ["2026-10-23", "2026-10-24"];
+const PX_PER_MINUTE = 2;
+const START_MIN = 15 * 60; // 15:00, the earlier of the two envelopes
+const END_MIN = 24 * 60;
+
+/* ---------- prototype state (URL-backed) ---------- */
+const VARIANTS = {
+  A: "A — Tabs in the header row",
+  B: "B — Its own strip below",
+  C: "C — Dominant day + toggle",
+};
+const LABELS = {
+  "wd-date": "FRI 23",
+  wd: "FRI",
+  date: "23 OCT",
+  "wd-long": "FRIDAY",
+};
+const MARKERS = { dot: "dot", chip: "chip", underline: "underline", none: "none" };
+// Simulated Oslo now. day1/day2 put a Day in `today`; none is the 363-day case.
+const CLOCKS = {
+  day1: { label: "today = Fri 23", date: "2026-10-23", min: 20 * 60 + 15 },
+  day2: { label: "today = Sat 24", date: "2026-10-24", min: 20 * 60 + 15 },
+  none: { label: "none (a June day)", date: "2026-06-14", min: 20 * 60 + 15 },
+};
+
+const url = new URL(location.href);
+const state = {
+  variant: url.searchParams.get("variant") ?? "A",
+  labels: url.searchParams.get("labels") ?? "wd-date",
+  marker: url.searchParams.get("marker") ?? "dot",
+  clock: url.searchParams.get("clock") ?? "day1",
+};
+function setState(patch) {
+  Object.assign(state, patch);
+  const u = new URL(location.href);
+  for (const [k, v] of Object.entries(state)) u.searchParams.set(k, v);
+  history.replaceState(null, "", u);
+  render();
+}
+
+/* ---------- app state ---------- */
+const favourites = new Set(["AuYNElzODS"]); // one pre-starred act, so the accent is on screen
+let focus = false;
+let activeDate = DAYS[0];
+
+/* ---------- helpers ---------- */
+const WD_SHORT = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+const WD_LONG = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
+const MON = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+
+function tabLabel(date) {
+  const d = new Date(`${date}T12:00:00Z`);
+  const wd = WD_SHORT[d.getUTCDay()];
+  const dom = d.getUTCDate();
+  switch (state.labels) {
+    case "wd": return wd;
+    case "date": return `${dom} ${MON[d.getUTCMonth()]}`;
+    case "wd-long": return WD_LONG[d.getUTCDay()];
+    default: return `${wd} ${dom}`;
+  }
+}
+function todayDate() {
+  const c = CLOCKS[state.clock];
+  return DAYS.includes(c.date) ? c.date : null;
+}
+function standing(date) {
+  const t = todayDate();
+  if (t === null) return "none";
+  if (date === t) return "today";
+  return date < t ? "past" : "future";
+}
+const px = (min) => (min - START_MIN) * PX_PER_MINUTE;
+
+function icon(name, filled) {
+  if (name === "heart") {
+    return filled
+      ? `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-8-4.9-8-10.4A4.6 4.6 0 0 1 12 7a4.6 4.6 0 0 1 8 3.6C20 16.1 12 21 12 21z"/></svg>`
+      : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20.3s-7.2-4.4-7.2-9.4A4 4 0 0 1 12 7.8a4 4 0 0 1 7.2 3.1c0 5-7.2 9.4-7.2 9.4z"/></svg>`;
+  }
+  return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><circle cx="12" cy="7.6" r="0.9" fill="currentColor" stroke="none"/></svg>`;
+}
+
+/* ---------- switcher builders ---------- */
+function tabEl(date, big) {
+  const b = document.createElement("button");
+  b.className = "tab";
+  b.type = "button";
+  b.role = "tab";
+  b.dataset.date = date;
+  b.setAttribute("aria-selected", String(date === activeDate));
+  b.dataset.today = String(standing(date) === "today");
+  const txt = document.createElement("span");
+  txt.className = "txt";
+  txt.textContent = tabLabel(date);
+  const dot = document.createElement("span");
+  dot.className = "dot";
+  // Dot leads the label on a tab, so the two tabs stay visually parallel.
+  b.append(dot, txt);
+  b.addEventListener("click", () => showDay(date));
+  return b;
+}
+
+function buildSwitcher(variant) {
+  const wrap = document.createElement("div");
+  wrap.role = "tablist";
+  if (variant === "A") {
+    wrap.className = "sw-a";
+    for (const d of DAYS) wrap.appendChild(tabEl(d));
+  } else if (variant === "B") {
+    wrap.className = "sw-b";
+    for (const d of DAYS) wrap.appendChild(tabEl(d));
+  } else {
+    wrap.className = "sw-c";
+    const current = activeDate;
+    const other = DAYS.find((d) => d !== current);
+    const sep = document.createElement("span");
+    sep.className = "sep";
+    sep.textContent = "/";
+    wrap.append(tabEl(current), sep, tabEl(other));
+  }
+  return wrap;
+}
+
+/* ---------- app render ---------- */
+let daysEl = null;
+let scheduleEl = null;
+
+function render() {
+  const app = document.getElementById("app");
+  app.dataset.focus = String(focus);
+  app.dataset.marker = state.marker;
+  app.dataset.variant = state.variant;
+  const keepScrollTop = scheduleEl ? scheduleEl.scrollTop : null;
+  app.replaceChildren();
+
+  // header
+  const header = document.createElement("header");
+  header.className = "app-header";
+  const brand = document.createElement("div");
+  brand.className = "app-brand";
+  const logo = document.createElement("span");
+  logo.className = "app-logo-text";
+  logo.textContent = "fuzztid";
+  brand.appendChild(logo);
+  if (state.variant !== "B") brand.appendChild(buildSwitcher(state.variant));
+  const actions = document.createElement("div");
+  actions.className = "app-actions";
+  const focusBtn = document.createElement("button");
+  focusBtn.className = "app-focus-button";
+  focusBtn.setAttribute("aria-pressed", String(focus));
+  focusBtn.innerHTML = icon("heart", focus);
+  focusBtn.addEventListener("click", () => { focus = !focus; render(); });
+  const infoBtn = document.createElement("button");
+  infoBtn.innerHTML = icon("info");
+  actions.append(focusBtn, infoBtn);
+  header.append(brand, actions);
+  app.appendChild(header);
+
+  if (state.variant === "B") app.appendChild(buildSwitcher("B"));
+
+  // schedule
+  scheduleEl = document.createElement("div");
+  scheduleEl.className = "schedule";
+  const stageRow = document.createElement("div");
+  stageRow.className = "stage-row";
+  for (const s of STAGES) {
+    const el = document.createElement("div");
+    el.className = "stage-label";
+    el.textContent = s.name;
+    stageRow.appendChild(el);
+  }
+  const rail = document.createElement("div");
+  rail.className = "rail";
+  for (let m = START_MIN; m < END_MIN; m += 60) {
+    const t = document.createElement("div");
+    t.className = "tick";
+    t.style.top = `${px(m)}px`;
+    t.textContent = `${String(Math.floor(m / 60)).padStart(2, "0")}:00`;
+    rail.appendChild(t);
+  }
+  daysEl = document.createElement("div");
+  daysEl.className = "days";
+  const height = (END_MIN - START_MIN) * PX_PER_MINUTE;
+  for (const date of DAYS) {
+    const sec = document.createElement("section");
+    sec.className = "day";
+    const cols = document.createElement("div");
+    cols.className = "columns";
+    for (const s of STAGES) {
+      const col = document.createElement("div");
+      col.className = "column";
+      col.style.height = `${height}px`;
+      for (const a of ACTS.filter((a) => a.date === date && a.stage === s.id)) {
+        const el = document.createElement("div");
+        el.className = "act" + (favourites.has(a.id) ? " starred" : "");
+        el.style.top = `${px(a.start_min)}px`;
+        el.style.height = `${(a.end_min - a.start_min) * PX_PER_MINUTE}px`;
+        el.innerHTML =
+          `<span class="act-start">${a.start}</span>` +
+          `<span class="act-name">${a.name}</span>` +
+          `<span class="act-end">${a.end}</span>`;
+        el.addEventListener("click", () => {
+          favourites.has(a.id) ? favourites.delete(a.id) : favourites.add(a.id);
+          render();
+        });
+        col.appendChild(el);
+      }
+      cols.appendChild(col);
+    }
+    sec.appendChild(cols);
+    daysEl.appendChild(sec);
+  }
+
+  const nowLine = document.createElement("div");
+  nowLine.className = "now-line";
+  const nowPill = document.createElement("div");
+  nowPill.className = "now-pill";
+  nowPill.textContent = "NOW";
+  const nowMin = CLOCKS[state.clock].min;
+  const inEnvelope = nowMin >= START_MIN && nowMin < END_MIN;
+  nowLine.hidden = !inEnvelope;
+  nowPill.hidden = !inEnvelope;
+  const y = px(nowMin) + 30; // + column-header-height
+  nowLine.style.top = `${y}px`;
+  nowPill.style.top = `${y}px`;
+  nowPill.style.transform = "translateY(-50%)";
+
+  scheduleEl.append(stageRow, rail, daysEl, nowLine, nowPill);
+  scheduleEl.dataset.nowStanding = standing(activeDate);
+  app.appendChild(scheduleEl);
+
+  // restore positions, then start listening — otherwise the browser's own
+  // scroll restoration fires first and drags activeDate with it.
+  const el = daysEl;
+  requestAnimationFrame(() => {
+    const w = el.clientWidth;
+    el.scrollLeft = DAYS.indexOf(activeDate) * w;
+    scheduleEl.scrollTop =
+      keepScrollTop ?? Math.max(0, px(nowMin) - scheduleEl.clientHeight / 2);
+    el.addEventListener("scroll", onScroll, { passive: true });
+  });
+
+  // Swipe coupling: the same 50 % rounding notifyActiveDay uses.
+  function onScroll() {
+    const w = daysEl.clientWidth;
+    if (w === 0) return;
+    const idx = Math.max(0, Math.min(Math.round(daysEl.scrollLeft / w), DAYS.length - 1));
+    const date = DAYS[idx];
+    if (date === activeDate) return;
+    activeDate = date;
+    onActiveDayChange();
+  }
+}
+
+// Cheap version of the real onActiveDayChange: repaint only the switcher and
+// the standing, never the panes (ADR-0012 — the chrome is built once).
+function onActiveDayChange() {
+  scheduleEl.dataset.nowStanding = standing(activeDate);
+  if (state.variant === "C") { render(); return; } // C's hierarchy swaps
+  for (const t of document.querySelectorAll(".tab")) {
+    t.setAttribute("aria-selected", String(t.dataset.date === activeDate));
+  }
+}
+
+// showDay(date) — horizontal only, animated, never re-scrolls to now (#5).
+function showDay(date) {
+  const w = daysEl.clientWidth;
+  daysEl.scrollTo({ left: DAYS.indexOf(date) * w, behavior: "smooth" });
+}
+
+/* ---------- prototype bar ---------- */
+function group(label, options, key, current) {
+  const g = document.createElement("div");
+  g.className = "grp";
+  const l = document.createElement("span");
+  l.className = "lbl";
+  l.textContent = label;
+  g.appendChild(l);
+  for (const [k, text] of Object.entries(options)) {
+    const b = document.createElement("button");
+    b.textContent = text;
+    b.setAttribute("aria-pressed", String(k === current));
+    b.addEventListener("click", () => setState({ [key]: k }));
+    g.appendChild(b);
+  }
+  return g;
+}
+
+function renderBar() {
+  const bar = document.getElementById("bar");
+  bar.replaceChildren();
+  const nav = document.createElement("div");
+  nav.className = "grp";
+  const keys = Object.keys(VARIANTS);
+  const prev = document.createElement("button");
+  prev.textContent = "←";
+  prev.addEventListener("click", () => cycle(-1));
+  const name = document.createElement("span");
+  name.className = "name";
+  name.textContent = VARIANTS[state.variant];
+  const next = document.createElement("button");
+  next.textContent = "→";
+  next.addEventListener("click", () => cycle(1));
+  nav.append(prev, name, next);
+  bar.append(
+    nav,
+    group("labels", LABELS, "labels", state.labels),
+    group("today", MARKERS, "marker", state.marker),
+    group(
+      "clock",
+      Object.fromEntries(Object.entries(CLOCKS).map(([k, v]) => [k, v.label])),
+      "clock",
+      state.clock,
+    ),
+  );
+  function cycle(d) {
+    const i = keys.indexOf(state.variant);
+    setState({ variant: keys[(i + d + keys.length) % keys.length] });
+  }
+  window.onkeydown = (e) => {
+    if (e.key === "ArrowLeft") cycle(-1);
+    if (e.key === "ArrowRight") cycle(1);
+  };
+}
+
+const _render = render;
+render = function () { _render(); renderBar(); };
+render();
+</script>
+</body>
+</html>
