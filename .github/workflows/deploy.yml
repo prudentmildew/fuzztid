@@ -1,0 +1,70 @@
+# Builds the app and deploys it to GitHub Pages (ports Øyablikk's ADR-0009).
+# Reusable: the Reveal cron (#27) is expected to call this directly after it
+# commits fresh data — no workflow_run chaining, no SHA gate.
+#
+# Requires repo Settings → Pages → Source = "GitHub Actions" (set by hand).
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+    # Skip the runner entirely for pushes that change nothing a visitor could
+    # see. This is an ignore-list, not an allow-list, on purpose: this workflow
+    # is also the only CI on main, so anything that can affect lint/test/build
+    # must still trigger it. Test files, src/fixtures, scripts/, and biome.json
+    # never reach dist but do gate the build — they are deliberately absent
+    # below. A new file that belongs here costs one redundant build until it
+    # gets added; a missing entry in an allow-list would instead mean a silent
+    # non-deploy, which is the failure you would not notice.
+    paths-ignore:
+      - "docs/**"
+      - "**/*.md"
+      - ".githooks/**"
+      - ".gitignore"
+      # deploy.yml itself is NOT ignored: a change to it should exercise it.
+      - ".github/workflows/nightly-refresh.yml"
+  # No path filter applies here — the Reveal cron calls this after it commits
+  # data/schedule.json, and that always deploys.
+  workflow_call:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deploy at a time; never cancel an in-flight one mid-publish.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  # Single job: build and publish share a runner, so we don't pay a second
+  # runner's start-up just to hand the artifact over.
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v7
+      # pnpm/action-setup only supports pnpm v10 and older; package.json pins
+      # pnpm 11.23.0, so this is its v11+ successor. It installs Node itself,
+      # replacing actions/setup-node. install: false because pnpm ci below is
+      # the explicit install step.
+      - uses: pnpm/setup@v2
+        with:
+          runtime: node@24
+          cache: true
+          install: false
+      - run: pnpm ci
+      # Cheapest check first: a failing step ends the job, so a red build
+      # never reaches the publish step.
+      - run: pnpm lint
+      - run: pnpm test
+      - run: pnpm build
+      - uses: actions/configure-pages@v6
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist
+      - id: deployment
+        uses: actions/deploy-pages@v5
