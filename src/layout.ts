@@ -22,3 +22,13 @@ export function sharedOrigin(schedule: Schedule): TimeOrigin {
 export function pxFromMin(min: number, origin: TimeOrigin, pxPerMinute: number): number {
   return (min - origin.startMin) * pxPerMinute;
 }
+
+// Hour ticks (#31, story 12): px from the grid's top edge to the first whole
+// hour *strictly* after the origin starts. Strictly, because the origin is
+// the top edge — a tick there would be a line on the edge, and an origin
+// that happens to start on the hour (the 2025 fixture's 15:00) must not
+// become load-bearing.
+export function hourTickOffsetPx(origin: TimeOrigin, pxPerMinute: number): number {
+  const firstHourMin = (Math.floor(origin.startMin / 60) + 1) * 60;
+  return (firstHourMin - origin.startMin) * pxPerMinute;
+}

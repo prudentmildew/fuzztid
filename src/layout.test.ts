@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { pxFromMin, sharedOrigin } from "./layout.ts";
+import { hourTickOffsetPx, pxFromMin, sharedOrigin } from "./layout.ts";
 import type { Day, Schedule } from "./schedule.ts";
 
 function makeDay(overrides: Partial<Day> = {}): Day {
@@ -48,5 +48,24 @@ describe("pxFromMin", () => {
 
   it("positions a value before the origin as a negative offset", () => {
     expect(pxFromMin(590, { startMin: 600, endMin: 720 }, 2)).toBe(-20);
+  });
+});
+
+// Hour ticks (#31, story 12): the first whole hour strictly after the origin
+// starts, in px from the top of the grid — never the origin itself, which
+// is the grid's top edge, whether or not it happens to fall on the hour.
+describe("hourTickOffsetPx", () => {
+  it.each([
+    [900, 120], // 15:00 → 16:00 is a full hour down (the 2025 fixture)
+    [930, 60], // 15:30 → 16:00
+    [959, 2], // 15:59 → 16:00, one minute
+    [960, 120], // 16:00 on the dot → 17:00, not a line on the top edge
+    [0, 120], // midnight → 01:00
+  ])("from start_min %i puts the first tick at %i px at 2 px/min", (startMin, px) => {
+    expect(hourTickOffsetPx({ startMin, endMin: 1439 }, 2)).toBe(px);
+  });
+
+  it("scales with the px-per-minute", () => {
+    expect(hourTickOffsetPx({ startMin: 930, endMin: 1439 }, 3)).toBe(90);
   });
 });

@@ -639,3 +639,25 @@ describe("ScheduleView.showDay", () => {
     expect(container.scrollTop).toBe(42);
   });
 });
+
+describe("hour ticks (#31, story 12)", () => {
+  it("publishes the hour's height and the first tick's offset as custom properties on the container", () => {
+    createScheduleView({ container, schedule, now: fixedNow("2026-10-23T08:30:00Z") });
+    // 2 px/min: an hour is 120 px, and from a 10:00 origin the first tick is 11:00.
+    expect(container.style.getPropertyValue("--hour-px")).toBe("120px");
+    expect(container.style.getPropertyValue("--tick-offset")).toBe("120px");
+  });
+
+  it("lands the first tick on a whole hour whatever the origin's start", () => {
+    const offset: Schedule = {
+      stages,
+      days: [
+        { ...makeDay("2026-10-23"), start_min: 615, end_min: 1439 },
+        { ...makeDay("2026-10-24"), start_min: 630, end_min: 1439 },
+      ],
+    };
+    createScheduleView({ container, schedule: offset, now: fixedNow("2026-10-23T08:30:00Z") });
+    // The shared origin starts 10:15; 11:00 is 45 min = 90 px down.
+    expect(container.style.getPropertyValue("--tick-offset")).toBe("90px");
+  });
+});

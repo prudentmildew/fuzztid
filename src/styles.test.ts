@@ -116,3 +116,27 @@ describe("the palette holds (#30, ADR-0025 §8)", () => {
     expect(declarations(".now-pill").color).toBe("var(--bg)");
   });
 });
+
+describe("hour ticks (#31, story 12)", () => {
+  it("rules every .column with a --border gradient, placed by the JS-set offset", () => {
+    const column = declarations(".column");
+    expect(column["background-image"]).toMatch(/^repeating-linear-gradient\(/);
+    expect(column["background-image"]).toContain("var(--border)");
+    expect(column["background-image"]).toContain("var(--hour-px)");
+    expect(column["background-image"]).not.toMatch(/--muted|--accent/);
+    expect(column["background-position-y"]).toBe("var(--tick-offset)");
+    // From the offset down, not tiled from y=0: no line on the top edge.
+    expect(column["background-repeat"]).toBe("no-repeat");
+    // The shorthand would reset the image — the colour is set as its longhand.
+    expect(column.background).toBeUndefined();
+    expect(column["background-color"]).toBe("var(--bg)");
+  });
+
+  it("leaves the ticks alone under Focus — they are the ruler, not the content", () => {
+    for (const match of css.matchAll(/([^{}]+)\{[^{}]*\}/g)) {
+      const selector = (match[1] ?? "").trim();
+      if (!selector.includes("focus")) continue;
+      expect(selector).not.toMatch(/\.columns?\b/);
+    }
+  });
+});

@@ -5,7 +5,7 @@
 // drives `onActTap`.
 
 import { renderDay } from "./day-pane.ts";
-import { pxFromMin, sharedOrigin } from "./layout.ts";
+import { hourTickOffsetPx, pxFromMin, sharedOrigin } from "./layout.ts";
 import { dayStanding, osloMinutes, type ScheduleStanding, todayFestivalDate } from "./now.ts";
 import type { Day, Schedule } from "./schedule.ts";
 
@@ -52,6 +52,14 @@ export function createScheduleView(opts: ScheduleViewOptions): ScheduleView {
 
   const origin = sharedOrigin(schedule);
   const festivalDates = schedule.days.map((d) => d.date);
+
+  // Hour ticks (#31, story 12): the ruler is a background on every .column,
+  // so the stylesheet needs the two numbers only this module knows — an
+  // hour's height at this scale, and how far below the shared origin's top
+  // edge the first whole hour falls. Shared geometry: both Days scroll
+  // against one origin, so these are the same ticks on either pane.
+  container.style.setProperty("--hour-px", `${60 * PX_PER_MINUTE}px`);
+  container.style.setProperty("--tick-offset", `${hourTickOffsetPx(origin, PX_PER_MINUTE)}px`);
 
   // Persistent chrome (ADR-0012, ported by reference): built once, the Stage
   // row never moves under a Day change.

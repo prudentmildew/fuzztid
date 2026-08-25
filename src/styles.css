@@ -344,7 +344,24 @@ body {
 
 .column {
   position: relative;
-  background: var(--bg);
+  background-color: var(--bg);
+  /* Hour ticks (#31, story 12): one --border rule per whole hour, drawn as a
+     background — no DOM, no render cost, and behind the absolutely
+     positioned act blocks for free, with no stacking context to negotiate.
+     The 1 px --column-gap is --border too, so the per-column gradients read
+     as one rule across the pane. Not tiled from y=0: the image starts at
+     --tick-offset (the first whole hour below the origin, set by
+     schedule-view.ts) and runs down from there, so the grid's top edge never
+     carries a line and no origin is assumed to start on the hour. --border,
+     not --muted, and never --accent (ADR-0025 §8): the Now line stays the
+     only horizontal line on the grid that means anything. */
+  background-image: repeating-linear-gradient(
+    to bottom,
+    var(--border) 0 1px,
+    transparent 1px var(--hour-px)
+  );
+  background-repeat: no-repeat;
+  background-position-y: var(--tick-offset);
 }
 
 .act {
