@@ -1,6 +1,5 @@
 import { registerSW } from "virtual:pwa-register";
 import scheduleData from "../data/schedule.json";
-import { HOSTSABBAT_2026 } from "../scripts/edition-config.ts";
 import { createAboutSheet } from "./about.ts";
 import { infoSvg } from "./icons.ts";
 import { isPublished, type Schedule } from "./schedule.ts";
@@ -45,7 +44,7 @@ if (isPublished(schedule)) {
   throw new Error("Published Schedule rendering is not implemented yet — see issue #22.");
 }
 
-const screen = createUnpublishedScreen(HOSTSABBAT_2026);
+const screen = createUnpublishedScreen(schedule);
 
 app.append(header, screen, aboutSheet.element);
 

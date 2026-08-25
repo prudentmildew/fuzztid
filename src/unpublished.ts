@@ -5,18 +5,21 @@
 // and no Focus heart (nothing to dim) — the Header carries only the
 // wordmark and the ⓘ on this branch.
 
-import type { EditionConfig } from "../scripts/edition-config.ts";
+import type { Schedule } from "./schedule.ts";
 
 const VENUE = "Kulturkirken Jakob, Oslo";
 const LINEUP_URL = "https://www.hostsabbat.no/";
 
-export function createUnpublishedScreen(config: EditionConfig): HTMLElement {
+// Takes the Schedule, not EditionConfig: toSchedule(null, config) already
+// carries the Edition's Days on the unpublished Schedule itself, and src/
+// imports nothing from scripts/ — the outer seam is one directed edge.
+export function createUnpublishedScreen(schedule: Schedule): HTMLElement {
   const screen = document.createElement("main");
   screen.className = "unpublished";
 
   const dates = document.createElement("p");
   dates.className = "unpublished-dates";
-  dates.textContent = `${formatDateRange(config.days)}, ${VENUE}`;
+  dates.textContent = `${formatDateRange(schedule.days.map((d) => d.date))}, ${VENUE}`;
   screen.appendChild(dates);
 
   const note = document.createElement("p");
@@ -40,7 +43,7 @@ function formatDateRange(days: readonly string[]): string {
   const first = days[0];
   const last = days.at(-1);
   if (first === undefined || last === undefined) {
-    throw new Error("EditionConfig.days is empty — there is no range to show.");
+    throw new Error("The Schedule has no Days — there is no range to show.");
   }
 
   const firstDate = new Date(`${first}T12:00:00Z`);
