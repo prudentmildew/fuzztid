@@ -14,6 +14,8 @@
 :root {
   --header-height: 56px;
   --act-radius: 6px;
+  --stage-row-height: 40px;
+  --column-gap: 1px;
 
   /* The six tokens (ADR-0025), defined once. --fg is capped at 65%
      luminance, never #ffffff — the phone is the light source in a dark
@@ -159,6 +161,91 @@ body {
 
 .unpublished-link:active {
   opacity: 0.8;
+}
+
+/* The Schedule grid (#22) — Stage row is permanent chrome; Days scroll ----- */
+
+.schedule {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.stage-row {
+  display: grid;
+  grid-template-columns: repeat(var(--column-count), 1fr);
+  gap: var(--column-gap);
+  height: var(--stage-row-height);
+  flex-shrink: 0;
+  background: var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.stage-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  background: var(--bg);
+  color: var(--muted);
+  font-family: var(--display-font);
+  font-size: 0.8rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.days {
+  flex: 1;
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+}
+
+.day {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  overflow-y: auto;
+}
+
+.columns {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--column-count), 1fr);
+  gap: var(--column-gap);
+  background: var(--border);
+}
+
+.column {
+  position: relative;
+  background: var(--bg);
+}
+
+.act {
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--act-radius);
+  padding: 4px 6px;
+  color: var(--fg);
+}
+
+.act-start,
+.act-end {
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+
+.act-name {
+  font-size: 0.85rem;
+  font-weight: 500;
 }
 
 /* About sheet — bottom sheet visual language and dismiss conventions ------ */

@@ -3,6 +3,7 @@ import scheduleData from "../data/schedule.json";
 import { createAboutSheet } from "./about.ts";
 import { infoSvg } from "./icons.ts";
 import { isPublished, type Schedule } from "./schedule.ts";
+import { createScheduleView } from "./schedule-view.ts";
 import { createUnpublishedScreen } from "./unpublished.ts";
 
 const schedule = scheduleData as Schedule;
@@ -36,15 +37,15 @@ actions.appendChild(infoButton);
 
 header.appendChild(actions);
 
+// The Day switcher, the Now line, Favourites and Focus land on top of this
+// static render in #23–#25.
+let screen: HTMLElement;
 if (isPublished(schedule)) {
-  // The full app — the Day switcher, the Now line, Favourites and Focus —
-  // lands with the Schedule view itself (#22 onward). This branch is
-  // unreachable today: data/schedule.json only ever holds the unpublished
-  // Schedule pre-Reveal.
-  throw new Error("Published Schedule rendering is not implemented yet — see issue #22.");
+  screen = document.createElement("div");
+  createScheduleView({ container: screen, schedule }).render();
+} else {
+  screen = createUnpublishedScreen(schedule);
 }
-
-const screen = createUnpublishedScreen(schedule);
 
 app.append(header, screen, aboutSheet.element);
 
