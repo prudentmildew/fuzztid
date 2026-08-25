@@ -41,3 +41,15 @@ export type Schedule = {
 export function isPublished(schedule: Schedule): boolean {
   return schedule.days.some((day) => Object.values(day.acts).some((acts) => acts.length > 0));
 }
+
+// The Edition is a property of the Schedule, never a field on it (ADR-0024
+// §2): whatever the app scopes per Edition — the Favourites key today (#29),
+// the pre-Reveal line next (#31) — derives the year from the first Day here,
+// inside src/.
+export function editionYear(schedule: Schedule): string {
+  const first = schedule.days[0]?.date;
+  if (first === undefined) {
+    throw new Error("The Schedule has no Days — there is no Edition to derive.");
+  }
+  return first.slice(0, 4);
+}

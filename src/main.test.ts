@@ -154,14 +154,14 @@ describe("app boot — published Schedule", () => {
     it("stars an act on tap, and persists it", () => {
       tap(act());
       expect(act().classList.contains("starred")).toBe(true);
-      expect(localStorage.getItem("fuzztid.favourites")).toContain("act-1");
+      expect(localStorage.getItem("fuzztid.favourites.2026")).toContain("act-1");
       expect(focusButton().disabled).toBe(false);
     });
 
     it("unstars on a second tap, and persists that too", () => {
       tap(act());
       expect(act().classList.contains("starred")).toBe(false);
-      expect(JSON.parse(localStorage.getItem("fuzztid.favourites") ?? "[]")).toEqual([]);
+      expect(JSON.parse(localStorage.getItem("fuzztid.favourites.2026") ?? "[]")).toEqual([]);
       expect(focusButton().disabled).toBe(true);
     });
 

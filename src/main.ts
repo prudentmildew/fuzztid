@@ -2,13 +2,15 @@ import { registerSW } from "virtual:pwa-register";
 import scheduleData from "../data/schedule.json";
 import { createAboutSheet } from "./about.ts";
 import { createDaySwitcher } from "./day-switcher.ts";
-import { loadFavourites, toggleFavourite } from "./favourites.ts";
+import { applyDebugParams } from "./debug.ts";
+import { loadFavourites } from "./favourites.ts";
 import { heartSvg, infoSvg } from "./icons.ts";
 import { isPublished, type Schedule } from "./schedule.ts";
 import { createScheduleView } from "./schedule-view.ts";
 import { createUnpublishedScreen } from "./unpublished.ts";
 
-const schedule = scheduleData as Schedule;
+// Dev-only (#29): `?schedule=2025` and `?now=…` — a no-op in a production build.
+const { schedule, now } = await applyDebugParams(location.href, scheduleData as Schedule);
 
 const app = document.getElementById("app");
 if (!app) throw new Error("#app not found");
@@ -76,7 +78,7 @@ if (isPublished(schedule)) {
   function syncFocus(): void {
     // Nothing starred = nothing to focus on, and dimming everything would
     // leave an unreadable screen with no way back (#25).
-    focusButton.disabled = favourites.size === 0;
+    focusButton.disabled = favourites.ids.size === 0;
     focusButton.setAttribute("aria-pressed", String(focus));
     screen.classList.toggle("focus", focus);
   }
@@ -91,30 +93,28 @@ if (isPublished(schedule)) {
   header.insertBefore(switcher.element, actions);
   header.insertBefore(spacer, actions);
 
-  // Stale stars self-heal against the current Schedule (ADR-0019).
-  const scheduleActIds = new Set(
-    schedule.days.flatMap((d) => Object.values(d.acts).flat()).map((a) => a.id),
-  );
-  const favourites = loadFavourites(scheduleActIds);
+  // Stale stars self-heal against the current Schedule (ADR-0019), under
+  // this Edition's own key (#29).
+  const favourites = loadFavourites(schedule);
 
   view = createScheduleView({
     container: screen,
     schedule,
-    now: () => new Date(),
+    now,
     onActiveDayChange: (day, today) => switcher.update(day.date, today),
     onActTap: (actId) => {
       // The state flip is the feedback (ADR-0019) — instant repaint, no toast.
-      toggleFavourite(favourites, actId);
+      favourites.toggle(actId);
       // Unstarring the last favourite in Focus would dim every act and
       // disable the way back out. Drop out of Focus instead (ADR-0021).
-      if (favourites.size === 0) focus = false;
+      if (favourites.ids.size === 0) focus = false;
       syncFocus();
-      view.render({ favourites });
+      view.render({ favourites: favourites.ids });
     },
   });
-  view.render({ favourites });
+  view.render({ favourites: favourites.ids });
   syncFocus();
-  setInterval(() => view.tick(new Date()), TICK_MS);
+  setInterval(() => view.tick(now()), TICK_MS);
 } else {
   screen = createUnpublishedScreen(schedule);
 }

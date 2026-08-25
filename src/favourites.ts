@@ -2,46 +2,66 @@
 // client-side only. Keyed by the act `id` — Broadcast's `objectId` carried
 // verbatim in schedule.json (ADR-0024) — never an array index, so a Reveal
 // refresh (time shifts, Stage moves, cancellations) can't mis-attribute a
-// star. Re-namespaced off Øyablikk's `oya.` key.
+// star. Re-namespaced off Øyablikk's `oya.` key, and keyed per Edition (#29):
+// CONTEXT.md scopes Favourites to one Edition and carries none across, and
+// the self-heal below would otherwise wipe one year's stars on loading
+// another's Schedule.
 
-const STORAGE_KEY = "fuzztid.favourites";
+import { editionYear, type Schedule } from "./schedule.ts";
 
-/**
- * Loads the starred set, silently dropping ids absent from the current
- * Schedule — stale entries self-heal across refreshes. The pruned set is
- * written straight back, so a dropped id cannot resurrect if a future
- * Schedule reuses it.
- */
-export function loadFavourites(validActIds: ReadonlySet<string>): Set<string> {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (raw === null) return new Set();
-  const favourites = parse(raw, validActIds);
-  saveFavourites(favourites);
-  return favourites;
+export type Favourites = {
+  /** The starred act ids. Read by the view; mutated only through `toggle`. */
+  readonly ids: ReadonlySet<string>;
+  /** Flips one star and persists — the whole tap gesture ends here (ADR-0019). */
+  toggle(actId: string): void;
+};
+
+function storageKey(schedule: Schedule): string {
+  return `fuzztid.favourites.${editionYear(schedule)}`;
 }
 
-function parse(raw: string, validActIds: ReadonlySet<string>): Set<string> {
+/**
+ * Opens the Edition's starred set, silently dropping ids absent from the
+ * current Schedule — stale entries self-heal across refreshes. The pruned
+ * set is written straight back, so a dropped id cannot resurrect if a
+ * future Schedule reuses it.
+ */
+export function loadFavourites(schedule: Schedule): Favourites {
+  const key = storageKey(schedule);
+  const validActIds = new Set(
+    schedule.days.flatMap((day) => Object.values(day.acts).flat()).map((act) => act.id),
+  );
+
+  const ids = new Set<string>();
+  const raw = localStorage.getItem(key);
+  if (raw !== null) {
+    for (const id of parse(raw)) if (validActIds.has(id)) ids.add(id);
+    save(key, ids);
+  }
+
+  return {
+    ids,
+    toggle(actId) {
+      if (ids.has(actId)) {
+        ids.delete(actId);
+      } else {
+        ids.add(actId);
+      }
+      save(key, ids);
+    },
+  };
+}
+
+function parse(raw: string): string[] {
   try {
     const parsed: unknown = JSON.parse(raw);
-    if (Array.isArray(parsed) && parsed.every((id) => typeof id === "string")) {
-      return new Set(parsed.filter((id) => validActIds.has(id)));
-    }
+    if (Array.isArray(parsed) && parsed.every((id) => typeof id === "string")) return parsed;
   } catch {
     // fall through to nothing starred
   }
-  return new Set();
+  return [];
 }
 
-export function saveFavourites(favourites: ReadonlySet<string>): void {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify([...favourites]));
-}
-
-/** Flips one star and persists — the whole tap gesture ends here (ADR-0019). */
-export function toggleFavourite(favourites: Set<string>, actId: string): void {
-  if (favourites.has(actId)) {
-    favourites.delete(actId);
-  } else {
-    favourites.add(actId);
-  }
-  saveFavourites(favourites);
+function save(key: string, ids: ReadonlySet<string>): void {
+  localStorage.setItem(key, JSON.stringify([...ids]));
 }
