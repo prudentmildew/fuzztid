@@ -7,12 +7,22 @@ A mobile web app for the **Høstsabbat** festival programme in Oslo. Adapted fro
 Festivalen — copy its shape and conventions rather than inventing new ones, and
 port ADRs across by reference where the decision still holds.
 
-The repo is **empty as of this writing**. The domain vocabulary, the festival's
-dates, stages and venues, and the app's actual shape are all still open — they
-get pinned down in the `/wayfinder` session that follows this setup, and land in
-`CONTEXT.md` and `docs/adr/` as they resolve. Don't assume Øyablikk's specifics
-(seven park stages, four August days, a Sanity content lake) carry over;
-Høstsabbat is a different festival with a different programme structure.
+The design is **settled**, not open. The
+[wayfinder map](https://github.com/prudentmildew/fuzztid/issues/1) closed after fifteen
+tickets, and the port is ready to build. The vocabulary lives in `CONTEXT.md` and the
+decisions in `docs/adr/` (0023–0028) — but four resolutions deliberately wrote no ADR
+and live only in their closed tickets: the toolchain
+([#2](https://github.com/prudentmildew/fuzztid/issues/2)), the feature scope
+([#3](https://github.com/prudentmildew/fuzztid/issues/3)), what the seam owns
+([#4](https://github.com/prudentmildew/fuzztid/issues/4)) and the launch choreography
+([#5](https://github.com/prudentmildew/fuzztid/issues/5)). `docs/adr/` alone is not the
+whole brief.
+
+Høstsabbat is **not** Øyablikk with different data. Where Øyablikk has seven park stages,
+four August days and a Sanity content lake, this app has three Stages that are rooms
+inside one building (Kulturkirken Jakob), two Days (23–24 October 2026), and a
+third-party Broadcast feed. Where an Øyablikk decision still holds it ports by
+reference; where it doesn't, a fresh ADR above its number range says so.
 
 ## Toolchain
 
