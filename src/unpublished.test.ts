@@ -44,6 +44,23 @@ describe("createUnpublishedScreen", () => {
     );
   });
 
+  it("leads with which Festival and which Edition this is (#31, story 2)", () => {
+    const screen = createUnpublishedScreen(SCHEDULE);
+    const festival = screen.querySelector(".unpublished-festival");
+    expect(festival?.textContent).toBe("Høstsabbat 2026");
+    expect(screen.firstElementChild).toBe(festival);
+  });
+
+  it("derives the year from the first Day — the Edition rollover touches edition-config.ts alone", () => {
+    const screen = createUnpublishedScreen(unpublishedSchedule(["2027-10-22", "2027-10-23"]));
+    expect(screen.querySelector(".unpublished-festival")?.textContent).toBe("Høstsabbat 2027");
+  });
+
+  it("makes no heading of it — the <h1> is the wordmark's (ADR-0026 §3)", () => {
+    const screen = createUnpublishedScreen(SCHEDULE);
+    expect(screen.querySelector("h1, h2, h3")).toBeNull();
+  });
+
   it("builds no Day tabs and no Focus heart — there is nothing to switch between or dim", () => {
     const screen = createUnpublishedScreen(SCHEDULE);
     expect(screen.querySelector(".day-switcher")).toBeNull();

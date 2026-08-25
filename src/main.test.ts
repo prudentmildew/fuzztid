@@ -54,6 +54,13 @@ describe("app boot — unpublished Schedule", () => {
     );
   });
 
+  it("leads the unpublished screen with the Festival and the Edition, under the wordmark's <h1> (#31)", () => {
+    expect(document.querySelector(".unpublished-festival")?.textContent).toBe("Høstsabbat 2026");
+    const headings = document.querySelectorAll("h1");
+    expect(headings.length).toBe(1);
+    expect(headings[0]?.textContent).toBe("fuzztid");
+  });
+
   it("mounts the About sheet, closed, and opens it from the ⓘ", () => {
     const backdrop = document.querySelector<HTMLElement>(".sheet-backdrop");
     expect(backdrop?.hidden).toBe(true);

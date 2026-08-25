@@ -140,3 +140,12 @@ describe("hour ticks (#31, story 12)", () => {
     }
   });
 });
+
+describe("which Festival this is (#31, story 2)", () => {
+  it("sets the pre-Reveal line in the display face, uppercase, in --fg", () => {
+    const line = declarations(".unpublished-festival");
+    expect(line["font-family"]).toBe("var(--display-font)");
+    expect(line["text-transform"]).toBe("uppercase");
+    expect(line.color).toBe("var(--fg)");
+  });
+});

@@ -96,7 +96,10 @@ at all.
 9. **The unpublished screen.** The `fuzztid` wordmark and the ⓘ; the Edition's dates and
    venue — 23–24 October 2026, Kulturkirken Jakob; one line saying the programme is
    published a few days beforehand; and a link to `hostsabbat.no`, which is where §11 already
-   put the Lineup. **0026's two Day tabs and the ♥ are absent**: the tabs have no Days to
+   put the Lineup. _Amended 2026-08-25 ([#31](https://github.com/prudentmildew/fuzztid/issues/31)):
+   the screen leads with `HØSTSABBAT 2026` above the dates — the Festival's name a constant
+   in `unpublished.ts`, the year derived from the Schedule's first Day, and no heading: the
+   `<h1>` stays the wordmark's (0026 §3)._ **0026's two Day tabs and the ♥ are absent**: the tabs have no Days to
    move between and 0021's Focus has nothing to dim, so the unpublished Header is the
    wordmark and the ⓘ alone. This does not disturb 0012 — chrome is static across Day
    *swipes*, and there are none here.

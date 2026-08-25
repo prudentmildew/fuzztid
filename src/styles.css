@@ -227,6 +227,20 @@ body {
   text-align: center;
 }
 
+/* Which Festival and which Edition this is (#31, story 2): the name is
+   unpublished.ts's constant, the year the Schedule's first Day. Uppercase
+   in the stylesheet, natural case in the DOM, like every other display
+   line. */
+.unpublished-festival {
+  margin: 0;
+  font-family: var(--display-font);
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg);
+}
+
 .unpublished-dates {
   margin: 0;
   font-family: var(--display-font);

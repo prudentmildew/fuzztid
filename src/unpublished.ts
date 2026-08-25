@@ -3,10 +3,14 @@
 // — main.ts branches on isPublished before it ever builds a ScheduleView, a
 // time origin or a Day switcher. No Day tabs (no Days to move between yet)
 // and no Focus heart (nothing to dim) — the Header carries only the
-// wordmark and the ⓘ on this branch.
+// wordmark and the ⓘ on this branch. It leads with which Festival and which
+// Edition this is (#31, story 2): the name is a constant here, the year is
+// derived from the Schedule's first Day, so the Edition rollover touches
+// edition-config.ts and nothing else.
 
-import type { Schedule } from "./schedule.ts";
+import { editionYear, type Schedule } from "./schedule.ts";
 
+const FESTIVAL = "Høstsabbat";
 const VENUE = "Kulturkirken Jakob, Oslo";
 const LINEUP_URL = "https://www.hostsabbat.no/";
 
@@ -16,6 +20,13 @@ const LINEUP_URL = "https://www.hostsabbat.no/";
 export function createUnpublishedScreen(schedule: Schedule): HTMLElement {
   const screen = document.createElement("main");
   screen.className = "unpublished";
+
+  // Not a heading: the <h1> is the wordmark's (ADR-0026 §3), and the app is
+  // deliberately not branded as the Festival's own.
+  const festival = document.createElement("p");
+  festival.className = "unpublished-festival";
+  festival.textContent = `${FESTIVAL} ${editionYear(schedule)}`;
+  screen.appendChild(festival);
 
   const dates = document.createElement("p");
   dates.className = "unpublished-dates";
