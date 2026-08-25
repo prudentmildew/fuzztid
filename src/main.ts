@@ -1,6 +1,7 @@
 import { registerSW } from "virtual:pwa-register";
 import scheduleData from "../data/schedule.json";
 import { createAboutSheet } from "./about.ts";
+import { createDaySwitcher } from "./day-switcher.ts";
 import { infoSvg } from "./icons.ts";
 import { isPublished, type Schedule } from "./schedule.ts";
 import { createScheduleView } from "./schedule-view.ts";
@@ -37,14 +38,37 @@ actions.appendChild(infoButton);
 
 header.appendChild(actions);
 
-// The Day switcher, Favourites and Focus land on top of this static render
-// in #24–#25.
+// Favourites and Focus land on top of this static render in #25.
 const TICK_MS = 60_000;
 
 let screen: HTMLElement;
 if (isPublished(schedule)) {
   screen = document.createElement("div");
-  const view = createScheduleView({ container: screen, schedule, now: () => new Date() });
+
+  // The switcher's onSelect needs the view (to call showDay); the view's
+  // onActiveDayChange needs the switcher (to repaint its tabs). Neither
+  // exists yet when the other is built, so the view is captured by
+  // reference rather than threaded through a constructor argument.
+  let view: ReturnType<typeof createScheduleView>;
+  const switcher = createDaySwitcher({
+    days: schedule.days,
+    onSelect: (date) => view.showDay(date),
+  });
+
+  const spacer = document.createElement("div");
+  spacer.className = "app-header-spacer";
+
+  // Header order: wordmark, switcher, spacer, actions (Focus heart, ⓘ) —
+  // `actions` is already mounted, so both land just ahead of it.
+  header.insertBefore(switcher.element, actions);
+  header.insertBefore(spacer, actions);
+
+  view = createScheduleView({
+    container: screen,
+    schedule,
+    now: () => new Date(),
+    onActiveDayChange: (day, today) => switcher.update(day.date, today),
+  });
   view.render();
   setInterval(() => view.tick(new Date()), TICK_MS);
 } else {

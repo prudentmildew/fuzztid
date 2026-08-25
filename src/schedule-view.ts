@@ -1,12 +1,12 @@
 // The primary app seam (#22 onward): a Schedule in, the grid on screen. This
 // slice adds the Now line, the injected clock, Day standing and launch (#23).
-// The Day switcher and its `onActiveDayChange` hookup land in #24, Favourites
-// and `onActTap` in #25.
+// #24 adds the active-Day feed and `showDay` the switcher drives; Favourites
+// and `onActTap` land in #25.
 
 import { renderDay } from "./day-pane.ts";
 import { pxFromMin, sharedOrigin } from "./layout.ts";
 import { dayStanding, osloMinutes, type ScheduleStanding, todayFestivalDate } from "./now.ts";
-import type { Schedule } from "./schedule.ts";
+import type { Day, Schedule } from "./schedule.ts";
 
 const PX_PER_MINUTE = 2;
 
@@ -15,16 +15,20 @@ export type ScheduleViewOptions = {
   schedule: Schedule;
   /** Injected rather than ambient (#23): a test pins time by argument. */
   now: () => Date;
+  /** Fed the active pane's Day plus which date (if any) is today, so the switcher can mark its tab. */
+  onActiveDayChange?: (day: Day, today: string | null) => void;
 };
 
 export type ScheduleView = {
   render(): void;
   /** Repositions the Now line and re-derives standing — the minute tick must not rebuild panes. */
   tick(at: Date): void;
+  /** Horizontal-only, animated — never re-scrolls to now (ADR-0008, unqualified per #5). */
+  showDay(date: string): void;
 };
 
 export function createScheduleView(opts: ScheduleViewOptions): ScheduleView {
-  const { container, schedule, now } = opts;
+  const { container, schedule, now, onActiveDayChange } = opts;
   container.classList.add("schedule");
   container.style.setProperty("--column-count", String(schedule.stages.length));
 
@@ -107,6 +111,17 @@ export function createScheduleView(opts: ScheduleViewOptions): ScheduleView {
     container.dataset.nowStanding = paneStanding(activeDayDate(), at);
   }
 
+  // Never fires at zero width, when activeDayDate()'s width-less fallback to
+  // index 0 would misreport the active Day to the switcher.
+  function notifyActiveDayChange(at: Date): void {
+    if (!onActiveDayChange) return;
+    if (daysEl.clientWidth === 0) return;
+    const date = activeDayDate();
+    const day = schedule.days.find((d) => d.date === date);
+    if (!day) return;
+    onActiveDayChange(day, todayFestivalDate(festivalDates, at));
+  }
+
   // Flips true once the launch jump has run (successfully or via its
   // zero-width retry). A re-render afterwards preserves the pane in view
   // instead of jumping again.
@@ -132,6 +147,7 @@ export function createScheduleView(opts: ScheduleViewOptions): ScheduleView {
     }
     // The Now line itself is width-independent — render()'s own updateNow()
     // call already positions it, so this jump only owns the scroll.
+    notifyActiveDayChange(at);
   }
 
   function render(): void {
@@ -154,6 +170,7 @@ export function createScheduleView(opts: ScheduleViewOptions): ScheduleView {
       jumpToLaunchPane();
     } else if (width > 0) {
       daysEl.scrollLeft = activeIdx * width;
+      notifyActiveDayChange(now());
     }
 
     updateNow(now());
@@ -161,6 +178,16 @@ export function createScheduleView(opts: ScheduleViewOptions): ScheduleView {
 
   function tick(at: Date): void {
     updateNow(at);
+    // A calendar fact, not just a swipe-driven one — which Day is "today"
+    // can flip under an Oslo midnight while the pane stays parked.
+    notifyActiveDayChange(at);
+  }
+
+  function showDay(date: string): void {
+    const idx = schedule.days.findIndex((d) => d.date === date);
+    if (idx === -1) return;
+    const width = daysEl.clientWidth;
+    daysEl.scrollTo({ left: idx * width, behavior: "smooth" });
   }
 
   // Standing is a calendar fact that can also change with a bare swipe — an
@@ -168,10 +195,12 @@ export function createScheduleView(opts: ScheduleViewOptions): ScheduleView {
   daysEl.addEventListener(
     "scroll",
     () => {
-      container.dataset.nowStanding = paneStanding(activeDayDate(), now());
+      const at = now();
+      container.dataset.nowStanding = paneStanding(activeDayDate(), at);
+      notifyActiveDayChange(at);
     },
     { passive: true },
   );
 
-  return { render, tick };
+  return { render, tick, showDay };
 }

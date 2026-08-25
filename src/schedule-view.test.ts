@@ -298,3 +298,123 @@ describe("ScheduleView — launch", () => {
     });
   });
 });
+
+describe("ScheduleView — active-Day feed (#5's onActiveDayChange seam)", () => {
+  it("fires once launch lands on a known width, with the launch Day and today's date", () => {
+    const onActiveDayChange = vi.fn();
+    const view = createScheduleView({
+      container,
+      schedule,
+      now: fixedNow("2026-10-24T08:30:00Z"), // today (Oslo) is the second Day
+      onActiveDayChange,
+    });
+    widen(daysEl(), 320);
+    view.render();
+
+    expect(onActiveDayChange).toHaveBeenCalledWith(schedule.days[1], "2026-10-24");
+  });
+
+  it("does not fire while the launch pane is still zero width", () => {
+    const onActiveDayChange = vi.fn();
+    let rafCallback: FrameRequestCallback | undefined;
+    vi.stubGlobal("requestAnimationFrame", (cb: FrameRequestCallback) => {
+      rafCallback = cb;
+      return 0;
+    });
+
+    createScheduleView({
+      container,
+      schedule,
+      now: fixedNow("2026-10-24T08:30:00Z"),
+      onActiveDayChange,
+    }).render();
+
+    expect(onActiveDayChange).not.toHaveBeenCalled();
+
+    widen(daysEl(), 320);
+    rafCallback?.(0);
+    expect(onActiveDayChange).toHaveBeenCalledTimes(1);
+
+    vi.unstubAllGlobals();
+  });
+
+  it("follows a swipe-driven active-Day change", () => {
+    const onActiveDayChange = vi.fn();
+    const view = createScheduleView({
+      container,
+      schedule,
+      now: fixedNow("2026-10-23T08:30:00Z"), // today (Oslo) is the first Day
+      onActiveDayChange,
+    });
+    widen(daysEl(), 320);
+    view.render();
+    onActiveDayChange.mockClear();
+
+    daysEl().scrollLeft = 320; // swipe forward to the second Day
+    daysEl().dispatchEvent(new Event("scroll"));
+
+    expect(onActiveDayChange).toHaveBeenCalledWith(schedule.days[1], "2026-10-23");
+  });
+
+  it("states both axes on the Saturday case: a Day can be active without being today", () => {
+    const onActiveDayChange = vi.fn();
+    const view = createScheduleView({
+      container,
+      schedule,
+      now: fixedNow("2026-10-23T08:30:00Z"), // today (Oslo) is the first Day
+      onActiveDayChange,
+    });
+    widen(daysEl(), 320);
+    view.render();
+    onActiveDayChange.mockClear();
+
+    daysEl().scrollLeft = 320; // swipe forward to the second (non-today) Day
+    daysEl().dispatchEvent(new Event("scroll"));
+
+    const [day, today] = onActiveDayChange.mock.calls[0] ?? [];
+    expect(day).toBe(schedule.days[1]);
+    expect(today).toBe("2026-10-23");
+  });
+
+  it("re-derives today on tick, since it is a calendar fact that can change with no swipe", () => {
+    const onActiveDayChange = vi.fn();
+    const view = createScheduleView({
+      container,
+      schedule,
+      now: fixedNow("2026-10-23T08:30:00Z"),
+      onActiveDayChange,
+    });
+    widen(daysEl(), 320);
+    view.render();
+    onActiveDayChange.mockClear();
+
+    // Oslo has crossed into 24 Oct while the app stayed parked on the 23rd.
+    view.tick(new Date("2026-10-23T22:30:00Z"));
+
+    expect(onActiveDayChange).toHaveBeenCalledWith(schedule.days[0], "2026-10-24");
+  });
+});
+
+describe("ScheduleView.showDay", () => {
+  it("scrolls the pane horizontally only, animated", () => {
+    const view = createScheduleView({ container, schedule, now: fixedNow("2026-10-23T08:30:00Z") });
+    widen(daysEl(), 320);
+    view.render();
+    const scrollTo = vi.spyOn(daysEl(), "scrollTo");
+
+    view.showDay("2026-10-24");
+
+    expect(scrollTo).toHaveBeenCalledWith({ left: 320, behavior: "smooth" });
+  });
+
+  it("never re-scrolls to now — vertical scroll is untouched", () => {
+    const view = createScheduleView({ container, schedule, now: fixedNow("2026-10-23T08:30:00Z") });
+    widen(daysEl(), 320);
+    view.render();
+    container.scrollTop = 42;
+
+    view.showDay("2026-10-24");
+
+    expect(container.scrollTop).toBe(42);
+  });
+});

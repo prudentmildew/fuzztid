@@ -86,6 +86,68 @@ body {
   flex-shrink: 0;
 }
 
+.app-header-spacer {
+  flex: 1;
+}
+
+/* Day switcher (ADR-0026) ------------------------------------------------- */
+
+.day-switcher {
+  display: flex;
+  align-items: stretch;
+  align-self: stretch;
+  gap: 6px;
+  min-width: 0;
+  /* The only fixed gap in the row (ADR-0026's own budget spends it here,
+     between the wordmark and the switcher); the spacer already supplies
+     whatever room is left before the actions, so no header-level `gap`. */
+  margin-inline-start: 10px;
+}
+
+.day-switcher-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-family: var(--display-font);
+  font-size: 1.05rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  white-space: nowrap;
+  padding-inline: 5px;
+  /* Tap targets fill the Header's full height (ADR-0026 §8): a flex item's
+     own default cross-axis stretch, inherited through `.day-switcher`'s
+     `align-self: stretch`, takes the button to `--header-height` without
+     moving the label's own box. */
+  height: 100%;
+}
+
+.day-switcher-tab[aria-pressed="true"] {
+  color: var(--fg);
+  font-weight: 600;
+}
+
+.day-switcher-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex: 0 0 auto;
+  /* Reserved, not removed (ADR-0026 §6): the box stays for ~363 days a
+     year with nothing drawn in it, so the Header's geometry never shifts
+     under an Oslo midnight. */
+  visibility: hidden;
+}
+
+.day-switcher-tab[data-today="true"] .day-switcher-dot {
+  visibility: visible;
+}
+
 .app-actions {
   display: flex;
   align-items: center;

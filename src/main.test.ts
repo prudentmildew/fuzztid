@@ -83,6 +83,12 @@ describe("app boot — published Schedule", () => {
           ],
         },
       },
+      {
+        date: "2026-10-24",
+        start_min: 600,
+        end_min: 660,
+        acts: { "the-chapel": [] },
+      },
     ],
   };
 
@@ -106,5 +112,24 @@ describe("app boot — published Schedule", () => {
 
   it("mounts the wordmark alongside the Schedule", () => {
     expect(document.querySelector(".app-wordmark")?.textContent).toBe("fuzztid");
+  });
+
+  it("builds a Day switcher tab per Day, between the wordmark and the actions", () => {
+    const tabs = document.querySelectorAll(".day-switcher-tab");
+    expect(tabs.length).toBe(2);
+    expect((tabs[0] as HTMLElement).querySelector(".day-switcher-label")?.textContent).toBe(
+      "FRI 23",
+    );
+    expect((tabs[1] as HTMLElement).querySelector(".day-switcher-label")?.textContent).toBe(
+      "SAT 24",
+    );
+  });
+
+  it("moves the pane when a tab is tapped", () => {
+    const daysEl = document.querySelector<HTMLElement>(".days") as HTMLElement;
+    const scrollTo = vi.spyOn(daysEl, "scrollTo");
+    const secondTab = document.querySelectorAll<HTMLButtonElement>(".day-switcher-tab")[1];
+    secondTab?.click();
+    expect(scrollTo).toHaveBeenCalled();
   });
 });
