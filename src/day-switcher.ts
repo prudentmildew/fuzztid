@@ -53,7 +53,16 @@ export function createDaySwitcher(opts: DaySwitcherOptions): DaySwitcher {
     label.className = "day-switcher-label";
     label.textContent = tabLabel(day.date);
 
-    button.append(dot, label);
+    // The selected weight's box is reserved the same way the dot's is
+    // (ADR-0026 §5, amended in #30): a hidden bold copy shares the label's
+    // grid cell, so the tab is bold-wide at either weight and selecting it
+    // moves nothing beside it.
+    const reserve = document.createElement("span");
+    reserve.className = "day-switcher-label-reserve";
+    reserve.setAttribute("aria-hidden", "true");
+    reserve.textContent = label.textContent;
+
+    button.append(dot, label, reserve);
     button.addEventListener("click", () => onSelect(day.date));
     element.appendChild(button);
     return button;

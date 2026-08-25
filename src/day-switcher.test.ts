@@ -76,4 +76,14 @@ describe("createDaySwitcher", () => {
     expect(fri?.dataset.today).toBe("true");
     expect(sat?.dataset.today).toBe("false");
   });
+
+  it("reserves the selected weight's box: a hidden bold copy of the label rides every tab (#30)", () => {
+    const switcher = createDaySwitcher({ days, onSelect: vi.fn() });
+    for (const button of tabs(switcher.element)) {
+      const label = button.querySelector(".day-switcher-label");
+      const reserve = button.querySelector(".day-switcher-label-reserve");
+      expect(reserve?.textContent).toBe(label?.textContent);
+      expect(reserve?.getAttribute("aria-hidden")).toBe("true");
+    }
+  });
 });

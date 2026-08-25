@@ -58,3 +58,17 @@ describe("the shipped palette (ADR-0025)", () => {
     expect(contrastRatio("#0b0a0c", tokens.accent ?? "")).toBeGreaterThanOrEqual(4.5);
   });
 });
+
+// The six declarations above are read by name, so a colour painted anywhere
+// else in the file would sail past them (#30: `.now-pill` shipped `#ffffff`
+// on `--accent`, under the floor). Only the token block may spell a hex.
+describe("nothing paints outside the palette (ADR-0025 §8–§9)", () => {
+  it("has no hex literal in src/styles.css beyond the :root token block", () => {
+    const css = readFileSync("src/styles.css", "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
+    const outsideRoot = css.replace(/:root\s*\{[^}]*\}/, "");
+    const strays = [
+      ...outsideRoot.matchAll(/([a-z-]+)\s*:\s*([^;{}]*#[0-9a-f]{3,8}\b[^;{}]*);/gi),
+    ].map((m) => `${m[1]}: ${m[2]}`);
+    expect(strays).toEqual([]);
+  });
+});
