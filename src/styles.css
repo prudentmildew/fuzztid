@@ -165,14 +165,22 @@ body {
 
 /* The Schedule grid (#22) — Stage row is permanent chrome; Days scroll ----- */
 
+/* Single vertical scroll container (ADR-0012, ported by reference): the
+   Stage row and Now line are rendered once here and stay anchored across
+   Day swipes — only the act blocks inside .days translate horizontally. */
 .schedule {
+  position: relative;
   flex: 1;
   display: flex;
   flex-direction: column;
   min-height: 0;
+  overflow-y: auto;
 }
 
 .stage-row {
+  position: sticky;
+  top: 0;
+  z-index: 3;
   display: grid;
   grid-template-columns: repeat(var(--column-count), 1fr);
   gap: var(--column-gap);
@@ -197,7 +205,6 @@ body {
 }
 
 .days {
-  flex: 1;
   display: flex;
   overflow-x: auto;
   overflow-y: hidden;
@@ -207,7 +214,6 @@ body {
 .day {
   flex: 0 0 100%;
   scroll-snap-align: start;
-  overflow-y: auto;
 }
 
 .columns {
@@ -246,6 +252,68 @@ body {
 .act-name {
   font-size: 0.85rem;
   font-weight: 500;
+}
+
+/* Now line (#23) --------------------------------------------------------- */
+/* Single instance at the Schedule level (ADR-0012, ported by reference). The
+   transform adds the Stage row's height so the line aligns with the
+   corresponding y-coord in the act grid. */
+
+.now-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--accent);
+  pointer-events: none;
+  z-index: 5;
+  transform: translateY(var(--stage-row-height));
+  transition:
+    background-color 180ms ease,
+    height 180ms ease;
+}
+
+/* Day standing (ADR-0022, ported by reference): the line owns today, and
+   goes quiet everywhere else. Grey *and* thinner — with the pill hidden,
+   colour would otherwise be carrying the whole signal on a phone held up in
+   the church's daylight. */
+.schedule[data-now-standing="past"] .now-line,
+.schedule[data-now-standing="future"] .now-line {
+  height: 1px;
+  background-color: var(--muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .now-line {
+    transition: none;
+  }
+}
+
+.now-pill {
+  position: absolute;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 18px;
+  padding: 0 8px;
+  background: var(--accent);
+  color: #ffffff;
+  font-family: var(--display-font);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  border-radius: 3px;
+  pointer-events: none;
+  z-index: 6;
+  transform: translate(0, calc(var(--stage-row-height) - 50%));
+}
+
+/* NOW means now — off today's pane the word is a lie, so the pill goes
+   rather than being relabelled (ADR-0022). The dimmed line still carries the
+   time-of-day position, which stays useful on a neighbouring Day. */
+.schedule[data-now-standing="past"] .now-pill,
+.schedule[data-now-standing="future"] .now-pill {
+  display: none;
 }
 
 /* About sheet — bottom sheet visual language and dismiss conventions ------ */

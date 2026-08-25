@@ -37,12 +37,16 @@ actions.appendChild(infoButton);
 
 header.appendChild(actions);
 
-// The Day switcher, the Now line, Favourites and Focus land on top of this
-// static render in #23–#25.
+// The Day switcher, Favourites and Focus land on top of this static render
+// in #24–#25.
+const TICK_MS = 60_000;
+
 let screen: HTMLElement;
 if (isPublished(schedule)) {
   screen = document.createElement("div");
-  createScheduleView({ container: screen, schedule }).render();
+  const view = createScheduleView({ container: screen, schedule, now: () => new Date() });
+  view.render();
+  setInterval(() => view.tick(new Date()), TICK_MS);
 } else {
   screen = createUnpublishedScreen(schedule);
 }
