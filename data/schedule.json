@@ -1,0 +1,38 @@
+{
+  "stages": [
+    {
+      "id": "the-chapel",
+      "name": "The Chapel"
+    },
+    {
+      "id": "the-crypt",
+      "name": "The Crypt"
+    },
+    {
+      "id": "verkstedet",
+      "name": "Verkstedet"
+    }
+  ],
+  "days": [
+    {
+      "date": "2026-10-23",
+      "start_min": 0,
+      "end_min": 0,
+      "acts": {
+        "the-chapel": [],
+        "the-crypt": [],
+        "verkstedet": []
+      }
+    },
+    {
+      "date": "2026-10-24",
+      "start_min": 0,
+      "end_min": 0,
+      "acts": {
+        "the-chapel": [],
+        "the-crypt": [],
+        "verkstedet": []
+      }
+    }
+  ]
+}
