@@ -12,6 +12,11 @@ per-Stage fills are cut, and the palette is Høstsabbat's own. Consumes
 in `styles.css`, no hex in TS) and [#3](https://github.com/prudentmildew/fuzztid/issues/3)'s
 cut of the Stage filter. Decided in [#11](https://github.com/prudentmildew/fuzztid/issues/11)._
 
+_**Amended 2026-08-25** in [#31](https://github.com/prudentmildew/fuzztid/issues/31), in
+place: the Consequences' "dims toward `--bg`" becomes `transparent` — the same ground, but
+the dimmed block's fill and border both clear, so the hour rule #31 draws on the grid runs on
+through it. §6's own wording, "toward the ground", already says this and stands._
+
 Øyablikk paints each Act block in its Stage's colour so that **seven** columns are tellable
 apart, and pins the seven fills plus an accent as a tested artefact:
 `scripts/validate-palette.ts` (147 lines of Machado-2009 CVD simulation and Lab ΔE) with
@@ -146,7 +151,9 @@ Measured, all clearing their floors:
   these tokens in situ at 360 px and may nudge a value inside the stated floors — an
   adjustment, not a re-decision. Its today-marker inherits `--accent`.
 - **Focus** (0021, ported by reference in #3) changes mechanism: it dims toward `--bg`
-  rather than reducing opacity over a saturated fill.
+  rather than reducing opacity over a saturated fill. _(Amended 2026-08-25, #31: the dimmed
+  block goes to `transparent` — the ground itself, fill and border alike — so the hour rule
+  runs through it, where a `--bg` fill cut it across every on-the-hour Act.)_
 - The Now line's pill keeps Øyablikk's dark-text-on-accent form, so 0022's `past`/`future`
   treatment (`--muted`, 1 px, pill hidden) ports unchanged.
 - Any future return of per-Stage colour would need the pairwise-distance machinery back, and

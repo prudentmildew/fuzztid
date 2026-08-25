@@ -38,6 +38,12 @@ examining rather than porting.
    different deploys. **One hash means the two can never disagree**, and atomicity is worth
    more here than the bytes.
 
+   _Noted 2026-08-25, in review of [#29](https://github.com/prudentmildew/fuzztid/issues/29):
+   `main.ts` now top-level-`await`s the debug switch, so the boot is async in form. In a
+   production build the promise resolves at once with the schedule inlined as above, and
+   none of the four costs this paragraph names — a loading state, a failure path, a
+   staleness skew, a second hash — arises. The decision stands as written._
+
 2. **The runtime document cache is deleted.** It is either redundant or harmful, and never
    anything else:
 

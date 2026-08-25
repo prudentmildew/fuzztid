@@ -24,7 +24,8 @@ _**Amended 2026-08-25** in [#30](https://github.com/prudentmildew/fuzztid/issues
 place: §6's endorsement of centring the Header rather than baseline-aligning it is
 reversed; §5 gains §6's reserve-the-box discipline for the weight axis; §8 records that
 what first shipped was not the negative-margin form it specified; and the Consequences'
-"Stage row 30 px" is reconciled to the shipped 40 px. Each edit is marked where it sits._
+"Stage row 30 px" is reconciled to the shipped 40 px. Each edit is marked where it sits, and
+the before/after captures at 360 and 390 px sit in `docs/screenshots/30-header-*.png`._
 
 Øyablikk has four Days and teaches the swipe between them with a first-visit nudge
 (0017) — 36 lines of module, an `animatePeek` choreography, and a grace window arbitrating
