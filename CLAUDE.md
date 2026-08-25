@@ -35,14 +35,19 @@ namespaces and parameter properties, and `allowImportingTsExtensions` means impo
 specifiers carry the `.ts` extension. `noUncheckedIndexedAccess` and
 `verbatimModuleSyntax` are on.
 
-**Two pieces are conditional on the service worker**, decided in
-[#3](https://github.com/prudentmildew/fuzztid/issues/3), not here. If a service
-worker survives the port, keep Øyablikk's two-config typecheck split
-(`tsconfig.worker.json` typechecks `src/sw.ts` against the WebWorker lib) and its
-five PWA dependencies — `vite-plugin-pwa` plus four `workbox-*`. If it does not,
-both disappear: a single `tsconfig.json`, one `typecheck` script, six devDependencies
-instead of eleven. Do not merge the two configs into one with
-`lib: ["DOM", "WebWorker"]` — the globals conflict and the errors are silent.
+**The service worker survives the port**, decided in
+[#3](https://github.com/prudentmildew/fuzztid/issues/3), so Øyablikk's two-config
+typecheck split stays with it: `tsconfig.worker.json` typechecks `src/sw.ts` against
+the WebWorker lib, and both `typecheck` scripts remain. Do not merge the two configs
+into one with `lib: ["DOM", "WebWorker"]` — the globals conflict and the errors are
+silent.
+
+The PWA dependencies are **four** — `vite-plugin-pwa` plus `workbox-precaching`,
+`workbox-routing` and `workbox-window` — on ten devDependencies total.
+[ADR-0027](docs/adr/0027-navigation-race-precache-only-fallback.md) drops
+`workbox-strategies` and `workbox-cacheable-response` along with the runtime document
+cache. Øyablikk carries six PWA deps on twelve, not the five on eleven this file
+previously claimed.
 
 The pre-commit hook stays opt-in per clone (`git config core.hooksPath .githooks`):
 lint-fix and re-stage, then typecheck, then the suite. `deploy.yml` is the real gate
