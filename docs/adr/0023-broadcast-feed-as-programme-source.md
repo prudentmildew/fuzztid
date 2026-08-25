@@ -15,7 +15,7 @@ by reference unchanged. Decided in
 [#8](https://github.com/prudentmildew/fuzztid/issues/8) on the evidence of
 [#6](https://github.com/prudentmildew/fuzztid/issues/6) and
 [#7](https://github.com/prudentmildew/fuzztid/issues/7).
-**Amended by [0027](./0027-cloudflare-apex-and-the-unpublished-schedule-gate.md)**: §6 writes
+**Amended by [0028](./0028-cloudflare-apex-and-the-unpublished-schedule-gate.md)**: §6 writes
 an unpublished Schedule rather than exiting 0, §11's pre-Reveal committed data is the
 unpublished 2026 Schedule rather than the 2025 programme, and the gate §11 left to the deploy
 decision turns out not to live in the deploy._
@@ -66,7 +66,7 @@ invariant below; the 2026 one is a placeholder until the Reveal.
    allowlisted-exclusion carve-out and not a softening of fail-loud. It writes the
    **unpublished Schedule** — the Edition's Days and Stages, no Acts — rather than exiting 0
    without writing, so the deployed app has something honest to render
-   ([0027](./0027-cloudflare-apex-and-the-unpublished-schedule-gate.md) §5–§6);
+   ([0028](./0028-cloudflare-apex-and-the-unpublished-schedule-gate.md) §5–§6);
    `git diff --quiet` keeps it to one commit and hourly no-ops thereafter. If **some** acts
    have a Stage, throw: that is a partial Reveal.
 7. **A per-Stage no-overlap invariant.** Høstsabbat's Stages are rooms in one building;
@@ -93,7 +93,7 @@ invariant below; the 2026 one is a placeholder until the Reveal.
     one and the cron is a no-op until the Reveal. There is no lineup-only pre-Reveal mode: the
     festival's own page already provides the lineup, and the window is ~four days. **The
     public go-live is gated on the Reveal** — and
-    [0027](./0027-cloudflare-apex-and-the-unpublished-schedule-gate.md) resolves that gate as
+    [0028](./0028-cloudflare-apex-and-the-unpublished-schedule-gate.md) resolves that gate as
     a property of the data rather than anything in the deploy: the app ships months early at
     `fuzztid.no` and the cron flips it.
 
@@ -132,5 +132,5 @@ any time takes it down. A "yes" swaps the secret and changes nothing else.
 - The key rotating or `demo.broadcastapp.no` retiring degrades to a stale programme
   and a red run, never an empty app.
 - The deploy decision inherited "go-live gated on the Reveal" as an input and discharged it
-  in [0027](./0027-cloudflare-apex-and-the-unpublished-schedule-gate.md): nothing is held
+  in [0028](./0028-cloudflare-apex-and-the-unpublished-schedule-gate.md): nothing is held
   back, and the Reveal is the only remaining moment on the calendar.

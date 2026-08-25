@@ -13,7 +13,7 @@ triggers by side, and records the pipeline/app seam that
 [#4](https://github.com/prudentmildew/fuzztid/issues/4) decided. Decided in
 [#9](https://github.com/prudentmildew/fuzztid/issues/9); the invariants it places come from
 [0023](./0023-broadcast-feed-as-programme-source.md).
-**Amended by [0027](./0027-cloudflare-apex-and-the-unpublished-schedule-gate.md)**: §9's
+**Amended by [0028](./0028-cloudflare-apex-and-the-unpublished-schedule-gate.md)**: §9's
 pre-Reveal copy of the fixture is deleted, and the assembler's `null` Programme now has a
 return value — the unpublished Schedule._
 
@@ -105,7 +105,7 @@ seams are re-cut rather than re-copied.
    pre-Reveal copy of this fixture. It is the unpublished 2026 Schedule that
    `toSchedule(null, HOSTSABBAT_2026)` returns — the Edition's Days and Stages, no Acts —
    because the app is deployed and public months before the Reveal and must render something
-   true ([0027](./0027-cloudflare-apex-and-the-unpublished-schedule-gate.md) §5–§8). The
+   true ([0028](./0028-cloudflare-apex-and-the-unpublished-schedule-gate.md) §5–§8). The
    golden test is untouched; at the Reveal the cron overwrites the unpublished file and
    nothing breaks.
 

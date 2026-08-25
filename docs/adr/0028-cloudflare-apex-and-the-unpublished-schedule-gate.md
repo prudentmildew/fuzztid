@@ -13,7 +13,9 @@ _New decision, original to Høstsabbat. Ports Øyablikk's
 (Cloudflare Web Analytics) by reference, each with one clause struck. **Amends
 [0023](./0023-broadcast-feed-as-programme-source.md) §6 and §11**, extends
 [0024](./0024-programme-as-the-pipeline-seam.md)'s assembler to the null Programme, and
-qualifies [0026](./0026-two-day-switcher-in-the-header.md)'s Header. Decided in
+qualifies [0026](./0026-two-day-switcher-in-the-header.md)'s Header. Leans on
+[0027](./0027-navigation-race-precache-only-fallback.md) for delivery — the Reveal reaches an
+already-installed phone through the route it decides. Decided in
 [#15](https://github.com/prudentmildew/fuzztid/issues/15)._
 
 Øyablikk's three deploy ADRs were all written while its domain was still an open question,
@@ -64,7 +66,10 @@ at all.
    **unpublished Schedule** honestly until the Programme lands. At the Reveal the hourly
    October cron (0023 §2) sees `externalVenueName` fill in, writes a real Schedule, commits
    and calls `deploy.yml`; anyone who installed early receives it through 0013's silent
-   auto-update. **No human flips anything**, which is the same argument 0023 §2 already made
+   auto-update. Because
+   [0027](./0027-navigation-race-precache-only-fallback.md) keeps the schedule inlined in the
+   JS bundle, the flip from unpublished to published *is* a new bundle — there is no second
+   fetch to get wrong, and no cached data file that can outlive the shell that reads it. **No human flips anything**, which is the same argument 0023 §2 already made
    against a `workflow_dispatch`-only cadence.
 
 6. **0023 §6 amended: the pipeline writes the unpublished Schedule instead of exiting 0.**
