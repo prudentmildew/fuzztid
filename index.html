@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no"
+    />
+    <title>Who's on right now, on which stage? A mobile programme for Høstsabbat 2026 at Kulturkirken Jakob, Oslo, 23–24 October.</title>
+    <meta
+      name="description"
+      content="Who's on right now, on which stage? A mobile programme for Høstsabbat 2026 at Kulturkirken Jakob, Oslo, 23–24 October."
+    />
+    <meta name="theme-color" content="#0b0a0c" />
+    <!-- No analytics snippet here by design: the beacon is injected at the
+         Cloudflare edge, so there is no token to maintain in this file. The
+         service worker is registered from main.ts. -->
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <!-- OG URLs are absolute by spec; they name the apex domain even though
+         every other path in this file is relative. -->
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:title"
+      content="Who's on right now, on which stage? A mobile programme for Høstsabbat 2026 at Kulturkirken Jakob, Oslo, 23–24 October."
+    />
+    <meta
+      property="og:description"
+      content="Who's on right now, on which stage? A mobile programme for Høstsabbat 2026 at Kulturkirken Jakob, Oslo, 23–24 October."
+    />
+    <meta property="og:url" content="https://fuzztid.no/" />
+    <meta property="og:image" content="https://fuzztid.no/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="./src/main.ts"></script>
+  </body>
+</html>
