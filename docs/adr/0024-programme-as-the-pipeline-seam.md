@@ -12,7 +12,10 @@ stands), re-expresses
 triggers by side, and records the pipeline/app seam that
 [#4](https://github.com/prudentmildew/fuzztid/issues/4) decided. Decided in
 [#9](https://github.com/prudentmildew/fuzztid/issues/9); the invariants it places come from
-[0023](./0023-broadcast-feed-as-programme-source.md)._
+[0023](./0023-broadcast-feed-as-programme-source.md).
+**Amended by [0027](./0027-cloudflare-apex-and-the-unpublished-schedule-gate.md)**: §9's
+pre-Reveal copy of the fixture is deleted, and the assembler's `null` Programme now has a
+return value — the unpublished Schedule._
 
 Øyablikk's pipeline is one script with a "thin shell, pure core" split, and 0020 claims
 that swapping the source leaves the core untouched. It does not: `toSchedule` takes a
@@ -97,9 +100,14 @@ seams are re-cut rather than re-copied.
    with Vitest's `toMatchFileSnapshot`, so the fixture the app's tests run against is
    generated from the real 2025 payload and regenerated with `vitest -u` when the
    transform legitimately changes. `HOSTSABBAT_2025` is exported from
-   `edition-config.ts` beside 2026 and documents the previous edition. Pre-Reveal,
-   `data/schedule.json` is a committed copy of that fixture (0023 §11: same transform,
-   same fixture, one code path); at the Reveal the two diverge and nothing breaks.
+   `edition-config.ts` beside 2026 and documents the previous edition, and is how a
+   developer gets rich data before the Reveal. **Amended**: `data/schedule.json` is *not* a
+   pre-Reveal copy of this fixture. It is the unpublished 2026 Schedule that
+   `toSchedule(null, HOSTSABBAT_2026)` returns — the Edition's Days and Stages, no Acts —
+   because the app is deployed and public months before the Reveal and must render something
+   true ([0027](./0027-cloudflare-apex-and-the-unpublished-schedule-gate.md) §5–§8). The
+   golden test is untouched; at the Reveal the cron overwrites the unpublished file and
+   nothing breaks.
 
 ## Considered options
 

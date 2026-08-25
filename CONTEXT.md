@@ -47,9 +47,10 @@ historically about four days before the Festival. Before it, the source carries 
 _Avoid_: launch, release
 
 **Published**:
-The **Programme**'s state once every **Act** has a **Stage**. A source where no Act has a
-Stage is not yet published; one where only some do is a partial **Reveal**, which is an
-error.
+The **Programme**'s state once every **Act** has a **Stage**, carried through onto the
+**Schedule** built from it. A source where no Act has a Stage is not yet published; one where
+only some do is a partial **Reveal**, which is an error. An unpublished **Schedule** carries
+the **Edition**'s **Days** and **Stages** but no Acts.
 
 **Day**:
 One programme date. The **Schedule** shows one Day's **Acts** at a time. Acts never cross

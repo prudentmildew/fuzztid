@@ -14,7 +14,11 @@ _New decision, original to Høstsabbat. Supersedes-by-reference Øyablikk's
 by reference unchanged. Decided in
 [#8](https://github.com/prudentmildew/fuzztid/issues/8) on the evidence of
 [#6](https://github.com/prudentmildew/fuzztid/issues/6) and
-[#7](https://github.com/prudentmildew/fuzztid/issues/7)._
+[#7](https://github.com/prudentmildew/fuzztid/issues/7).
+**Amended by [0027](./0027-cloudflare-apex-and-the-unpublished-schedule-gate.md)**: §6 writes
+an unpublished Schedule rather than exiting 0, §11's pre-Reveal committed data is the
+unpublished 2026 Schedule rather than the 2025 programme, and the gate §11 left to the deploy
+decision turns out not to live in the deploy._
 
 Høstsabbat publishes no structured programme of its own: `hostsabbat.no` is Squarespace
 with no events collection, and the schedule ships as JPEGs plus a fontless Photoshop PDF.
@@ -56,11 +60,15 @@ invariant below; the 2026 one is a placeholder until the Reveal.
    *performance* (YOB played both nights in 2025 and has two ids), which is exactly
    0019's "one act = one performance". 0019 ports by reference with 0020's duplicate-id
    guard. Ids are per festival record, so Favourites reset between editions — correct.
-6. **The published predicate.** Before the Reveal every act carries an empty
+6. **The published predicate (amended).** Before the Reveal every act carries an empty
    `externalVenueName` and one shared placeholder slot. The pipeline checks first: if
-   **every** act has an empty Stage, log "programme not published" and exit 0 without
-   writing — a known state, on the model of 0006's allowlisted-exclusion carve-out, not a
-   softening of fail-loud. If **some** acts have a Stage, throw: that is a partial Reveal.
+   **every** act has an empty Stage, that is a known state, on the model of 0006's
+   allowlisted-exclusion carve-out and not a softening of fail-loud. It writes the
+   **unpublished Schedule** — the Edition's Days and Stages, no Acts — rather than exiting 0
+   without writing, so the deployed app has something honest to render
+   ([0027](./0027-cloudflare-apex-and-the-unpublished-schedule-gate.md) §5–§6);
+   `git diff --quiet` keeps it to one commit and hourly no-ops thereafter. If **some** acts
+   have a Stage, throw: that is a partial Reveal.
 7. **A per-Stage no-overlap invariant.** Høstsabbat's Stages are rooms in one building;
    two acts overlapping on one Stage is physically impossible. The assembler throws on
    it. This is the check that catches a Reveal half-entered in Broadcast's CMS — stages
@@ -78,12 +86,16 @@ invariant below; the 2026 one is a placeholder until the Reveal.
 10. **Times convert UTC → Oslo wall-clock via `Europe/Oslo`**, never a hard-coded offset.
     The Day is the Oslo-local date. The 2026 festival (23–24 Oct) sits inside CEST — DST
     ends Sunday 25 Oct — so no act straddles the switch.
-11. **Before the Reveal, the committed `data/schedule.json` is the 2025 programme**, produced
-    by the same transform over the 2025 fixture — one code path, no `--festival` override.
-    The fetch script targets 2026 from day one and the cron is a no-op until the Reveal.
-    There is no lineup-only pre-Reveal mode: the festival's own page already provides
-    the lineup, and the window is ~four days. **The public go-live is gated on the
-    Reveal**; how that gate is expressed belongs to the deploy decision.
+11. **Before the Reveal, the committed `data/schedule.json` is the unpublished 2026
+    Schedule** (amended — it was the 2025 programme), produced by the same transform over a
+    null Programme: one code path, no `--festival` override. 2025 stays the developer's rich
+    data via `scripts/fixtures/` and `HOSTSABBAT_2025`. The fetch script targets 2026 from day
+    one and the cron is a no-op until the Reveal. There is no lineup-only pre-Reveal mode: the
+    festival's own page already provides the lineup, and the window is ~four days. **The
+    public go-live is gated on the Reveal** — and
+    [0027](./0027-cloudflare-apex-and-the-unpublished-schedule-gate.md) resolves that gate as
+    a property of the data rather than anything in the deploy: the app ships months early at
+    `fuzztid.no` and the cron flips it.
 
 ## Shipping condition
 
@@ -119,4 +131,6 @@ any time takes it down. A "yes" swaps the secret and changes nothing else.
   canonical invariants: `end > start`, unique ids, known Stage, **no overlap per Stage**.
 - The key rotating or `demo.broadcastapp.no` retiring degrades to a stale programme
   and a red run, never an empty app.
-- The deploy decision inherits "go-live gated on the Reveal" as an input.
+- The deploy decision inherited "go-live gated on the Reveal" as an input and discharged it
+  in [0027](./0027-cloudflare-apex-and-the-unpublished-schedule-gate.md): nothing is held
+  back, and the Reveal is the only remaining moment on the calendar.

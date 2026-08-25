@@ -14,7 +14,9 @@ button do not. **Amends** Øyablikk's
 [#3](https://github.com/prudentmildew/fuzztid/issues/3), consumes
 [#5](https://github.com/prudentmildew/fuzztid/issues/5)'s `showDay` / `onActiveDayChange`
 seam, and discharges [0025](./0025-single-fill-palette-no-stage-colour.md)'s stated
-consequence that the today marker inherits `--accent`. Decided in
+consequence that the today marker inherits `--accent`. **Qualified by
+[0027](./0027-cloudflare-apex-and-the-unpublished-schedule-gate.md)**: the tabs and the ♥
+are absent while the Schedule is unpublished, leaving the wordmark and the ⓘ alone. Decided in
 [#12](https://github.com/prudentmildew/fuzztid/issues/12) against a prototype on branch
 [`prototype/day-switcher`](https://github.com/prudentmildew/fuzztid/tree/prototype/day-switcher/prototype/day-switcher)._
 
