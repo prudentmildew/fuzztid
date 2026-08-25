@@ -72,6 +72,11 @@ Crypt** and **Verkstedet** — all inside Kulturkirken Jakob, so no Stage is mor
 staircase from any other. The columns are shared across both **Days**.
 _Avoid_: room, venue, scene
 
+**Accent**:
+The palette's one chromatic mark, an ember red. It means exactly two things — the **Now
+line**, and a **Favourite** — and there are no per-**Stage** colours competing with it.
+_Avoid_: highlight, primary, brand colour, stage colour
+
 **Act**:
 A single **Artist**'s performance on one **Stage** over a bounded time window.
 _Avoid_: slot, set, gig, performance

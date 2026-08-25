@@ -16,3 +16,4 @@ or leaves standing.
 |---|---|
 | [0023](./0023-broadcast-feed-as-programme-source.md) | Broadcast festival feed as the programme source: build-time snapshot, hourly October cron, `objectId` identity, published predicate, no-overlap invariant |
 | [0024](./0024-programme-as-the-pipeline-seam.md) | The pipeline's two seams: `data/schedule.json` is the only thing crossing `scripts/` → `src/`; inside, a Broadcast adapter emits the Programme (Oslo-local, `null` before the Reveal) and a source-agnostic assembler holds the canonical invariants |
+| [0025](./0025-single-fill-palette-no-stage-colour.md) | One dark palette, no Stage colour: three columns separate by position, the accent means only *now* and *starred*, the tokens live in `styles.css` and stay a tested artefact at a fraction of the machinery |
