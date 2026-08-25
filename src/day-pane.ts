@@ -3,6 +3,7 @@
 // outright (ADR-0025), so a column carries only position — the Stage row
 // above it is the permanent label.
 
+import { heartSvg } from "./icons.ts";
 import { pxFromMin, type TimeOrigin } from "./layout.ts";
 import type { Day, Stage } from "./schedule.ts";
 
@@ -11,10 +12,12 @@ export type RenderDayOptions = {
   stages: Stage[];
   origin: TimeOrigin;
   pxPerMinute: number;
+  /** Starred act ids (ADR-0019, ported by reference). Omitted = nothing starred. */
+  favourites?: ReadonlySet<string>;
 };
 
 export function renderDay(opts: RenderDayOptions): HTMLElement {
-  const { day, stages, origin, pxPerMinute } = opts;
+  const { day, stages, origin, pxPerMinute, favourites } = opts;
   const section = document.createElement("section");
   section.className = "day";
   section.dataset.dayDate = day.date;
@@ -48,6 +51,16 @@ export function renderDay(opts: RenderDayOptions): HTMLElement {
       end.className = "act-end";
       end.textContent = act.end;
       actEl.append(start, name, end);
+
+      // Starred = highlighted in place (ADR-0019): filled heart + louder
+      // block. The outlined heart rides every act as the standing hint that
+      // the block is tappable — the grid gives no other sign (ADR-0021).
+      const starred = favourites?.has(act.id) === true;
+      if (starred) actEl.classList.add("starred");
+      const heart = document.createElement("span");
+      heart.className = "act-heart";
+      heart.innerHTML = heartSvg(starred);
+      actEl.appendChild(heart);
 
       colEl.appendChild(actEl);
     }

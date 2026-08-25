@@ -2,7 +2,8 @@ import { registerSW } from "virtual:pwa-register";
 import scheduleData from "../data/schedule.json";
 import { createAboutSheet } from "./about.ts";
 import { createDaySwitcher } from "./day-switcher.ts";
-import { infoSvg } from "./icons.ts";
+import { loadFavourites, toggleFavourite } from "./favourites.ts";
+import { heartSvg, infoSvg } from "./icons.ts";
 import { isPublished, type Schedule } from "./schedule.ts";
 import { createScheduleView } from "./schedule-view.ts";
 import { createUnpublishedScreen } from "./unpublished.ts";
@@ -38,7 +39,6 @@ actions.appendChild(infoButton);
 
 header.appendChild(actions);
 
-// Favourites and Focus land on top of this static render in #25.
 const TICK_MS = 60_000;
 
 let screen: HTMLElement;
@@ -46,9 +46,10 @@ if (isPublished(schedule)) {
   screen = document.createElement("div");
 
   // The switcher's onSelect needs the view (to call showDay); the view's
-  // onActiveDayChange needs the switcher (to repaint its tabs). Neither
-  // exists yet when the other is built, so the view is captured by
-  // reference rather than threaded through a constructor argument.
+  // onActiveDayChange needs the switcher (to repaint its tabs); onActTap
+  // needs the view (to repaint favourites). Neither exists yet when the
+  // other is built, so the view is captured by reference rather than
+  // threaded through a constructor argument.
   let view: ReturnType<typeof createScheduleView>;
   const switcher = createDaySwitcher({
     days: schedule.days,
@@ -58,18 +59,61 @@ if (isPublished(schedule)) {
   const spacer = document.createElement("div");
   spacer.className = "app-header-spacer";
 
+  // Focus (ADR-0021, ported by reference): a transient squint at my own
+  // night, never persisted. Filled in both states — outline-vs-fill already
+  // means "favourited" everywhere else, so here the colour carries the
+  // state instead.
+  const focusButton = document.createElement("button");
+  focusButton.type = "button";
+  focusButton.className = "app-focus-button";
+  focusButton.setAttribute("aria-label", "Focus on Favourites");
+  focusButton.setAttribute("aria-pressed", "false");
+  focusButton.innerHTML = heartSvg(true);
+  actions.insertBefore(focusButton, infoButton);
+
+  let focus = false;
+
+  function syncFocus(): void {
+    // Nothing starred = nothing to focus on, and dimming everything would
+    // leave an unreadable screen with no way back (#25).
+    focusButton.disabled = favourites.size === 0;
+    focusButton.setAttribute("aria-pressed", String(focus));
+    screen.classList.toggle("focus", focus);
+  }
+
+  focusButton.addEventListener("click", () => {
+    focus = !focus;
+    syncFocus();
+  });
+
   // Header order: wordmark, switcher, spacer, actions (Focus heart, ⓘ) —
   // `actions` is already mounted, so both land just ahead of it.
   header.insertBefore(switcher.element, actions);
   header.insertBefore(spacer, actions);
+
+  // Stale stars self-heal against the current Schedule (ADR-0019).
+  const scheduleActIds = new Set(
+    schedule.days.flatMap((d) => Object.values(d.acts).flat()).map((a) => a.id),
+  );
+  const favourites = loadFavourites(scheduleActIds);
 
   view = createScheduleView({
     container: screen,
     schedule,
     now: () => new Date(),
     onActiveDayChange: (day, today) => switcher.update(day.date, today),
+    onActTap: (actId) => {
+      // The state flip is the feedback (ADR-0019) — instant repaint, no toast.
+      toggleFavourite(favourites, actId);
+      // Unstarring the last favourite in Focus would dim every act and
+      // disable the way back out. Drop out of Focus instead (ADR-0021).
+      if (favourites.size === 0) focus = false;
+      syncFocus();
+      view.render({ favourites });
+    },
   });
-  view.render();
+  view.render({ favourites });
+  syncFocus();
   setInterval(() => view.tick(new Date()), TICK_MS);
 } else {
   screen = createUnpublishedScreen(schedule);

@@ -1,7 +1,8 @@
 // The primary app seam (#22 onward): a Schedule in, the grid on screen. This
 // slice adds the Now line, the injected clock, Day standing and launch (#23).
-// #24 adds the active-Day feed and `showDay` the switcher drives; Favourites
-// and `onActTap` land in #25.
+// #24 adds the active-Day feed and `showDay` the switcher drives. #25 adds
+// Favourites (`render`'s `favourites`) and the tap-vs-scroll discipline that
+// drives `onActTap`.
 
 import { renderDay } from "./day-pane.ts";
 import { pxFromMin, sharedOrigin } from "./layout.ts";
@@ -10,6 +11,16 @@ import type { Day, Schedule } from "./schedule.ts";
 
 const PX_PER_MINUTE = 2;
 
+// A tap and a scroll start identically; the pointer's travel between down
+// and up is what tells them apart. Kept generous — a fingertip wobbles.
+const TAP_SLOP_PX = 10;
+
+// A touch landing this soon after a scroll event is arresting a fling, not
+// starring an act. Momentum scroll emits events every frame (~15 ms apart,
+// measured) right up to the touch, while a deliberate scroll-then-tap has a
+// human-scale gap (>100 ms) — 50 ms splits the two with margin both ways.
+const SCROLL_QUIET_MS = 50;
+
 export type ScheduleViewOptions = {
   container: HTMLElement;
   schedule: Schedule;
@@ -17,10 +28,17 @@ export type ScheduleViewOptions = {
   now: () => Date;
   /** Fed the active pane's Day plus which date (if any) is today, so the switcher can mark its tab. */
   onActiveDayChange?: (day: Day, today: string | null) => void;
+  /** Fires on a clean tap on an act block — never on a scroll (ADR-0019). */
+  onActTap?: (actId: string) => void;
+};
+
+export type RenderState = {
+  /** Starred act ids (ADR-0019, ported by reference). Omitted = nothing starred. */
+  favourites?: ReadonlySet<string>;
 };
 
 export type ScheduleView = {
-  render(): void;
+  render(state?: RenderState): void;
   /** Repositions the Now line and re-derives standing — the minute tick must not rebuild panes. */
   tick(at: Date): void;
   /** Horizontal-only, animated — never re-scrolls to now (ADR-0008, unqualified per #5). */
@@ -28,7 +46,7 @@ export type ScheduleView = {
 };
 
 export function createScheduleView(opts: ScheduleViewOptions): ScheduleView {
-  const { container, schedule, now, onActiveDayChange } = opts;
+  const { container, schedule, now, onActiveDayChange, onActTap } = opts;
   container.classList.add("schedule");
   container.style.setProperty("--column-count", String(schedule.stages.length));
 
@@ -150,7 +168,13 @@ export function createScheduleView(opts: ScheduleViewOptions): ScheduleView {
     notifyActiveDayChange(at);
   }
 
-  function render(): void {
+  // Held across renders so the tap handler (bound once, below) always sees
+  // the latest star state without threading it through the listener.
+  let favourites: ReadonlySet<string> | undefined;
+
+  function render(state?: RenderState): void {
+    favourites = state?.favourites;
+
     // Panes are replaced, not accumulated — preserve whichever Day is in
     // view across the rebuild rather than snapping back to the first.
     const width = daysEl.clientWidth;
@@ -159,7 +183,13 @@ export function createScheduleView(opts: ScheduleViewOptions): ScheduleView {
     daysEl.replaceChildren();
     for (const day of schedule.days) {
       daysEl.appendChild(
-        renderDay({ day, stages: schedule.stages, origin, pxPerMinute: PX_PER_MINUTE }),
+        renderDay({
+          day,
+          stages: schedule.stages,
+          origin,
+          pxPerMinute: PX_PER_MINUTE,
+          favourites,
+        }),
       );
     }
 
@@ -201,6 +231,45 @@ export function createScheduleView(opts: ScheduleViewOptions): ScheduleView {
     },
     { passive: true },
   );
+
+  if (onActTap) {
+    // Delegated on the days layer — act blocks are rebuilt on every render,
+    // so per-block listeners would not survive a repaint. The act is chosen
+    // at pointerdown: within the slop the finger may end on a neighbour, and
+    // the block it landed on is the one the user meant.
+    let down: { x: number; y: number; actId: string | undefined } | null = null;
+    let lastScrollAt = Number.NEGATIVE_INFINITY;
+
+    // Both scroll axes disqualify a tap: vertical momentum lives on the
+    // schedule container, horizontal day swipes on the days layer. Either
+    // mid-gesture cancels; either just-before means the touch was spent
+    // stopping the fling (ADR-0019's tap-vs-scroll discipline).
+    const noteScroll = (): void => {
+      lastScrollAt = performance.now();
+      down = null;
+    };
+    container.addEventListener("scroll", noteScroll, { passive: true });
+    daysEl.addEventListener("scroll", noteScroll, { passive: true });
+
+    daysEl.addEventListener("pointerdown", (e) => {
+      if (performance.now() - lastScrollAt < SCROLL_QUIET_MS) return;
+      down = {
+        x: e.clientX,
+        y: e.clientY,
+        actId: (e.target as Element).closest<HTMLElement>(".act")?.dataset.actId,
+      };
+    });
+    daysEl.addEventListener("pointercancel", () => {
+      down = null;
+    });
+    daysEl.addEventListener("pointerup", (e) => {
+      if (down === null) return;
+      const { x, y, actId } = down;
+      down = null;
+      if (Math.abs(e.clientX - x) > TAP_SLOP_PX || Math.abs(e.clientY - y) > TAP_SLOP_PX) return;
+      if (actId) onActTap(actId);
+    });
+  }
 
   return { render, tick, showDay };
 }

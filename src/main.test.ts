@@ -132,4 +132,65 @@ describe("app boot — published Schedule", () => {
     secondTab?.click();
     expect(scrollTo).toHaveBeenCalled();
   });
+
+  describe("Favourites and Focus (#25)", () => {
+    function tap(el: HTMLElement): void {
+      el.dispatchEvent(
+        new PointerEvent("pointerdown", { clientX: 50, clientY: 100, bubbles: true }),
+      );
+      el.dispatchEvent(new PointerEvent("pointerup", { clientX: 50, clientY: 100, bubbles: true }));
+    }
+
+    const focusButton = () => document.querySelector(".app-focus-button") as HTMLButtonElement;
+    const act = () => document.querySelector(".act") as HTMLElement;
+    const daysEl = () => document.querySelector(".days") as HTMLElement;
+    const scheduleEl = () => document.querySelector(".schedule") as HTMLElement;
+
+    it("is inert with nothing starred", () => {
+      expect(focusButton().disabled).toBe(true);
+      expect(focusButton().getAttribute("aria-pressed")).toBe("false");
+    });
+
+    it("stars an act on tap, and persists it", () => {
+      tap(act());
+      expect(act().classList.contains("starred")).toBe(true);
+      expect(localStorage.getItem("fuzztid.favourites")).toContain("act-1");
+      expect(focusButton().disabled).toBe(false);
+    });
+
+    it("unstars on a second tap, and persists that too", () => {
+      tap(act());
+      expect(act().classList.contains("starred")).toBe(false);
+      expect(JSON.parse(localStorage.getItem("fuzztid.favourites") ?? "[]")).toEqual([]);
+      expect(focusButton().disabled).toBe(true);
+    });
+
+    it("dims unstarred acts under Focus, and restores them when off", () => {
+      tap(act()); // star the only act
+      focusButton().click();
+      expect(scheduleEl().classList.contains("focus")).toBe(true);
+      expect(focusButton().getAttribute("aria-pressed")).toBe("true");
+
+      focusButton().click();
+      expect(scheduleEl().classList.contains("focus")).toBe(false);
+      expect(focusButton().getAttribute("aria-pressed")).toBe("false");
+    });
+
+    it("drops out of Focus when the last favourite is unstarred", () => {
+      focusButton().click();
+      expect(scheduleEl().classList.contains("focus")).toBe(true);
+
+      tap(act()); // unstar the only favourite
+
+      expect(scheduleEl().classList.contains("focus")).toBe(false);
+      expect(focusButton().disabled).toBe(true);
+      expect(focusButton().getAttribute("aria-pressed")).toBe("false");
+    });
+
+    it("does not star on a scroll", () => {
+      daysEl().dispatchEvent(new Event("scroll"));
+      tap(act());
+      expect(act().classList.contains("starred")).toBe(false);
+    });
+  });
 });

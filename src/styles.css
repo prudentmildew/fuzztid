@@ -316,6 +316,62 @@ body {
   font-weight: 500;
 }
 
+/* Starred act (Favourite, ADR-0019, ported by reference) ------------------ */
+/* Highlighted in place: accent border + louder glyph. The accent means
+   exactly two things (ADR-0025) — the Now line and this. */
+
+.act.starred {
+  border-color: var(--accent);
+}
+
+/* The heart rides every act, outlined, as the standing hint that a block is
+   tappable — nothing else on the grid says so (ADR-0021, ported by
+   reference). Solid accent once starred. */
+
+.act-heart {
+  position: absolute;
+  top: 3px;
+  right: 5px;
+  width: 13px;
+  height: 13px;
+  line-height: 0;
+  color: var(--muted);
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.act.starred .act-heart {
+  color: var(--accent);
+  opacity: 1;
+}
+
+.act-heart svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Focus (ADR-0021, ported by reference) ------------------------------------ */
+/* Transient, opt-in, off on every load. Dims by dropping unstarred blocks
+   toward the ground rather than by reducing opacity over a saturated fill
+   (ADR-0025 §6, a mechanism change from Øyablikk) — the surface and border
+   both collapse toward --bg. Dimmed acts stay tappable. */
+
+.schedule.focus .act:not(.starred) {
+  background: var(--bg);
+  border-color: var(--bg);
+}
+
+.schedule.focus .act:not(.starred) .act-name,
+.schedule.focus .act:not(.starred) .act-start,
+.schedule.focus .act:not(.starred) .act-end {
+  color: var(--muted);
+}
+
+.schedule.focus .act:not(.starred) .act-heart {
+  opacity: 0.35;
+}
+
 /* Now line (#23) --------------------------------------------------------- */
 /* Single instance at the Schedule level (ADR-0012, ported by reference). The
    transform adds the Stage row's height so the line aligns with the
