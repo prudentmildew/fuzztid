@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><title>fuzztid</title>
+  <rect width="512" height="512" fill="#0b0a0c"/>
+  <g transform="translate(256 256) scale(1) translate(-256 -256)">
+    <path d="M 102 432 L 102 118 A 38 38 0 0 1 178 118 L 178 432 Z M 218 432 L 218 118 A 38 38 0 0 1 294 118 L 294 432 Z M 334 432 L 334 118 A 38 38 0 0 1 410 118 L 410 432 Z" fill="#2a2326" stroke="#948b83" stroke-width="16" stroke-linejoin="miter"/>
+    <path d="M 44 292 L 468 292" stroke="#d9452f" stroke-width="36"/>
+  </g>
+</svg>
