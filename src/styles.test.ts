@@ -121,8 +121,11 @@ describe("hour ticks (#31, story 12)", () => {
   it("rules every .column with a --border gradient, placed by the JS-set offset", () => {
     const column = declarations(".column");
     expect(column["background-image"]).toMatch(/^repeating-linear-gradient\(/);
-    expect(column["background-image"]).toContain("var(--border)");
-    expect(column["background-image"]).toContain("var(--hour-px)");
+    // The line is the first pixel of each period — swapped stops would put
+    // every tick a period-minus-one below its hour.
+    expect(column["background-image"]).toMatch(
+      /var\(--border\) 0 1px,\s*transparent 1px var\(--hour-px\)/,
+    );
     expect(column["background-image"]).not.toMatch(/--muted|--accent/);
     expect(column["background-position-y"]).toBe("var(--tick-offset)");
     // From the offset down, not tiled from y=0: no line on the top edge.
@@ -130,14 +133,31 @@ describe("hour ticks (#31, story 12)", () => {
     // The shorthand would reset the image — the colour is set as its longhand.
     expect(column.background).toBeUndefined();
     expect(column["background-color"]).toBe("var(--bg)");
+    // Nor may any other rule reaching a column reset it later in the cascade.
+    for (const match of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+      const selector = (match[1] ?? "").trim();
+      if (selector === ".column" || !/\.column(?!s)\b/.test(selector)) continue;
+      expect(match[2], selector).not.toMatch(/background(-image)?\s*:/);
+    }
   });
 
   it("leaves the ticks alone under Focus — they are the ruler, not the content", () => {
-    for (const match of css.matchAll(/([^{}]+)\{[^{}]*\}/g)) {
+    for (const match of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
       const selector = (match[1] ?? "").trim();
-      if (!selector.includes("focus")) continue;
-      expect(selector).not.toMatch(/\.columns?\b/);
+      if (!selector.includes(".focus")) continue;
+      // Every Focus rule dims an act or something inside one — never a
+      // column, a pane, or the token the ticks are drawn in.
+      expect(selector).toMatch(/\.act\b/);
+      expect(match[2], selector).not.toMatch(/--border\s*:|filter\s*:/);
     }
+  });
+
+  it("drops a dimmed act to the ground itself, so the rule runs on through it", () => {
+    // An on-the-hour Act's top border sits on the tick row; painted --bg it
+    // would cut the ruler across the block's width at every hour it dims.
+    const dimmed = declarations(".schedule.focus .act:not(.starred)");
+    expect(dimmed.background).toBe("transparent");
+    expect(dimmed["border-color"]).toBe("transparent");
   });
 });
 

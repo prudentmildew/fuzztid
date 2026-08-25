@@ -229,8 +229,8 @@ body {
 
 /* Which Festival and which Edition this is (#31, story 2): the name is
    unpublished.ts's constant, the year the Schedule's first Day. Uppercase
-   in the stylesheet, natural case in the DOM, like every other display
-   line. */
+   in the stylesheet, natural case in the DOM, as the Stage labels and the
+   sheet title already are. */
 .unpublished-festival {
   margin: 0;
   font-family: var(--display-font);
@@ -442,11 +442,13 @@ body {
 /* Transient, opt-in, off on every load. Dims by dropping unstarred blocks
    toward the ground rather than by reducing opacity over a saturated fill
    (ADR-0025 §6, a mechanism change from Øyablikk) — the surface and border
-   both collapse toward --bg. Dimmed acts stay tappable. */
+   both go to the ground itself, transparent rather than --bg painted over
+   it, so the hour rule (#31) runs on through a dimmed block instead of being
+   cut where an on-the-hour Act's top border sat. Dimmed acts stay tappable. */
 
 .schedule.focus .act:not(.starred) {
-  background: var(--bg);
-  border-color: var(--bg);
+  background: transparent;
+  border-color: transparent;
 }
 
 .schedule.focus .act:not(.starred) .act-name,

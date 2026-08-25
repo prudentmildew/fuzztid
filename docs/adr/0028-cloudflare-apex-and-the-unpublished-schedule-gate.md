@@ -18,6 +18,10 @@ qualifies [0026](./0026-two-day-switcher-in-the-header.md)'s Header. Leans on
 already-installed phone through the route it decides. Decided in
 [#15](https://github.com/prudentmildew/fuzztid/issues/15)._
 
+_**Amended 2026-08-25** in [#31](https://github.com/prudentmildew/fuzztid/issues/31), in
+place: §9's inventory of the unpublished screen gains the `HØSTSABBAT 2026` line above the
+dates. Marked where it sits._
+
 Øyablikk's three deploy ADRs were all written while its domain was still an open question,
 so each carries a migration: 0009 designs a subpath *today* with portable paths for a
 custom domain *tomorrow*, 0015 describes the cut-over, and 0016 registers the analytics

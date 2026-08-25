@@ -56,6 +56,10 @@ describe("createUnpublishedScreen", () => {
     expect(screen.querySelector(".unpublished-festival")?.textContent).toBe("Høstsabbat 2027");
   });
 
+  it("fails loud on a Schedule with no Days — there is no Edition to name", () => {
+    expect(() => createUnpublishedScreen({ stages: [], days: [] })).toThrow(/no Days/);
+  });
+
   it("makes no heading of it — the <h1> is the wordmark's (ADR-0026 §3)", () => {
     const screen = createUnpublishedScreen(SCHEDULE);
     expect(screen.querySelector("h1, h2, h3")).toBeNull();

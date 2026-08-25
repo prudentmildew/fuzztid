@@ -5,8 +5,8 @@
 // and no Focus heart (nothing to dim) — the Header carries only the
 // wordmark and the ⓘ on this branch. It leads with which Festival and which
 // Edition this is (#31, story 2): the name is a constant here, the year is
-// derived from the Schedule's first Day, so the Edition rollover touches
-// edition-config.ts and nothing else.
+// derived from the Schedule's first Day, so this line adds no rollover touch
+// point of its own — the year follows edition-config.ts through the Schedule.
 
 import { editionYear, type Schedule } from "./schedule.ts";
 
