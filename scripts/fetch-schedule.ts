@@ -11,8 +11,13 @@ import { toSchedule } from "./to-schedule.ts";
 
 const BROADCAST_KEY = process.env.BROADCAST_KEY;
 if (BROADCAST_KEY === undefined || BROADCAST_KEY === "") {
+  // Names the remediation, not just the fault: a red run at 23:00 in Reveal
+  // week should be a one-line fix. The key is never committed — in CI it is
+  // a GitHub Actions secret, locally an env var.
   throw new Error(
-    "BROADCAST_KEY is not set. It must be a GitHub Actions secret and a local env var.",
+    "BROADCAST_KEY is not set, so there is nothing to authenticate to Broadcast with. " +
+      "Locally: BROADCAST_KEY=<key> pnpm fetch-schedule. " +
+      "In CI: repo Settings \u2192 Secrets and variables \u2192 Actions. It is never committed.",
   );
 }
 

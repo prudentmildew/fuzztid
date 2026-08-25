@@ -1,0 +1,119 @@
+# The Reveal, happening by itself (ADR-0023 §2, ADR-0028 §5–§6).
+#
+# Høstsabbat fills the stages in about four days before the doors open. This
+# cron notices within the hour, writes a real Schedule, commits it and calls
+# the deploy — and anyone who installed the app months earlier receives it
+# through the service worker's silent update, on a phone, without opening
+# anything. No human flips anything, which is the entire point: the
+# alternative is someone pressing buttons from inside a stone church in the
+# busiest week of the year.
+#
+# On change: test the fetched data, one bot commit, then deploy via
+# workflow_call. On no change, script failure, or a red suite: no commit, no
+# deploy. Before the Reveal the fetch writes the *unpublished* Schedule
+# rather than exiting without writing (ADR-0028 §6), so this is one code path
+# and not two — `git diff --quiet` is what keeps it to a single commit and
+# hourly no-ops thereafter.
+#
+# HAZARD, owned by a human and not by this file: GitHub disables scheduled
+# workflows after 60 days without a push to the repo. The app deploys in
+# August and the Reveal is ~19 October, which is inside that window with only
+# a few days to spare — a quiet September would switch this cron off exactly
+# when it is needed. Any commit resets the clock, and the Actions tab warns
+# beforehand. Deliberately not solved with a keepalive commit bot: that trades
+# a visible warning for an invisible dependency.
+#
+# The suite runs BEFORE the commit, not after. Committing first and letting
+# deploy.yml catch the problem leaves malformed data sitting on main with
+# every subsequent deploy blocked until a human intervenes; failing here
+# makes a bad fetch a clean no-op instead.
+name: Hourly refresh
+
+on:
+  schedule:
+    # Hourly, all October — the cadence the Reveal window earns. Broadcast's
+    # edge caches ~10 min, so hourly is the honest granularity, and a no-op
+    # run is ~10s. Scoped to the month rather than the days so the line never
+    # needs commenting in or out between editions.
+    - cron: "0 * * 10 *"
+  # Year-round, so a refresh outside October is a button and not an edit.
+  workflow_dispatch:
+
+concurrency:
+  group: hourly-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      changed: ${{ steps.diff.outputs.changed }}
+      sha: ${{ steps.commit.outputs.sha }}
+    steps:
+      - uses: actions/checkout@v7
+      # pnpm/action-setup only supports pnpm v10 and older; package.json pins
+      # pnpm 11.23.0, so this is its v11+ successor. It installs Node itself,
+      # replacing actions/setup-node. install: false because the fetch below
+      # needs no dependencies at all, and `pnpm ci` only runs if it changed.
+      - uses: pnpm/setup@v2
+        with:
+          runtime: node@24
+          cache: true
+          install: false
+      # The fetch has zero runtime dependencies, so it runs before the
+      # install — a Broadcast outage costs nothing. It exits non-zero and
+      # writes nothing on any failure, including an unset key, so a bad run
+      # ends the job here with main untouched.
+      - run: node scripts/fetch-schedule.ts
+        env:
+          # Never committed. Settings → Secrets and variables → Actions.
+          BROADCAST_KEY: ${{ secrets.BROADCAST_KEY }}
+      - id: diff
+        run: |
+          if git diff --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+      # Install and test only when the Schedule actually changed: on a quiet
+      # hour the job stays the ~10s it has always been.
+      - if: steps.diff.outputs.changed == 'true'
+        run: pnpm ci
+      # Gates the commit. src/schedule-data.test.ts is the one that reads the
+      # freshly fetched file; a red suite ends the job with the change
+      # unpushed, so main keeps the last known-good Schedule. It is a
+      # contract test and not a content test precisely so that the Reveal —
+      # a legitimate programme change — cannot be what turns it red.
+      - if: steps.diff.outputs.changed == 'true'
+        run: pnpm test
+      - id: commit
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # Explicit path, not -a: the install above runs before this step,
+          # so a blanket commit could sweep in an incidentally touched
+          # lockfile. The refresh commit is the data file, nothing else.
+          git commit -m "🗃️ refresh the schedule data" -- data/schedule.json
+          git push
+          # Handed to the deploy below, which would otherwise build the tree
+          # as it stood before this commit.
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+  # Chained explicitly rather than left to deploy.yml's push trigger: a push
+  # made with GITHUB_TOKEN does not start another workflow run, so without
+  # this the Reveal would be committed and never deployed.
+  deploy:
+    needs: refresh
+    if: needs.refresh.outputs.changed == 'true'
+    uses: ./.github/workflows/deploy.yml
+    # The commit just pushed, NOT the caller's github.sha — which is main as
+    # it stood when the schedule fired, i.e. before the Reveal was committed.
+    with:
+      ref: ${{ needs.refresh.outputs.sha }}
+    permissions:
+      contents: read
+      pages: write
+      id-token: write

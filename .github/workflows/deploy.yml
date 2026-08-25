@@ -22,10 +22,22 @@ on:
       - ".githooks/**"
       - ".gitignore"
       # deploy.yml itself is NOT ignored: a change to it should exercise it.
-      - ".github/workflows/nightly-refresh.yml"
-  # No path filter applies here — the Reveal cron calls this after it commits
-  # data/schedule.json, and that always deploys.
+      - ".github/workflows/hourly-refresh.yml"
+  # No path filter applies here — the Reveal cron (hourly-refresh.yml) calls
+  # this after it commits data/schedule.json, and that always deploys.
   workflow_call:
+    inputs:
+      ref:
+        description: >-
+          Commit to build. A called workflow inherits the CALLER's github.sha,
+          which for the cron is main as it stood when the schedule fired —
+          before the refresh committed. Left unset the deploy would publish
+          the pre-Reveal tree, and every later run would no-op on a clean
+          `git diff`, so the Reveal would never reach a phone. The cron
+          passes the SHA it just pushed. Empty on a push, where checkout's
+          own default (the triggering SHA) is already right.
+        type: string
+        required: false
 
 permissions:
   contents: read
@@ -47,6 +59,8 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.ref }}
       # pnpm/action-setup only supports pnpm v10 and older; package.json pins
       # pnpm 11.23.0, so this is its v11+ successor. It installs Node itself,
       # replacing actions/setup-node. install: false because pnpm ci below is

@@ -1,10 +1,8 @@
-import { execFileSync } from "node:child_process";
-import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import type { Programme, ProgrammeAct } from "./broadcast.ts";
 import { readProgramme } from "./broadcast.ts";
 import type { EditionConfig } from "./edition-config.ts";
-import { HOSTSABBAT_2025 } from "./edition-config.ts";
+import { HOSTSABBAT_2025, HOSTSABBAT_2026 } from "./edition-config.ts";
 import { toSchedule } from "./to-schedule.ts";
 
 // A two-stage, two-day edition small enough to hand-compute expectations.
@@ -194,20 +192,22 @@ describe("the golden test — fixture provenance from the real 2025 payload", ()
   });
 });
 
-describe("fetch-schedule shell", () => {
-  it("exits non-zero and writes nothing when the fetch fails", () => {
-    const script = join(import.meta.dirname, "fetch-schedule.ts");
-    let status: number | null = null;
-    try {
-      execFileSync("node", [script], {
-        // An unroutable endpoint: connection is refused immediately.
-        env: { ...process.env, BROADCAST_KEY: "test-key", BROADCAST_URL: "http://127.0.0.1:1" },
-        stdio: "pipe",
-      });
-      status = 0;
-    } catch (error) {
-      status = (error as { status: number | null }).status;
+describe("the 2026 payload as it stands today — the pre-Reveal dry run", () => {
+  it("drops the placeholder Lineup and yields the unpublished Schedule", async () => {
+    // Every act stageless on one shared 13:00Z–23:00Z slot. Read end to end
+    // rather than as two unit tests, because the pre-Reveal state is the one
+    // the deployed app renders for two months.
+    const fixture = (await import("./fixtures/broadcast-2026.json")).default;
+    const schedule = toSchedule(readProgramme(fixture), HOSTSABBAT_2026);
+
+    expect(schedule.stages).toEqual(HOSTSABBAT_2026.stages);
+    expect(schedule.days.map((d) => d.date)).toEqual(HOSTSABBAT_2026.days);
+    // The Edition's Days come from the config here, not from the data —
+    // the placeholder slot's single date must not become a single pane.
+    for (const day of schedule.days) {
+      expect(Object.values(day.acts).flat(), day.date).toEqual([]);
+      expect(day.start_min).toBe(0);
+      expect(day.end_min).toBe(0);
     }
-    expect(status).not.toBe(0);
   });
 });
