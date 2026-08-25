@@ -17,14 +17,16 @@
 // of 2025 JSON). Proven, not assumed: `pnpm build`, then grep dist/ for a
 // 2025 Artist — zero hits.
 
+import { osloDate, osloMinutes } from "./now.ts";
 import type { Schedule } from "./schedule.ts";
 
-const SCHEDULES = ["2025"] as const;
+// The Editions whose Schedule ships as a fixture: the values `?schedule=` accepts.
+const PAST_EDITIONS = ["2025"] as const;
 const NOW_FORMAT = "YYYY-MM-DDTHH:MM";
 const DEFAULT_PIN = "20:30";
 
 type DebugParams = {
-  schedule: (typeof SCHEDULES)[number] | null;
+  schedule: (typeof PAST_EDITIONS)[number] | null;
   /** The pinned instant, already interpreted as Oslo wall-clock. */
   now: Date | null;
   warnings: string[];
@@ -56,7 +58,8 @@ export async function applyDebugParams(
 
   // An offset, not a freeze: the line still moves on the minute and
   // today-ness still re-derives under an Oslo midnight (stories 20, 26).
-  const delta = clockDelta(pinned, Date.now());
+  // How far the pinned instant sits from the real one, fixed once at boot.
+  const delta = pinned.getTime() - Date.now();
   return { schedule, now: () => new Date(Date.now() + delta) };
 }
 
@@ -65,12 +68,12 @@ function parseDebugParams(search: URLSearchParams): DebugParams {
 
   const schedule = search.get("schedule");
   if (schedule !== null) {
-    const known = SCHEDULES.find((s) => s === schedule);
+    const known = PAST_EDITIONS.find((s) => s === schedule);
     if (known !== undefined) {
       params.schedule = known;
     } else {
       params.warnings.push(
-        `[fuzztid] ?schedule=${schedule} is not a Schedule this build knows — accepted: ${SCHEDULES.join(", ")}. Booting on the real Schedule.`,
+        `[fuzztid] ?schedule=${schedule} is not a Schedule this build knows — accepted: ${PAST_EDITIONS.join(", ")}. Booting on the real Schedule.`,
       );
     }
   }
@@ -90,30 +93,7 @@ function parseDebugParams(search: URLSearchParams): DebugParams {
   return params;
 }
 
-/** How far the pinned instant sits from the real one, in ms — computed once at boot. */
-function clockDelta(pinned: Date, realNow: number): number {
-  return pinned.getTime() - realNow;
-}
-
-const OSLO = "Europe/Oslo";
 const WALL_CLOCK = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/;
-
-// Built on first use, not at module load: a top-level `new Intl.DateTimeFormat`
-// is not a pure expression to Rollup, and it alone would survive in the
-// production bundle after everything that calls it has been erased.
-let osloParts: Intl.DateTimeFormat | undefined;
-function osloFormatter(): Intl.DateTimeFormat {
-  osloParts ??= new Intl.DateTimeFormat("sv-SE", {
-    timeZone: OSLO,
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    hourCycle: "h23",
-  });
-  return osloParts;
-}
 
 /**
  * `YYYY-MM-DDTHH:MM` read as Oslo wall-clock, whatever the host's zone —
@@ -140,17 +120,17 @@ function osloWallClockToInstant(wallClock: string): Date | null {
   if (!Number.isFinite(instant)) return null;
 
   // Round-trip: the instant must read back as the wall-clock it was given,
-  // which is what rejects a time that does not exist in Oslo.
+  // which is what rejects a time that does not exist in Oslo — Date.UTC
+  // would have rolled a 30 February on into March without a word.
   const date = new Date(instant);
-  return osloWallClock(date) === wallClock ? date : null;
+  const readsBack = osloDate(date) === wallClock.slice(0, 10) && osloMinutes(date) === h * 60 + mi;
+  return readsBack ? date : null;
 }
 
-function osloWallClock(at: Date): string {
-  // sv-SE gives "YYYY-MM-DD HH:MM"; the space is the only thing not ISO.
-  return osloFormatter().format(at).replace(" ", "T");
-}
-
+// Oslo's UTC offset at `at`, read through the same two formatters the Now
+// line already keeps the clock with (now.ts) — so this adds no formatter of
+// its own for Rollup to leave standing in the production bundle.
 function osloOffsetMs(at: Date): number {
-  const [date, time] = osloFormatter().format(at).split(" ");
-  return Date.parse(`${date}T${time}:00Z`) - at.getTime();
+  const osloMidnightAsUtc = Date.parse(`${osloDate(at)}T00:00Z`);
+  return osloMidnightAsUtc + osloMinutes(at) * 60_000 - at.getTime();
 }

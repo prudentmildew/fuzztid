@@ -8,13 +8,21 @@ import { describe, expect, it } from "vitest";
 
 const css = readFileSync("src/styles.css", "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
 
+/** Every rule in the sheet, in source order: its selector list and the declarations between the braces. */
+function rules(): { selector: string; body: string }[] {
+  return Array.from(css.matchAll(/([^{}]+)\{([^{}]*)\}/g), (match) => ({
+    selector: (match[1] ?? "").trim(),
+    body: match[2] ?? "",
+  }));
+}
+
 /** Declarations of every rule whose selector list names `selector` exactly, merged in source order. */
 function declarations(selector: string): Record<string, string> {
   const out: Record<string, string> = {};
-  for (const match of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
-    const selectors = (match[1] ?? "").split(",").map((s) => s.trim());
+  for (const rule of rules()) {
+    const selectors = rule.selector.split(",").map((s) => s.trim());
     if (!selectors.includes(selector)) continue;
-    for (const declaration of (match[2] ?? "").split(";")) {
+    for (const declaration of rule.body.split(";")) {
       const colon = declaration.indexOf(":");
       if (colon === -1) continue;
       const property = declaration.slice(0, colon).trim();
@@ -134,21 +142,19 @@ describe("hour ticks (#31, story 12)", () => {
     expect(column.background).toBeUndefined();
     expect(column["background-color"]).toBe("var(--bg)");
     // Nor may any other rule reaching a column reset it later in the cascade.
-    for (const match of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
-      const selector = (match[1] ?? "").trim();
+    for (const { selector, body } of rules()) {
       if (selector === ".column" || !/\.column(?!s)\b/.test(selector)) continue;
-      expect(match[2], selector).not.toMatch(/background(-image)?\s*:/);
+      expect(body, selector).not.toMatch(/background(-image)?\s*:/);
     }
   });
 
   it("leaves the ticks alone under Focus — they are the ruler, not the content", () => {
-    for (const match of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
-      const selector = (match[1] ?? "").trim();
+    for (const { selector, body } of rules()) {
       if (!selector.includes(".focus")) continue;
       // Every Focus rule dims an act or something inside one — never a
       // column, a pane, or the token the ticks are drawn in.
       expect(selector).toMatch(/\.act\b/);
-      expect(match[2], selector).not.toMatch(/--border\s*:|filter\s*:/);
+      expect(body, selector).not.toMatch(/--border\s*:|filter\s*:/);
     }
   });
 
