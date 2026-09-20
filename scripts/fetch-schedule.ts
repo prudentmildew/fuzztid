@@ -13,10 +13,11 @@ const BROADCAST_KEY = process.env.BROADCAST_KEY;
 if (BROADCAST_KEY === undefined || BROADCAST_KEY === "") {
   // Names the remediation, not just the fault: a red run at 23:00 in Reveal
   // week should be a one-line fix. The key is never committed — in CI it is
-  // a GitHub Actions secret, locally an env var.
+  // a GitHub Actions secret, locally a gitignored .env that `pnpm
+  // fetch-schedule` loads.
   throw new Error(
     "BROADCAST_KEY is not set, so there is nothing to authenticate to Broadcast with. " +
-      "Locally: BROADCAST_KEY=<key> pnpm fetch-schedule. " +
+      "Locally: put BROADCAST_KEY=<key> in .env and run pnpm fetch-schedule. " +
       "In CI: repo Settings \u2192 Secrets and variables \u2192 Actions. It is never committed.",
   );
 }
