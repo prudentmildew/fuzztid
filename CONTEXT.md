@@ -68,9 +68,9 @@ standing `none`.
 _Avoid_: day tabs, day picker, swipe nudge
 
 **Stage**:
-A performance room, and a column in the **Schedule**. Three exist — **The Chapel**, **The
-Crypt** and **Verkstedet** — all inside Kulturkirken Jakob, so no Stage is more than a
-staircase from any other. The columns are shared across both **Days**.
+A performance room, and a column in the **Schedule**. Three exist in 2026 — **Church of
+Riffs**, **The Crypt** and **Kafé Hærverk** — named as the source publishes them; 2025 had
+**The Chapel**, **The Crypt** and **Verkstedet**. The columns are shared across both **Days**.
 _Avoid_: room, venue, scene
 
 **Accent**:

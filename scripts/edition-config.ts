@@ -12,20 +12,22 @@ export type EditionConfig = {
   stages: Stage[];
 };
 
-const STAGES: Stage[] = [
-  { id: "the-chapel", name: "The Chapel" },
-  { id: "the-crypt", name: "The Crypt" },
-  { id: "verkstedet", name: "Verkstedet" },
-];
-
 export const HOSTSABBAT_2026: EditionConfig = {
   festival: { id: "XIanfZspWO", name: "Høstsabbat 2026" },
   days: ["2026-10-23", "2026-10-24"],
-  stages: STAGES,
+  stages: [
+    { id: "church-of-riffs", name: "Church of Riffs" },
+    { id: "the-crypt", name: "The Crypt" },
+    { id: "kafe-haerverk", name: "Kafé Hærverk" },
+  ],
 };
 
 export const HOSTSABBAT_2025: EditionConfig = {
   festival: { id: "dEoMHOghYt", name: "Høstsabbat 2025" },
   days: ["2025-10-24", "2025-10-25"],
-  stages: STAGES,
+  stages: [
+    { id: "the-chapel", name: "The Chapel" },
+    { id: "the-crypt", name: "The Crypt" },
+    { id: "verkstedet", name: "Verkstedet" },
+  ],
 };

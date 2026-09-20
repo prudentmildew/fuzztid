@@ -1,16 +1,16 @@
 {
   "stages": [
     {
-      "id": "the-chapel",
-      "name": "The Chapel"
+      "id": "church-of-riffs",
+      "name": "Church of Riffs"
     },
     {
       "id": "the-crypt",
       "name": "The Crypt"
     },
     {
-      "id": "verkstedet",
-      "name": "Verkstedet"
+      "id": "kafe-haerverk",
+      "name": "Kafé Hærverk"
     }
   ],
   "days": [
@@ -19,9 +19,9 @@
       "start_min": 0,
       "end_min": 0,
       "acts": {
-        "the-chapel": [],
+        "church-of-riffs": [],
         "the-crypt": [],
-        "verkstedet": []
+        "kafe-haerverk": []
       }
     },
     {
@@ -29,9 +29,9 @@
       "start_min": 0,
       "end_min": 0,
       "acts": {
-        "the-chapel": [],
+        "church-of-riffs": [],
         "the-crypt": [],
-        "verkstedet": []
+        "kafe-haerverk": []
       }
     }
   ]
