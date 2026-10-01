@@ -48,8 +48,9 @@ _Avoid_: launch, release
 
 **Published**:
 The **Programme**'s state once every **Act** has a **Stage**, carried through onto the
-**Schedule** built from it. A source where no Act has a Stage is not yet published; one where
-only some do is a partial **Reveal**, which is an error. An unpublished **Schedule** carries
+**Schedule** built from it. A source where no Act has a Stage, or where every Act sits on one
+shared placeholder slot, is not yet published; one where only some Acts have a Stage, or
+only some have left the placeholder, is a partial **Reveal**, which is an error. An unpublished **Schedule** carries
 the **Edition**'s **Days** and **Stages** but no Acts.
 
 **Day**:
