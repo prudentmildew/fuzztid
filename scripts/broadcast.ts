@@ -26,12 +26,13 @@ export function broadcastUrl(festivalId: string, key: string): string {
 /**
  * `null` means there is no Programme yet. Two known pre-Reveal states say so
  * (ADR-0023 §6, amended): every Act is stageless, or no Stage carries a
- * running order yet — every Act shares its Stage's placeholder slot for its
- * Day. The feed seen in October 2026 had Stages assigned weeks before any
- * times, and a Programme without times is still a Lineup. A partial Reveal
- * (some Acts stageless, some not) throws: that is not a value this seam
- * models, it is an error a human must see. A running order entered for some
- * Stages or Days and not others passes through for the assembler's
+ * running order yet — on every Stage and Day with two or more Acts, all of
+ * them are on stage at one and the same moment, which only placeholder
+ * windows can be. The feed seen in October 2026 had Stages assigned weeks
+ * before any times, and a Programme without times is still a Lineup. A
+ * partial Reveal (some Acts stageless, some not) throws: that is not a value
+ * this seam models, it is an error a human must see. A running order entered
+ * on some Stages or Days and not others passes through for the assembler's
  * per-Stage no-overlap invariant to refuse.
  */
 export function readProgramme(payload: unknown): Programme | null {
@@ -73,13 +74,16 @@ export function readProgramme(payload: unknown): Programme | null {
 
 /**
  * True when no Stage has a running order yet: in every group of two or more
- * acts sharing a Stage and an Oslo Day, all of them carry one identical start
- * and end instant. The placeholder is per Day (Friday's and Saturday's slots
- * are different instants), and parallel sets across different Stages are a
- * normal Programme, so neither is compared. A group of one has no running
- * order to lack, and a payload with no crowded group is a Programme as it
- * stands. Any crowded group that differs within itself means times are being
- * entered — pass it through and let the no-overlap invariant decide.
+ * acts sharing a Stage and an Oslo Day, the latest start is before the
+ * earliest end, so there is a moment at which every act in the room is on
+ * stage at once. A real running order never has that; a placeholder always
+ * does, whatever windows the festival uses for it (the October 2026 feed
+ * had 15:00–23:59, 14:00–22:59 and a 19:00–22:59 variant, mixed within one
+ * room). A group of one has no running order to lack, parallel sets across
+ * different Stages are an ordinary night, and a payload with no crowded group
+ * is a Programme as it stands. A crowded group with any two acts that do not
+ * overlap means times are being entered — pass it through and let the
+ * no-overlap invariant decide.
  */
 function noRunningOrderYet(acts: readonly RawBroadcastAct[]): boolean {
   const groups = new Map<string, RawBroadcastAct[]>();
@@ -92,13 +96,9 @@ function noRunningOrderYet(acts: readonly RawBroadcastAct[]): boolean {
   const crowded = [...groups.values()].filter((group) => group.length >= 2);
   if (crowded.length === 0) return false;
   return crowded.every((group) => {
-    const first = group[0];
-    return (
-      first !== undefined &&
-      group.every(
-        (act) => act.startTimeIso === first.startTimeIso && act.endTimeIso === first.endTimeIso,
-      )
-    );
+    const latestStart = Math.max(...group.map((act) => Date.parse(act.startTimeIso)));
+    const earliestEnd = Math.min(...group.map((act) => Date.parse(act.endTimeIso)));
+    return latestStart < earliestEnd;
   });
 }
 

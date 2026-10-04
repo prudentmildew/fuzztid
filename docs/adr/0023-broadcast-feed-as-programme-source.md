@@ -20,13 +20,14 @@ an unpublished Schedule rather than exiting 0, §11's pre-Reveal committed data 
 unpublished 2026 Schedule rather than the 2025 programme, and the gate §11 left to the deploy
 decision turns out not to live in the deploy._
 
-_**Amended 2026-10-01**, in place: §6's published predicate gains a second unpublished
-state. On 1 October the 2026 feed carried a Stage on every act and every act on one shared
-15:00–23:59 slot, so the predicate saw a Reveal and §7's no-overlap invariant turned the
-hourly cron red — the "~500 red runs" this ADR rejected, through a door it did not
+_**Amended 2026-10-01 and 2026-10-04**, in place: §6's published predicate gains a second
+unpublished state. From 1 October the 2026 feed carried a Stage on every act and every act on
+a wide placeholder window, so the predicate saw a Reveal and §7's no-overlap invariant turned
+the hourly cron red — the "~500 red runs" this ADR rejected, through a door it did not
 anticipate. No Stage carrying a running order yet is now `null`, like every act stageless.
-Marked where it sits. (First cut, 1 October, compared every act to one slot; the placeholder
-is per Day, so it never matched the live feed. Corrected 4 October.)_
+Marked where it sits. The 1 October cut compared every act to one slot and never matched
+the live feed, whose windows differ per Day and even within a room; the 4 October rule is
+the one that holds._
 
 Høstsabbat publishes no structured programme of its own: `hostsabbat.no` is Squarespace
 with no events collection, and the schedule ships as JPEGs plus a fontless Photoshop PDF.
@@ -77,23 +78,25 @@ invariant below; the 2026 one is a placeholder until the Reveal.
    ([0028](./0028-cloudflare-apex-and-the-unpublished-schedule-gate.md) §5–§6);
    `git diff --quiet` keeps it to one commit and hourly no-ops thereafter. If **some** acts
    have a Stage, throw: that is a partial Reveal. _Amended 2026-10-01, corrected 2026-10-04:
-   a second known state is **no Stage with a running order yet** — in every group of two or
-   more acts sharing a Stage and an Oslo Day, all carry one identical start and end instant.
-   The festival assigns rooms weeks before it enters a running order, and a Programme without
-   times is still a Lineup. It is `null` too, and checked before the partial-Reveal throw,
-   since Stages half-entered on top of placeholder times are still "no times yet". The
-   placeholder is per Day, so Friday and Saturday are never compared; parallel sets across
-   Stages are an ordinary night, so neither are different Stages; a group of one has no
-   running order to lack. A running order on some Stages or Days and not others passes
-   through to §7._
+   a second known state is **no Stage with a running order yet** — on every Stage and Oslo
+   Day with two or more acts, the latest start is before the earliest end, so every act in
+   the room is on stage at one and the same moment. Only placeholder windows can be like
+   that; a real running order never is, and back-to-back sets are not. The festival assigns
+   rooms weeks before it enters a running order, and a Programme without times is still a
+   Lineup. It is `null` too, and checked before the partial-Reveal throw, since Stages
+   half-entered on top of placeholder times are still "no times yet". The windows are not
+   compared to each other (the 2026 feed mixed 15:00–23:59, 14:00–22:59 and 19:00–22:59,
+   two of them inside one room), parallel sets across Stages are an ordinary night, and a
+   group of one has no running order to lack. A room with any two acts that do not overlap
+   passes through to §7._
 7. **A per-Stage no-overlap invariant.** Høstsabbat's Stages are rooms in one building;
    two acts overlapping on one Stage is physically impossible. The assembler throws on
    it. This is the check that catches a Reveal half-entered in Broadcast's CMS — stages
    filled in, times still on the 13:00→23:00 placeholder, which `end > start` alone would
    pass. _Amended 2026-10-01: that exact state turned out to be the ordinary pre-Reveal feed
    for weeks, not a half-entered Reveal, so §6 now absorbs it when it holds on **every** Stage
-   and Day. What this invariant still catches is a running order entered on **some** Stages
-   or Days and the rest still stacked on the placeholder._ Back-to-back (one ends 15:00, the next starts 15:00) is allowed; the 2025
+   and Day. What this invariant still catches is a running order entered in **some** rooms
+   and the rest still stacked on their windows._ Back-to-back (one ends 15:00, the next starts 15:00) is allowed; the 2025
    stagger needs it.
 8. **`isMainSchedule: false` throws.** All 49 acts seen across two editions are `true`;
    `false` is unverified, and 0006's allowlisted exclusion was earned by a census, not
