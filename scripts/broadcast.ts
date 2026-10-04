@@ -25,13 +25,14 @@ export function broadcastUrl(festivalId: string, key: string): string {
 
 /**
  * `null` means there is no Programme yet. Two known pre-Reveal states say so
- * (ADR-0023 §6, amended): every Act is stageless, or every Act sits on one
- * shared placeholder slot — the feed seen on 1 October 2026 had Stages
- * assigned weeks before any times, and a Programme without times is still a
- * Lineup. A partial Reveal (some Acts stageless, some not) throws: that is
- * not a value this seam models, it is an error a human must see. Some Acts
- * timed and some still on the placeholder is the assembler's per-Stage
- * no-overlap invariant's to catch.
+ * (ADR-0023 §6, amended): every Act is stageless, or no Stage carries a
+ * running order yet — every Act shares its Stage's placeholder slot for its
+ * Day. The feed seen in October 2026 had Stages assigned weeks before any
+ * times, and a Programme without times is still a Lineup. A partial Reveal
+ * (some Acts stageless, some not) throws: that is not a value this seam
+ * models, it is an error a human must see. A running order entered for some
+ * Stages or Days and not others passes through for the assembler's
+ * per-Stage no-overlap invariant to refuse.
  */
 export function readProgramme(payload: unknown): Programme | null {
   if (!Array.isArray(payload)) {
@@ -41,7 +42,7 @@ export function readProgramme(payload: unknown): Programme | null {
   const parsed = payload.map((item, index) => parseBroadcastAct(item, index));
 
   const stageless = parsed.filter((act) => act.externalVenueName === "");
-  if (stageless.length === parsed.length || onOneSharedSlot(parsed)) {
+  if (stageless.length === parsed.length || noRunningOrderYet(parsed)) {
     return null;
   }
   if (stageless.length > 0) {
@@ -71,16 +72,34 @@ export function readProgramme(payload: unknown): Programme | null {
 }
 
 /**
- * True when two or more acts all carry the same start and end instant: no
- * running order has been entered, whatever the Stages say. One act on its
- * own slot is not a placeholder — it cannot overlap anything.
+ * True when no Stage has a running order yet: in every group of two or more
+ * acts sharing a Stage and an Oslo Day, all of them carry one identical start
+ * and end instant. The placeholder is per Day (Friday's and Saturday's slots
+ * are different instants), and parallel sets across different Stages are a
+ * normal Programme, so neither is compared. A group of one has no running
+ * order to lack, and a payload with no crowded group is a Programme as it
+ * stands. Any crowded group that differs within itself means times are being
+ * entered — pass it through and let the no-overlap invariant decide.
  */
-function onOneSharedSlot(acts: readonly RawBroadcastAct[]): boolean {
-  const first = acts[0];
-  if (first === undefined || acts.length < 2) return false;
-  return acts.every(
-    (act) => act.startTimeIso === first.startTimeIso && act.endTimeIso === first.endTimeIso,
-  );
+function noRunningOrderYet(acts: readonly RawBroadcastAct[]): boolean {
+  const groups = new Map<string, RawBroadcastAct[]>();
+  for (const act of acts) {
+    const key = `${act.externalVenueName}\u0000${toOsloLocal(act.startTimeIso).date}`;
+    const group = groups.get(key);
+    if (group === undefined) groups.set(key, [act]);
+    else group.push(act);
+  }
+  const crowded = [...groups.values()].filter((group) => group.length >= 2);
+  if (crowded.length === 0) return false;
+  return crowded.every((group) => {
+    const first = group[0];
+    return (
+      first !== undefined &&
+      group.every(
+        (act) => act.startTimeIso === first.startTimeIso && act.endTimeIso === first.endTimeIso,
+      )
+    );
+  });
 }
 
 type RawBroadcastAct = {
