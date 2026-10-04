@@ -27,13 +27,70 @@ describe("readProgramme", () => {
     ).toBeNull();
   });
 
+  it("returns null when every act sits on one shared placeholder slot, Stages assigned", () => {
+    // The feed as seen on 1 October 2026: Stages filled in, every act on
+    // the same 15:00–23:59 slot. No times means no Programme, not an overlap.
+    expect(
+      readProgramme([
+        broadcastAct({
+          objectId: "a",
+          externalVenueName: "Church of Riffs",
+          start_time_iso: "2026-10-23T13:00:00.000Z",
+          end_time_iso: "2026-10-23T21:59:00.000Z",
+        }),
+        broadcastAct({
+          objectId: "b",
+          externalVenueName: "Church of Riffs",
+          start_time_iso: "2026-10-23T13:00:00.000Z",
+          end_time_iso: "2026-10-23T21:59:00.000Z",
+        }),
+        broadcastAct({
+          objectId: "c",
+          externalVenueName: "The Crypt",
+          start_time_iso: "2026-10-23T13:00:00.000Z",
+          end_time_iso: "2026-10-23T21:59:00.000Z",
+        }),
+      ]),
+    ).toBeNull();
+  });
+
+  it("returns null when every act sits on one shared slot and some are still stageless", () => {
+    // Stages half-entered on top of placeholder times is still "no times":
+    // the placeholder check wins over the partial-Reveal throw.
+    expect(
+      readProgramme([
+        broadcastAct({ objectId: "a", externalVenueName: "" }),
+        broadcastAct({ objectId: "b" }),
+      ]),
+    ).toBeNull();
+  });
+
+  it("reads a single act as a Programme even though it has nothing to differ from", () => {
+    expect(readProgramme([broadcastAct()])).toHaveLength(1);
+  });
+
+  it("passes acts on the placeholder beside timed ones through, for the assembler to refuse", () => {
+    // Some acts timed, some not, is a partial entry of the running order.
+    // It is not this predicate's to catch: the Programme goes to toSchedule,
+    // whose per-Stage no-overlap invariant throws on it (ADR-0023 §7).
+    const programme = readProgramme([
+      broadcastAct({ objectId: "a", start_time_iso: "2025-10-24T13:00:00.000Z" }),
+      broadcastAct({ objectId: "b" }),
+      broadcastAct({ objectId: "c" }),
+    ]);
+    expect(programme).toHaveLength(3);
+  });
+
   it("returns null for an empty payload", () => {
     expect(readProgramme([])).toBeNull();
   });
 
-  it("throws on a partial Reveal — some acts stageless, some not", () => {
+  it("throws on a partial Reveal — some acts stageless, some not, times entered", () => {
     expect(() =>
-      readProgramme([broadcastAct({ externalVenueName: "" }), broadcastAct()]),
+      readProgramme([
+        broadcastAct({ objectId: "a", externalVenueName: "" }),
+        broadcastAct({ objectId: "b", start_time_iso: "2025-10-24T13:00:00.000Z" }),
+      ]),
     ).toThrowError(/partial reveal/i);
   });
 

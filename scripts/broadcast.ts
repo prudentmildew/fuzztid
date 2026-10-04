@@ -24,9 +24,14 @@ export function broadcastUrl(festivalId: string, key: string): string {
 }
 
 /**
- * `null` means there is no Programme yet — every Act is stageless, the known
- * pre-Reveal state. A partial Reveal (some Acts stageless, some not) throws:
- * that is not a value this seam models, it is an error a human must see.
+ * `null` means there is no Programme yet. Two known pre-Reveal states say so
+ * (ADR-0023 §6, amended): every Act is stageless, or every Act sits on one
+ * shared placeholder slot — the feed seen on 1 October 2026 had Stages
+ * assigned weeks before any times, and a Programme without times is still a
+ * Lineup. A partial Reveal (some Acts stageless, some not) throws: that is
+ * not a value this seam models, it is an error a human must see. Some Acts
+ * timed and some still on the placeholder is the assembler's per-Stage
+ * no-overlap invariant's to catch.
  */
 export function readProgramme(payload: unknown): Programme | null {
   if (!Array.isArray(payload)) {
@@ -36,7 +41,7 @@ export function readProgramme(payload: unknown): Programme | null {
   const parsed = payload.map((item, index) => parseBroadcastAct(item, index));
 
   const stageless = parsed.filter((act) => act.externalVenueName === "");
-  if (stageless.length === parsed.length) {
+  if (stageless.length === parsed.length || onOneSharedSlot(parsed)) {
     return null;
   }
   if (stageless.length > 0) {
@@ -63,6 +68,19 @@ export function readProgramme(payload: unknown): Programme | null {
       stage: act.externalVenueName,
     };
   });
+}
+
+/**
+ * True when two or more acts all carry the same start and end instant: no
+ * running order has been entered, whatever the Stages say. One act on its
+ * own slot is not a placeholder — it cannot overlap anything.
+ */
+function onOneSharedSlot(acts: readonly RawBroadcastAct[]): boolean {
+  const first = acts[0];
+  if (first === undefined || acts.length < 2) return false;
+  return acts.every(
+    (act) => act.startTimeIso === first.startTimeIso && act.endTimeIso === first.endTimeIso,
+  );
 }
 
 type RawBroadcastAct = {

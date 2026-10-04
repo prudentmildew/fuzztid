@@ -20,6 +20,13 @@ an unpublished Schedule rather than exiting 0, §11's pre-Reveal committed data 
 unpublished 2026 Schedule rather than the 2025 programme, and the gate §11 left to the deploy
 decision turns out not to live in the deploy._
 
+_**Amended 2026-10-01**, in place: §6's published predicate gains a second unpublished
+state. On 1 October the 2026 feed carried a Stage on every act and every act on one shared
+15:00–23:59 slot, so the predicate saw a Reveal and §7's no-overlap invariant turned the
+hourly cron red — the "~500 red runs" this ADR rejected, through a door it did not
+anticipate. Every act on one identical slot is now `null`, like every act stageless. Marked
+where it sits._
+
 Høstsabbat publishes no structured programme of its own: `hostsabbat.no` is Squarespace
 with no events collection, and the schedule ships as JPEGs plus a fontless Photoshop PDF.
 The only surface with times and stages is the third-party **Broadcast** platform, which
@@ -68,12 +75,19 @@ invariant below; the 2026 one is a placeholder until the Reveal.
    without writing, so the deployed app has something honest to render
    ([0028](./0028-cloudflare-apex-and-the-unpublished-schedule-gate.md) §5–§6);
    `git diff --quiet` keeps it to one commit and hourly no-ops thereafter. If **some** acts
-   have a Stage, throw: that is a partial Reveal.
+   have a Stage, throw: that is a partial Reveal. _Amended 2026-10-01: a second known state
+   is **every act on one identical start and end instant**, Stages or not — the festival
+   assigns rooms weeks before it enters a running order, and a Programme without times is
+   still a Lineup. It is `null` too, and checked before the partial-Reveal throw, since
+   Stages half-entered on top of placeholder times are still "no times yet". A single act
+   is never a placeholder. Some acts timed and some still on the slot passes through to §7._
 7. **A per-Stage no-overlap invariant.** Høstsabbat's Stages are rooms in one building;
    two acts overlapping on one Stage is physically impossible. The assembler throws on
    it. This is the check that catches a Reveal half-entered in Broadcast's CMS — stages
    filled in, times still on the 13:00→23:00 placeholder, which `end > start` alone would
-   pass. Back-to-back (one ends 15:00, the next starts 15:00) is allowed; the 2025
+   pass. _Amended 2026-10-01: that exact state turned out to be the ordinary pre-Reveal feed
+   for weeks, not a half-entered Reveal, so §6 now absorbs it when it is **every** act. What
+   this invariant still catches is **some** acts timed and the rest on the placeholder._ Back-to-back (one ends 15:00, the next starts 15:00) is allowed; the 2025
    stagger needs it.
 8. **`isMainSchedule: false` throws.** All 49 acts seen across two editions are `true`;
    `false` is unverified, and 0006's allowlisted exclusion was earned by a census, not
