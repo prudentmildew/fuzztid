@@ -5,7 +5,8 @@
 
 import { writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { broadcastUrl, readProgramme } from "./broadcast.ts";
+import type { Schedule } from "../src/schedule.ts";
+import { broadcastUrl, readProgramme, slotCensus } from "./broadcast.ts";
 import { HOSTSABBAT_2026 } from "./edition-config.ts";
 import { toSchedule } from "./to-schedule.ts";
 
@@ -34,8 +35,16 @@ async function main(): Promise<void> {
   }
 
   const payload: unknown = await response.json();
-  const programme = readProgramme(payload);
-  const schedule = toSchedule(programme, HOSTSABBAT_2026);
+  let schedule: Schedule;
+  try {
+    schedule = toSchedule(readProgramme(payload), HOSTSABBAT_2026);
+  } catch (error) {
+    // The error names the offending act; the census says what shape the
+    // whole feed is in, which is what a human needs to decide whether this
+    // is the Reveal half-entered or a state the predicate should learn.
+    console.error(slotCensus(payload));
+    throw error;
+  }
 
   writeFileSync(OUTPUT_PATH, `${JSON.stringify(schedule, null, 2)}\n`);
 

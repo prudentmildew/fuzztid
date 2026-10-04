@@ -102,6 +102,46 @@ function noRunningOrderYet(acts: readonly RawBroadcastAct[]): boolean {
   });
 }
 
+/**
+ * A diagnostic for a red run: per Stage and Oslo Day, each distinct slot and
+ * how many acts sit on it, with their names. Reads the payload loosely —
+ * this runs after a throw, so it must not throw itself — and never prints
+ * the key. The hourly cron's log is the only view of the feed anyone has
+ * in Reveal week, and "A overlaps B" alone does not say what shape the
+ * feed is in.
+ */
+export function slotCensus(payload: unknown): string {
+  if (!Array.isArray(payload)) return "slot census: payload is not an array";
+  const groups = new Map<string, Map<string, string[]>>();
+  for (const item of payload) {
+    const record = (typeof item === "object" && item !== null ? item : {}) as Record<
+      string,
+      unknown
+    >;
+    const stage = typeof record.externalVenueName === "string" ? record.externalVenueName : "?";
+    const name = typeof record.name === "string" ? record.name : "?";
+    const start = safeOslo(record.start_time_iso);
+    const end = safeOslo(record.end_time_iso);
+    const dayKey = `${stage || "(no stage)"} · ${start.date}`;
+    const slotKey = `${start.time}–${end.time}`;
+    const slots = groups.get(dayKey) ?? new Map<string, string[]>();
+    groups.set(dayKey, slots);
+    slots.set(slotKey, [...(slots.get(slotKey) ?? []), name]);
+  }
+  const lines = ["slot census (Stage · Day → slot ×acts):"];
+  for (const [dayKey, slots] of [...groups.entries()].sort(([a], [b]) => (a < b ? -1 : 1))) {
+    for (const [slot, names] of [...slots.entries()].sort(([a], [b]) => (a < b ? -1 : 1))) {
+      lines.push(`  ${dayKey} → ${slot} ×${names.length}: ${names.join(", ")}`);
+    }
+  }
+  return lines.join("\n");
+}
+
+function safeOslo(iso: unknown): { date: string; time: string } {
+  if (typeof iso !== "string" || Number.isNaN(Date.parse(iso))) return { date: "?", time: "?" };
+  return toOsloLocal(iso);
+}
+
 type RawBroadcastAct = {
   objectId: string;
   name: string;
