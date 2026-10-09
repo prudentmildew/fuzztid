@@ -27,40 +27,53 @@ describe("readProgramme", () => {
     ).toBeNull();
   });
 
-  it("returns null when every act sits on one shared placeholder slot, Stages assigned", () => {
-    // The feed as seen on 1 October 2026: Stages filled in, every act on
-    // the same 15:00–23:59 slot. No times means no Programme, not an overlap.
+  it("returns null when every crowded Stage and Day is stacked on placeholder windows", () => {
+    // The feed as the hourly refresh saw it on 4 October 2026: Stages
+    // filled in, one window per Day, and a second 19:00–22:59 window inside
+    // Kafé Hærverk. Every act in a room is on stage at once — no running
+    // order, so no Programme, not an overlap.
+    const friday = {
+      start_time_iso: "2026-10-23T13:00:00.000Z",
+      end_time_iso: "2026-10-23T21:59:00.000Z",
+    };
+    const fridayLate = {
+      start_time_iso: "2026-10-23T17:00:00.000Z",
+      end_time_iso: "2026-10-23T20:59:00.000Z",
+    };
+    const saturday = {
+      start_time_iso: "2026-10-24T12:00:00.000Z",
+      end_time_iso: "2026-10-24T20:59:00.000Z",
+    };
+    const saturdayLate = {
+      start_time_iso: "2026-10-24T17:00:00.000Z",
+      end_time_iso: "2026-10-24T20:59:00.000Z",
+    };
     expect(
       readProgramme([
-        broadcastAct({
-          objectId: "a",
-          externalVenueName: "Church of Riffs",
-          start_time_iso: "2026-10-23T13:00:00.000Z",
-          end_time_iso: "2026-10-23T21:59:00.000Z",
-        }),
-        broadcastAct({
-          objectId: "b",
-          externalVenueName: "Church of Riffs",
-          start_time_iso: "2026-10-23T13:00:00.000Z",
-          end_time_iso: "2026-10-23T21:59:00.000Z",
-        }),
-        broadcastAct({
-          objectId: "c",
-          externalVenueName: "The Crypt",
-          start_time_iso: "2026-10-23T13:00:00.000Z",
-          end_time_iso: "2026-10-23T21:59:00.000Z",
-        }),
+        broadcastAct({ objectId: "a", externalVenueName: "Church of Riffs", ...friday }),
+        broadcastAct({ objectId: "b", externalVenueName: "Church of Riffs", ...friday }),
+        broadcastAct({ objectId: "c", externalVenueName: "Kafé Hærverk", ...friday }),
+        broadcastAct({ objectId: "d", externalVenueName: "Kafé Hærverk", ...fridayLate }),
+        broadcastAct({ objectId: "e", externalVenueName: "The Crypt", ...friday }),
+        broadcastAct({ objectId: "f", externalVenueName: "The Crypt", ...friday }),
+        broadcastAct({ objectId: "g", externalVenueName: "Church of Riffs", ...saturday }),
+        broadcastAct({ objectId: "h", externalVenueName: "Church of Riffs", ...saturday }),
+        broadcastAct({ objectId: "i", externalVenueName: "Kafé Hærverk", ...saturday }),
+        broadcastAct({ objectId: "j", externalVenueName: "Kafé Hærverk", ...saturdayLate }),
+        broadcastAct({ objectId: "k", externalVenueName: "Kafé Hærverk", ...saturdayLate }),
       ]),
     ).toBeNull();
   });
 
-  it("returns null when every act sits on one shared slot and some are still stageless", () => {
+  it("returns null when every crowded group is stacked and some acts are still stageless", () => {
     // Stages half-entered on top of placeholder times is still "no times":
     // the placeholder check wins over the partial-Reveal throw.
     expect(
       readProgramme([
         broadcastAct({ objectId: "a", externalVenueName: "" }),
-        broadcastAct({ objectId: "b" }),
+        broadcastAct({ objectId: "b", externalVenueName: "" }),
+        broadcastAct({ objectId: "c" }),
+        broadcastAct({ objectId: "d" }),
       ]),
     ).toBeNull();
   });
@@ -69,14 +82,63 @@ describe("readProgramme", () => {
     expect(readProgramme([broadcastAct()])).toHaveLength(1);
   });
 
-  it("passes acts on the placeholder beside timed ones through, for the assembler to refuse", () => {
-    // Some acts timed, some not, is a partial entry of the running order.
-    // It is not this predicate's to catch: the Programme goes to toSchedule,
-    // whose per-Stage no-overlap invariant throws on it (ADR-0023 §7).
+  it("reads parallel sets across different Stages as a Programme, not a placeholder", () => {
+    // Two rooms playing at once is an ordinary night; only acts sharing a
+    // Stage and a Day are compared.
     const programme = readProgramme([
-      broadcastAct({ objectId: "a", start_time_iso: "2025-10-24T13:00:00.000Z" }),
+      broadcastAct({ objectId: "a", externalVenueName: "The Crypt" }),
+      broadcastAct({ objectId: "b", externalVenueName: "Church of Riffs" }),
+    ]);
+    expect(programme).toHaveLength(2);
+  });
+
+  it("reads back-to-back sets on one Stage as a Programme", () => {
+    // 16:00–17:00 then 17:00–18:00 Oslo: no moment with both on stage.
+    const programme = readProgramme([
+      broadcastAct({ objectId: "a" }),
+      broadcastAct({
+        objectId: "b",
+        start_time_iso: "2025-10-24T15:00:00.000Z",
+        end_time_iso: "2025-10-24T16:00:00.000Z",
+      }),
+    ]);
+    expect(programme).toHaveLength(2);
+  });
+
+  it("passes a Stage still on its placeholder beside a timed one through, for the assembler", () => {
+    // A running order entered for one Stage and not another is a partial
+    // entry. It is not this predicate's to catch: the Programme goes to
+    // toSchedule, whose per-Stage no-overlap invariant throws on the Stage
+    // still stacked on its window (ADR-0023 §7).
+    const programme = readProgramme([
+      broadcastAct({ objectId: "a", externalVenueName: "Church of Riffs" }),
+      broadcastAct({ objectId: "b", externalVenueName: "Church of Riffs" }),
+      broadcastAct({
+        objectId: "c",
+        externalVenueName: "The Crypt",
+        start_time_iso: "2025-10-24T12:00:00.000Z",
+        end_time_iso: "2025-10-24T13:00:00.000Z",
+      }),
+      broadcastAct({ objectId: "d", externalVenueName: "The Crypt" }),
+    ]);
+    expect(programme).toHaveLength(4);
+  });
+
+  it("passes a room with a timed pair beside acts still on the window through", () => {
+    // Two acts that do not overlap mean times are being entered in this
+    // room; the one still on the window is the assembler's to refuse.
+    const programme = readProgramme([
+      broadcastAct({
+        objectId: "a",
+        start_time_iso: "2025-10-24T12:00:00.000Z",
+        end_time_iso: "2025-10-24T13:00:00.000Z",
+      }),
       broadcastAct({ objectId: "b" }),
-      broadcastAct({ objectId: "c" }),
+      broadcastAct({
+        objectId: "c",
+        start_time_iso: "2025-10-24T12:00:00.000Z",
+        end_time_iso: "2025-10-24T16:00:00.000Z",
+      }),
     ]);
     expect(programme).toHaveLength(3);
   });
