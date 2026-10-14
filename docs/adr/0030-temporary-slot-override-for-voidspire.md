@@ -23,7 +23,7 @@ some rooms and the rest still stacked on their windows" state it exists to catch
 Nine days before doors, waiting for Broadcast to be corrected leaves the app with no
 running order at all. Every other room and Day has four evenly spaced sets, and Kafé
 Hærverk's Friday is missing a slot at about 19:00. Voidspire is entered by hand at
-**19:00–20:15**.
+**19:00–19:45**. The first entry, 19:00–20:15, was a guess and was corrected the same day.
 
 ## Decision
 
@@ -37,12 +37,12 @@ Hærverk's Friday is missing a slot at about 19:00. Voidspire is entered by hand
 3. **The override fails loud once the feed changes.** If Broadcast shows anything other than
    the pinned placeholder for that act, `applySlotOverrides` throws and the hourly refresh
    fails before committing. That includes a different slot, the act being gone, the feed
-   going back to no Programme, and even exactly 19:00–20:15. Main keeps the last good
+   going back to no Programme, and even exactly 19:00–19:45. Main keeps the last good
    Schedule, with the override applied, until a human acts.
 4. **The red run is the message.** GitHub emails failed scheduled runs, which is how this
    problem surfaced in the first place. The error names the act, its new slot, and the
    remedy: remove the override and retire this ADR. Then reconcile together: check the
-   feed's new slot against 19:00–20:15, delete the override, its test and this ADR, and run
+   feed's new slot against 19:00–19:45, delete the override, its test and this ADR, and run
    the refresh.
 
 ## Rejected

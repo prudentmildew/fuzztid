@@ -26,7 +26,7 @@ export const SLOT_OVERRIDES: SlotOverride[] = [
     id: "g2dz3dGOLT",
     name: "Voidspire",
     expected: { date: "2026-10-23", start: "19:00", end: "22:59" },
-    replacement: { start: "19:00", end: "20:15" },
+    replacement: { start: "19:00", end: "19:45" },
   },
 ];
 
