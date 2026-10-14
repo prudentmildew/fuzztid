@@ -1,5 +1,5 @@
 // Thin IO shell (ADR-0023/0024): fetch Broadcast's programme endpoint,
-// readProgramme → toSchedule, write data/schedule.json. Exits non-zero on
+// readProgramme → applySlotOverrides → toSchedule, write data/schedule.json. Exits non-zero on
 // any failure so the hourly refresh aborts before committing — the output is
 // either correct or absent, never partial.
 
@@ -8,6 +8,7 @@ import { fileURLToPath } from "node:url";
 import type { Schedule } from "../src/schedule.ts";
 import { broadcastUrl, readProgramme, slotCensus } from "./broadcast.ts";
 import { HOSTSABBAT_2026 } from "./edition-config.ts";
+import { applySlotOverrides, SLOT_OVERRIDES } from "./slot-overrides.ts";
 import { toSchedule } from "./to-schedule.ts";
 
 const BROADCAST_KEY = process.env.BROADCAST_KEY;
@@ -37,7 +38,12 @@ async function main(): Promise<void> {
   const payload: unknown = await response.json();
   let schedule: Schedule;
   try {
-    schedule = toSchedule(readProgramme(payload), HOSTSABBAT_2026);
+    // TEMPORARY (ADR-0030): hand-entered slots for placeholder windows
+    // Broadcast left behind. Goes red the moment the feed changes under one.
+    schedule = toSchedule(
+      applySlotOverrides(readProgramme(payload), SLOT_OVERRIDES),
+      HOSTSABBAT_2026,
+    );
   } catch (error) {
     // The error names the offending act; the census says what shape the
     // whole feed is in, which is what a human needs to decide whether this
