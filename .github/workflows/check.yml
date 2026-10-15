@@ -1,0 +1,41 @@
+# The PR gate: the same lint, test and build deploy.yml runs on main, run on
+# every pull request so a red change is visible before it merges rather
+# than after. A solo repo cannot approve its own PRs, so this check is the
+# review that counts.
+#
+# No paths filter, on purpose: if this is ever made a required status check,
+# a filtered-out run never reports, and the PR waits forever on a check that
+# will not come. A docs-only PR costs one ~40 s run.
+name: Check
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+# A new push to the PR supersedes the run on the old head.
+concurrency:
+  group: check-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  # The job id is the status check's name. Keep it stable: a ruleset that
+  # requires "check" is matched on it.
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      # Same setup as deploy.yml: pnpm/setup installs pnpm 11 and Node itself;
+      # pnpm ci below is the explicit install step.
+      - uses: pnpm/setup@v2
+        with:
+          runtime: node@24
+          cache: true
+          install: false
+      - run: pnpm ci
+      # Cheapest first. `pnpm build` typechecks both tsconfigs before bundling.
+      - run: pnpm lint
+      - run: pnpm test
+      - run: pnpm build
