@@ -6,8 +6,13 @@ status: temporary
 
 _New decision, original to Høstsabbat. **Suspends [0023](./0023-broadcast-feed-as-programme-source.md)
 §7 for exactly one act** without loosening the invariant itself. Temporary by construction:
-delete this ADR, `scripts/slot-overrides.ts` and its test the day the hourly cron goes red on
-it._
+delete this ADR, `scripts/slot-overrides.ts` and its test the day the hourly refresh reports
+it stale._
+
+_**Amended 2026-10-15**, in place: §3–§4 no longer fail the run when the feed changes under
+the override. A corrected feed is the outcome this ADR waits for, and nine days out it must
+reach phones on its own, not behind a red run and a human. The override now steps aside and
+reports itself stale as a notice. Marked where it sits._
 
 ## Context
 
@@ -34,16 +39,17 @@ Hærverk's Friday is missing a slot at about 19:00. Voidspire is entered by hand
    assembler and its invariants never learn an override happened.
 2. **§7 is not touched.** The assembler still refuses any overlap, so a typo in the
    override is a red run like any other.
-3. **The override fails loud once the feed changes.** If Broadcast shows anything other than
-   the pinned placeholder for that act, `applySlotOverrides` throws and the hourly refresh
-   fails before committing. That includes a different slot, the act being gone, the feed
-   going back to no Programme, and even exactly 19:00–19:45. Main keeps the last good
-   Schedule, with the override applied, until a human acts.
-4. **The red run is the message.** GitHub emails failed scheduled runs, which is how this
-   problem surfaced in the first place. The error names the act, its new slot, and the
-   remedy: remove the override and retire this ADR. Then reconcile together: check the
-   feed's new slot against 19:00–19:45, delete the override, its test and this ADR, and run
-   the refresh.
+3. **The override steps aside once the feed changes** _(amended 2026-10-15; it failed loud
+   before)_. If Broadcast shows anything other than the pinned placeholder for that act, the
+   feed wins: a different slot, exactly 19:00–19:45, or the act being gone. The refresh stays
+   green, and a changed Schedule commits and deploys like any other. §7 still checks the
+   feed's slot, so a correction that overlaps another act is a red run. One case still fails
+   loud: the feed going back to no Programme. Stepping aside there would write the
+   unpublished Schedule over the real one.
+4. **The notice is the message** _(amended 2026-10-15; it was the red run)_. Each run that
+   finds the override stale prints a GitHub Actions notice on the run, naming the act, the
+   feed's slot, and the remedy: delete the override, its test and this ADR. Nothing breaks
+   while the dead override lingers. It matches nothing and changes nothing.
 
 ## Rejected
 
@@ -54,3 +60,7 @@ Hærverk's Friday is missing a slot at about 19:00. Voidspire is entered by hand
   edit as stale.
 - **Overriding unconditionally.** The festival's eventual fix would be silently ignored,
   and the app would show our guess over their answer.
+- **Failing loud once the feed changes** _(the original §3, replaced 2026-10-15)_. It froze
+  every later change to the Schedule behind one stale override until a human acted. In
+  festival week, that means cancellations and moved sets stop reaching phones, all to
+  announce that the festival fixed the thing we were waiting for.

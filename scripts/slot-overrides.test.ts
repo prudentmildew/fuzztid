@@ -27,34 +27,48 @@ describe("applySlotOverrides", () => {
 
     const result = applySlotOverrides([act(), other], [OVERRIDE]);
 
-    expect(result).toEqual([act({ start: "19:00", end: "20:15" }), other]);
+    expect(result).toEqual({
+      programme: [act({ start: "19:00", end: "20:15" }), other],
+      stale: [],
+    });
   });
 
-  it("goes red once the feed has a different slot for the act", () => {
-    expect(() => applySlotOverrides([act({ start: "18:30", end: "19:15" })], [OVERRIDE])).toThrow(
-      /Broadcast now has "Placeholder Act".*18:30–19:15.*remove the override/,
-    );
+  it("steps aside for the feed's slot once Broadcast publishes one, and reports itself stale", () => {
+    const fixed = act({ start: "18:30", end: "19:15" });
+
+    const result = applySlotOverrides([fixed], [OVERRIDE]);
+
+    expect(result.programme).toEqual([fixed]);
+    expect(result.stale).toHaveLength(1);
+    expect(result.stale[0]?.reason).toMatch(/Broadcast now has "Placeholder Act".*18:30–19:15/);
   });
 
-  it("goes red even when the feed agrees with the override", () => {
-    // Still stale: the feed is fixed and the override is dead weight.
-    expect(() => applySlotOverrides([act({ end: "20:15" })], [OVERRIDE])).toThrow(
-      /The feed has changed/,
-    );
+  it("steps aside when the feed agrees with the override, and reports itself stale", () => {
+    const fixed = act({ end: "20:15" });
+
+    const result = applySlotOverrides([fixed], [OVERRIDE]);
+
+    expect(result.programme).toEqual([fixed]);
+    expect(result.stale).toHaveLength(1);
   });
 
-  it("goes red when the act has left the feed", () => {
-    expect(() => applySlotOverrides([act({ id: "someone-else" })], [OVERRIDE])).toThrow(
-      /no longer in the Broadcast feed/,
-    );
+  it("steps aside when the act has left the feed, and reports itself stale", () => {
+    const other = act({ id: "someone-else" });
+
+    const result = applySlotOverrides([other], [OVERRIDE]);
+
+    expect(result.programme).toEqual([other]);
+    expect(result.stale[0]?.reason).toMatch(/no longer in the Broadcast feed/);
   });
 
-  it("goes red when the feed is back to no Programme", () => {
+  it("still goes red when the feed is back to no Programme", () => {
+    // Not a schedule being published: stepping aside here would write the
+    // unpublished Schedule over the real one.
     expect(() => applySlotOverrides(null, [OVERRIDE])).toThrow(/no Programme/);
   });
 
   it("is a no-op with no overrides", () => {
-    expect(applySlotOverrides(null, [])).toBeNull();
-    expect(applySlotOverrides([act()], [])).toEqual([act()]);
+    expect(applySlotOverrides(null, [])).toEqual({ programme: null, stale: [] });
+    expect(applySlotOverrides([act()], [])).toEqual({ programme: [act()], stale: [] });
   });
 });

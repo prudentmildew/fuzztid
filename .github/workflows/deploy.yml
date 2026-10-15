@@ -23,6 +23,7 @@ on:
       - ".gitignore"
       # deploy.yml itself is NOT ignored: a change to it should exercise it.
       - ".github/workflows/hourly-refresh.yml"
+      - ".github/workflows/check.yml"
   # No path filter applies here — the Reveal cron (hourly-refresh.yml) calls
   # this after it commits data/schedule.json, and that always deploys.
   workflow_call:
