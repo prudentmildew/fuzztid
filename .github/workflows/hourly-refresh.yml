@@ -45,7 +45,11 @@ concurrency:
 
 jobs:
   refresh:
-    runs-on: ubuntu-latest
+    # Pinned, not ubuntu-latest: that label moves to Ubuntu 26 from 19 October
+    # 2026, four days before doors. Nothing here needs the new image, and a
+    # runner change in festival week is a risk with no upside. Return to
+    # ubuntu-latest after 24 October, in all three workflows at once.
+    runs-on: ubuntu-24.04
     permissions:
       contents: write
     outputs:

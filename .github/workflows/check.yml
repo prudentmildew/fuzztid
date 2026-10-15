@@ -24,7 +24,11 @@ jobs:
   # The job id is the status check's name. Keep it stable: a ruleset that
   # requires "check" is matched on it.
   check:
-    runs-on: ubuntu-latest
+    # Pinned, not ubuntu-latest: that label moves to Ubuntu 26 from 19 October
+    # 2026, four days before doors. Nothing here needs the new image, and a
+    # runner change in festival week is a risk with no upside. Return to
+    # ubuntu-latest after 24 October, in all three workflows at once.
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
       # Same setup as deploy.yml: pnpm/setup installs pnpm 11 and Node itself;
