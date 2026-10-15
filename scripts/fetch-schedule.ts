@@ -39,11 +39,17 @@ async function main(): Promise<void> {
   let schedule: Schedule;
   try {
     // TEMPORARY (ADR-0030): hand-entered slots for placeholder windows
-    // Broadcast left behind. Goes red the moment the feed changes under one.
-    schedule = toSchedule(
-      applySlotOverrides(readProgramme(payload), SLOT_OVERRIDES),
-      HOSTSABBAT_2026,
-    );
+    // Broadcast left behind. Each steps aside the moment the feed has
+    // something else for its act, so a corrected feed just deploys.
+    const { programme, stale } = applySlotOverrides(readProgramme(payload), SLOT_OVERRIDES);
+    for (const { override, reason } of stale) {
+      // A GitHub Actions notice: shown on the run, never fails it.
+      console.log(
+        `::notice title=Slot override for ${override.name} is no longer needed::${reason} ` +
+          "Remove it from scripts/slot-overrides.ts and retire ADR-0030.",
+      );
+    }
+    schedule = toSchedule(programme, HOSTSABBAT_2026);
   } catch (error) {
     // The error names the offending act; the census says what shape the
     // whole feed is in, which is what a human needs to decide whether this
